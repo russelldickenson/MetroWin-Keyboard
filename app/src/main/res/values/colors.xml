@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="metro_cyan">#1BA1E2</color>
+    <!-- The launcher icon. -->
     <color name="ic_background">#2196F3</color>
-    <color name="metro_bg">#FFFFFF</color>
-    <color name="metro_fg">#000000</color>
-    <color name="metro_subtle">#666666</color>
-    <color name="metro_tile">#E6E6E6</color>
+    <!-- The default accent of the keyboard's Classic look (the cyan of Windows Phone); the keyboard themes draw with it, the app does not. -->
+    <color name="metro_cyan">#1BA1E2</color>
+
+    <!-- Material 3 fallback scheme (light), for phones without wallpaper colours. -->
+    <color name="m3_primary">#0061A4</color>
+    <color name="m3_on_primary">#FFFFFF</color>
+    <color name="m3_primary_container">#D1E4FF</color>
+    <color name="m3_on_primary_container">#001D36</color>
+    <color name="m3_secondary">#535F70</color>
+    <color name="m3_on_secondary">#FFFFFF</color>
+    <color name="m3_secondary_container">#D7E3F8</color>
+    <color name="m3_on_secondary_container">#101C2B</color>
+    <color name="m3_surface">#FDFCFF</color>
+    <color name="m3_on_surface">#1A1C1E</color>
+    <color name="m3_surface_variant">#DFE2EB</color>
+    <color name="m3_on_surface_variant">#43474E</color>
+    <color name="m3_outline">#73777F</color>
 </resources>

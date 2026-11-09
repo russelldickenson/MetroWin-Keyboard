@@ -25,7 +25,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MetroWinKeyboard"
+        android:theme="@style/Theme.PhayzKeyboard"
         tools:targetApi="35">
 
         <service
@@ -59,7 +59,7 @@
             android:name=".settings.HelperActivity"
             android:excludeFromRecents="true"
             android:exported="false"
-            android:theme="@style/Theme.MetroWinKeyboard.Transparent" />
+            android:theme="@style/Theme.PhayzKeyboard.Transparent" />
 
         <!-- Optional: lets the keyboard take the colour of the app under it. Turned on by the user in the accessibility settings. -->
         <service

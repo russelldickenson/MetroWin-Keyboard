@@ -24,8 +24,16 @@ class SettingsScreensTest {
 
     @Test fun calibrationScreenOpens() {
         val a = Robolectric.buildActivity(com.metrowin.keyboard.settings.CalibrationActivity::class.java).setup().get()
-        assertNotNull(a.findViewById<View>(R.id.header_title))
+        assertNotNull(a.window.decorView)
         a.finish()
+    }
+
+    @Test fun tutorialOnboardingAndTestScreensOpen() {
+        for (cls in listOf(com.metrowin.keyboard.settings.TutorialActivity::class.java, com.metrowin.keyboard.settings.OnboardingActivity::class.java, com.metrowin.keyboard.settings.TestActivity::class.java)) {
+            val a = Robolectric.buildActivity(cls).setup().get()
+            assertNotNull(cls.simpleName, a.window.decorView)
+            a.finish()
+        }
     }
 
     @Test fun everyScreenOpens() {

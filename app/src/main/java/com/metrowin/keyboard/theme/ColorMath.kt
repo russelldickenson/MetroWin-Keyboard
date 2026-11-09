@@ -51,7 +51,7 @@ object ColorMath {
      * colourful (and common) wins, so a grey wall with a red door gives red. Falls back to the average for a grey picture.
      */
     fun dominant(pixels: IntArray): Int {
-        if (pixels.isEmpty()) return Accents.metro[Accents.DEFAULT_INDEX]
+        if (pixels.isEmpty()) return Accents.DEFAULT
         val count = IntArray(4096); val sr = LongArray(4096); val sg = LongArray(4096); val sb = LongArray(4096)
         var tr = 0L; var tg = 0L; var tb = 0L
         for (p in pixels) {

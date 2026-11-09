@@ -22,7 +22,6 @@ import androidx.core.content.ContextCompat
 import com.metrowin.keyboard.K
 import com.metrowin.keyboard.KeyboardApp
 import com.metrowin.keyboard.R
-import com.metrowin.keyboard.ui.Fonts
 import com.metrowin.keyboard.ui.dp
 
 /**
@@ -59,7 +58,7 @@ class OnboardingActivity : AppCompatActivity() {
         holder = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         root.addView(ScrollView(this).apply { addView(holder) }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
         setContentView(root)
-        MetroUi.applyInsets(root)
+        Ui.applyInsets(root)
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() { if (step.ordinal == 0) finish() else go(Step.entries[step.ordinal - 1]) }
         })
@@ -69,7 +68,7 @@ class OnboardingActivity : AppCompatActivity() {
     override fun onResume() { super.onResume(); handler.post(poll) }
     override fun onPause() { handler.removeCallbacksAndMessages(null); super.onPause() }
 
-    private fun markOk() { status?.text = "✓  " + getString(R.string.onb_done_step); status?.setTextColor(MetroUi.accent(this)) }
+    private fun markOk() { status?.text = "✓  " + getString(R.string.onb_done_step); status?.setTextColor(Ui.primary(this)) }
 
     private fun go(s: Step) {
         step = s
@@ -84,17 +83,17 @@ class OnboardingActivity : AppCompatActivity() {
             Step.TRY -> R.string.onb_try_title to R.string.onb_try_text
             Step.DONE -> R.string.onb_finish_title to R.string.onb_finish_text
         }
-        holder.addView(MetroUi.header(this, getString(title)))
-        val pad = dp(24f).toInt()
+        holder.addView(if (s.ordinal == 0) Ui.toolbar(this, getString(title)) else Ui.toolbar(this, getString(title)) { go(Step.entries[s.ordinal - 1]) })
+        val pad = dp(16f).toInt()
         val body = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(pad, dp(12f).toInt(), pad, pad) }
-        body.addView(MetroUi.label(this, "${s.ordinal + 1} / ${Step.entries.size}", 13f, MetroUi.accent(this), Fonts.semibold(this)))
-        body.addView(MetroUi.label(this, getString(text), 18f, MetroUi.fg(this), Fonts.light(this)).apply { setLineSpacing(0f, 1.2f); includeFontPadding = true; setPadding(0, dp(8f).toInt(), 0, dp(16f).toInt()) })
+        body.addView(Ui.text(this, "${s.ordinal + 1} / ${Step.entries.size}", Ui.Type.LABEL, Ui.primary(this)))
+        body.addView(Ui.text(this, getString(text), Ui.Type.BODY).apply { setLineSpacing(0f, 1.2f); setPadding(0, dp(8f).toInt(), 0, dp(16f).toInt()) })
         val gap = dp(12f).toInt()
         fun addButton(label: Int, filled: Boolean = true, action: () -> Unit) = body.addView(
-            MetroUi.button(this, getString(label), filled, action),
+            Ui.button(this, getString(label), filled, action),
             LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { topMargin = gap },
         )
-        fun addStatus(idle: Int) { status = MetroUi.label(this, getString(idle), 15f, MetroUi.subtle(this), Fonts.regular(this)).apply { setPadding(0, gap, 0, 0) }; body.addView(status) }
+        fun addStatus(idle: Int) { status = Ui.text(this, getString(idle), Ui.Type.BODY_SMALL, Ui.onSurfaceVariant(this)).apply { setPadding(0, gap, 0, 0) }; body.addView(status) }
         when (s) {
             Step.WELCOME -> addButton(R.string.onb_start) { go(Step.ENABLE) }
             Step.ENABLE -> {
@@ -116,9 +115,9 @@ class OnboardingActivity : AppCompatActivity() {
             }
             Step.TRY -> {
                 body.addView(EditText(this).apply {
-                    setHint(R.string.test_hint); textSize = 20f; typeface = Fonts.light(this@OnboardingActivity); minLines = 4; gravity = Gravity.TOP
+                    setHint(R.string.test_hint); textSize = 20f; minLines = 4; gravity = Gravity.TOP
                     inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-                    setTextColor(MetroUi.fg(this@OnboardingActivity)); setHintTextColor(MetroUi.subtle(this@OnboardingActivity))
+                    setTextColor(Ui.onSurface(this@OnboardingActivity)); setHintTextColor(Ui.onSurfaceVariant(this@OnboardingActivity))
                     requestFocus()
                 })
                 addButton(R.string.onb_next) { go(Step.DONE) }

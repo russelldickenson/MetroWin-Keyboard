@@ -8,11 +8,10 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
-import androidx.appcompat.widget.SwitchCompat
+import com.google.android.material.materialswitch.MaterialSwitch
 import androidx.fragment.app.Fragment
 import com.metrowin.keyboard.KeyboardApp
 import com.metrowin.keyboard.R
-import com.metrowin.keyboard.ui.Fonts
 import com.metrowin.keyboard.ui.dp
 import com.metrowin.keyboard.update.NotFound
 import com.metrowin.keyboard.update.Repo
@@ -40,15 +39,15 @@ class UpdateFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val c = requireContext()
-        val pad = c.dp(24f).toInt()
+        val pad = c.dp(16f).toInt()
         val list = LinearLayout(c).apply { orientation = LinearLayout.VERTICAL; setPadding(0, c.dp(8f).toInt(), 0, c.dp(32f).toInt()) }
 
         // The switch for the 12-hour check.
-        val switch = SwitchCompat(c).apply { isChecked = prefs.updateAuto; setOnCheckedChangeListener { _, on -> prefs.putBoolean(com.metrowin.keyboard.K.UPDATE_AUTO, on); UpdateScheduler.sync(c.applicationContext) } }
+        val switch = MaterialSwitch(c).apply { isChecked = prefs.updateAuto; setOnCheckedChangeListener { _, on -> prefs.putBoolean(com.metrowin.keyboard.K.UPDATE_AUTO, on); UpdateScheduler.sync(c.applicationContext) } }
         val text = LinearLayout(c).apply {
             orientation = LinearLayout.VERTICAL
-            addView(MetroUi.label(c, getString(R.string.update_auto_title), 22f, MetroUi.fg(c), Fonts.light(c)).apply { includeFontPadding = true })
-            addView(MetroUi.label(c, getString(R.string.update_auto_summary), 14f, MetroUi.subtle(c), Fonts.regular(c)).apply { includeFontPadding = true })
+            addView(Ui.text(c, getString(R.string.update_auto_title), Ui.Type.BODY))
+            addView(Ui.text(c, getString(R.string.update_auto_summary), Ui.Type.BODY_SMALL, Ui.onSurfaceVariant(c)))
         }
         list.addView(LinearLayout(c).apply {
             orientation = LinearLayout.HORIZONTAL; gravity = android.view.Gravity.CENTER_VERTICAL; setPadding(pad, c.dp(8f).toInt(), pad, c.dp(12f).toInt())
@@ -56,20 +55,20 @@ class UpdateFragment : Fragment() {
             setOnClickListener { switch.toggle() }
         })
 
-        status = MetroUi.label(c, "", 18f, MetroUi.fg(c), Fonts.light(c)).apply { includeFontPadding = true; setLineSpacing(0f, 1.15f); setPadding(pad, c.dp(8f).toInt(), pad, c.dp(8f).toInt()) }
-        progress = MetroUi.label(c, "", 14f, MetroUi.accent(c), Fonts.semibold(c)).apply { includeFontPadding = true; setPadding(pad, 0, pad, c.dp(8f).toInt()) }
+        status = Ui.text(c, "", Ui.Type.SUBTITLE).apply { setLineSpacing(0f, 1.15f); setPadding(pad, c.dp(8f).toInt(), pad, c.dp(8f).toInt()) }
+        progress = Ui.text(c, "", Ui.Type.LABEL, Ui.primary(c)).apply { setPadding(pad, 0, pad, c.dp(8f).toInt()) }
         list.addView(status); list.addView(progress)
 
-        check = MetroUi.button(c, getString(R.string.update_check_now), filled = false) { look() }
-        install = MetroUi.button(c, getString(R.string.update_install)) { download() }
+        check = Ui.button(c, getString(R.string.update_check_now), filled = false) { look() }
+        install = Ui.button(c, getString(R.string.update_install)) { download() }
         val params = { LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { setMargins(pad, c.dp(6f).toInt(), pad, c.dp(6f).toInt()) } }
         list.addView(install, params()); list.addView(check, params())
 
-        notesLabel = MetroUi.label(c, getString(R.string.update_notes_title).uppercase(), 13f, MetroUi.accent(c), Fonts.semibold(c)).apply { setPadding(pad, c.dp(20f).toInt(), pad, c.dp(8f).toInt()) }
-        notes = MetroUi.label(c, "", 15f, MetroUi.fg(c), Fonts.regular(c)).apply { includeFontPadding = true; setLineSpacing(0f, 1.2f); setPadding(pad, 0, pad, 0); setTextIsSelectable(true) }
+        notesLabel = Ui.text(c, getString(R.string.update_notes_title), Ui.Type.LABEL, Ui.primary(c)).apply { setPadding(pad, c.dp(20f).toInt(), pad, c.dp(8f).toInt()) }
+        notes = Ui.text(c, "", Ui.Type.BODY_SMALL).apply { setLineSpacing(0f, 1.2f); setPadding(pad, 0, pad, 0); setTextIsSelectable(true) }
         list.addView(notesLabel); list.addView(notes)
 
-        list.addView(MetroUi.label(c, getString(R.string.update_privacy, Repo.OWNER + "/" + Repo.NAME), 12f, MetroUi.subtle(c), Fonts.regular(c)).apply { includeFontPadding = true; setPadding(pad, c.dp(24f).toInt(), pad, 0) })
+        list.addView(Ui.text(c, getString(R.string.update_privacy, Repo.OWNER + "/" + Repo.NAME), Ui.Type.CAPTION, Ui.onSurfaceVariant(c)).apply { setPadding(pad, c.dp(24f).toInt(), pad, 0) })
         return ScrollView(c).apply { addView(list) }
     }
 

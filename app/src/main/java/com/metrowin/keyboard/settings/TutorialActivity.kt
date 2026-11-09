@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.metrowin.keyboard.KeyboardApp
 import com.metrowin.keyboard.R
 import com.metrowin.keyboard.tutorial.Tutorial
-import com.metrowin.keyboard.ui.Fonts
 import com.metrowin.keyboard.ui.Icon
 import com.metrowin.keyboard.ui.Icons
 import com.metrowin.keyboard.ui.dp
@@ -25,7 +24,7 @@ class IconView(context: Context) : View(context) {
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     override fun onDraw(canvas: Canvas) {
         val i = icon ?: return
-        paint.color = MetroUi.accent(context)
+        paint.color = Ui.primary(context)
         Icons.draw(canvas, i, width / 2f, height / 2f, minOf(width, height) * 0.8f, paint)
     }
 }
@@ -34,7 +33,7 @@ class IconView(context: Context) : View(context) {
 class TutorialActivity : AppCompatActivity() {
     private var index = 0
     private var seen = 0
-    private lateinit var titleView: TextView
+    private lateinit var toolbar: com.google.android.material.appbar.MaterialToolbar
     private lateinit var body: TextView
     private lateinit var tag: TextView
     private lateinit var iconView: IconView
@@ -50,29 +49,28 @@ class TutorialActivity : AppCompatActivity() {
         index = savedInstanceState?.getInt("index") ?: intent.getIntExtra("start", Tutorial.startIndex(seen))
 
         val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        val header = MetroUi.header(this, getString(R.string.tutorial_title))
-        titleView = header.findViewById(R.id.header_title)
-        root.addView(header)
+        toolbar = Ui.toolbar(this, getString(R.string.tutorial_title))
+        root.addView(toolbar)
 
-        content = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(24f).toInt(), dp(12f).toInt(), dp(24f).toInt(), dp(12f).toInt()) }
-        tag = MetroUi.label(this, getString(R.string.tutorial_new).uppercase(), 12f, MetroUi.accent(this), Fonts.semibold(this))
+        content = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(16f).toInt(), dp(12f).toInt(), dp(16f).toInt(), dp(12f).toInt()) }
+        tag = Ui.text(this, getString(R.string.tutorial_new), Ui.Type.LABEL, Ui.primary(this))
         iconView = IconView(this)
-        body = MetroUi.label(this, "", 18f, MetroUi.fg(this), Fonts.light(this)).apply { setLineSpacing(0f, 1.2f); includeFontPadding = true }
+        body = Ui.text(this, "", Ui.Type.BODY).apply { setLineSpacing(0f, 1.2f) }
         content.addView(tag)
         content.addView(iconView, LinearLayout.LayoutParams(dp(72f).toInt(), dp(72f).toInt()).apply { topMargin = dp(8f).toInt(); bottomMargin = dp(8f).toInt() })
         content.addView(body)
         root.addView(ScrollView(this).apply { addView(content) }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
 
-        val footer = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(dp(24f).toInt(), dp(8f).toInt(), dp(24f).toInt(), dp(16f).toInt()) }
-        back = MetroUi.button(this, getString(R.string.tutorial_back), filled = false) { go(index - 1) }
-        counter = MetroUi.label(this, "", 14f, MetroUi.subtle(this), Fonts.regular(this)).apply { gravity = Gravity.CENTER }
-        next = MetroUi.button(this, getString(R.string.tutorial_next)) { if (index == Tutorial.pages.lastIndex) finish() else go(index + 1) }
+        val footer = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(dp(16f).toInt(), dp(8f).toInt(), dp(16f).toInt(), dp(16f).toInt()) }
+        back = Ui.button(this, getString(R.string.tutorial_back), filled = false) { go(index - 1) }
+        counter = Ui.text(this, "", Ui.Type.BODY_SMALL, Ui.onSurfaceVariant(this)).apply { gravity = Gravity.CENTER }
+        next = Ui.button(this, getString(R.string.tutorial_next)) { if (index == Tutorial.pages.lastIndex) finish() else go(index + 1) }
         footer.addView(back)
         footer.addView(counter, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
         footer.addView(next)
         root.addView(footer)
         setContentView(root)
-        MetroUi.applyInsets(root)
+        Ui.applyInsets(root)
         show()
     }
 
@@ -88,7 +86,7 @@ class TutorialActivity : AppCompatActivity() {
 
     private fun show() {
         val page = Tutorial.pages[index]
-        titleView.text = getString(page.title).lowercase()
+        toolbar.title = getString(page.title)
         body.text = getString(page.body)
         iconView.icon = page.icon; iconView.visibility = if (page.icon == null) View.GONE else View.VISIBLE; iconView.invalidate()
         tag.visibility = if (seen > 0 && page.since > seen) View.VISIBLE else View.GONE

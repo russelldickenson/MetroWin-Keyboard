@@ -2,38 +2,44 @@ package com.metrowin.keyboard.settings
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.google.android.material.appbar.MaterialToolbar
 import com.metrowin.keyboard.KeyboardApp
 import com.metrowin.keyboard.R
 
-/** The settings: a pivot home page (see [HomeFragment]) and, under it, one preference fragment per screen under a big light title like a Windows Phone page. */
+/** The settings: a home page (see [HomeFragment]) and, under it, one preference fragment per screen, under a Material top app bar. */
 class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
-    private var titleView: TextView? = null
+    private lateinit var toolbar: MaterialToolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        val root = findViewById<LinearLayout>(R.id.settings_root)
-        MetroUi.applyInsets(root)
-        val header = MetroUi.header(this, getString(R.string.app_name))
-        titleView = header.findViewById(R.id.header_title)
-        root.addView(header, 0)
+        Ui.applyInsets(findViewById<View>(R.id.settings_root))
+        toolbar = findViewById(R.id.toolbar)
+        toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        supportFragmentManager.addOnBackStackChangedListener { showArrow() }
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.settings_container, HomeFragment()).commit()
             // The first time, a guided set-up comes first.
             if (!KeyboardApp.of(this).prefs.onboardingDone) startActivity(Intent(this, OnboardingActivity::class.java))
         }
+        showArrow()
+    }
+
+    /** The arrow back is there on the screens under the home page, not on the home page itself. */
+    private fun showArrow() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+            toolbar.setNavigationContentDescription(R.string.back)
+        } else toolbar.navigationIcon = null
     }
 
     override fun onTitleChanged(title: CharSequence?, color: Int) {
         super.onTitleChanged(title, color)
-        // The home page draws its own titles (the pivot), so the big one is only for the screens under it.
-        titleView?.text = title.toString().lowercase()
-        titleView?.visibility = if (title.isNullOrEmpty()) android.view.View.GONE else android.view.View.VISIBLE
+        if (::toolbar.isInitialized) toolbar.title = title
     }
 
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {

@@ -1,32 +1,22 @@
 package com.metrowin.keyboard.settings
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.GridLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.content.ContextCompat
-import android.widget.TextView
 import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
-import androidx.preference.PreferenceGroupAdapter
-import androidx.preference.PreferenceScreen
-import androidx.preference.PreferenceViewHolder
-import androidx.recyclerview.widget.RecyclerView
-import com.metrowin.keyboard.ui.Fonts
 import com.metrowin.keyboard.ui.dp
 import androidx.preference.PreferenceFragmentCompat
 import com.metrowin.keyboard.K
@@ -34,38 +24,17 @@ import com.metrowin.keyboard.KeyboardApp
 import com.metrowin.keyboard.R
 import com.metrowin.keyboard.engine.LanguageEngine
 import com.metrowin.keyboard.service.ScreenColorService
-import com.metrowin.keyboard.theme.Accents
 import java.util.concurrent.Executors
 
 /** Shared plumbing of the settings screens: a preference file, a title, and quick access to the app. */
 abstract class BaseFragment(private val xml: Int, private val title: Int) : PreferenceFragmentCompat() {
-    /** Rows in the Windows Phone manner: big light titles, small grey summaries, accent-coloured section names. */
-    @SuppressLint("RestrictedApi")
-    override fun onCreateAdapter(preferenceScreen: PreferenceScreen): RecyclerView.Adapter<*> = object : PreferenceGroupAdapter(preferenceScreen) {
-        override fun onBindViewHolder(holder: PreferenceViewHolder, position: Int) {
-            super.onBindViewHolder(holder, position)
-            val ctx = holder.itemView.context
-            val item = getItem(position)
-            // The same 24 dp margin as the titles above and the home page, whether or not a row has a switch.
-            holder.itemView.setPadding(ctx.dp(24f).toInt(), holder.itemView.paddingTop, ctx.dp(24f).toInt(), holder.itemView.paddingBottom)
-            val titleView = holder.findViewById(android.R.id.title) as? TextView
-            val summaryView = holder.findViewById(android.R.id.summary) as? TextView
-            if (item is PreferenceCategory) {
-                titleView?.apply { text = text.toString().uppercase(); typeface = Fonts.semibold(ctx); textSize = 13f; setTextColor(MetroUi.accent(ctx)) }
-            } else {
-                titleView?.apply { typeface = Fonts.light(ctx); textSize = 22f; setTextColor(MetroUi.fg(ctx)) }
-                summaryView?.apply { typeface = Fonts.regular(ctx); textSize = 14f; setTextColor(MetroUi.subtle(ctx)) }
-            }
-        }
-    }
-
     protected val app get() = KeyboardApp.of(requireContext())
     private val io = Executors.newSingleThreadExecutor()
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(xml, rootKey)
         setup()
-        // No room kept for icons and no divider lines: a Windows Phone list is type on white.
+        // No room kept for icons: the screens have none.
         fun flat(g: androidx.preference.PreferenceGroup) {
             g.isIconSpaceReserved = false
             for (i in 0 until g.preferenceCount) preferenceScreen.let { g.getPreference(i) }.let { p -> p.isIconSpaceReserved = false; if (p is androidx.preference.PreferenceGroup) flat(p) }
@@ -99,7 +68,7 @@ abstract class BaseFragment(private val xml: Int, private val title: Int) : Pref
     }
 
     protected fun chooseOne(titleRes: Int, labels: List<String>, onPick: (Int) -> Unit) {
-        AlertDialog.Builder(requireContext()).setTitle(titleRes).setItems(labels.toTypedArray()) { _, i -> onPick(i) }.setNegativeButton(R.string.cancel, null).show()
+        MaterialAlertDialogBuilder(requireContext()).setTitle(titleRes).setItems(labels.toTypedArray()) { _, i -> onPick(i) }.setNegativeButton(R.string.cancel, null).show()
     }
 }
 
@@ -115,7 +84,7 @@ class BackupFragment : BaseFragment(R.xml.prefs_backup, R.string.screen_backup) 
 
     private val pick = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         if (uri == null) return@registerForActivityResult
-        AlertDialog.Builder(requireContext()).setTitle(R.string.backup_restore_title).setMessage(R.string.backup_restore_confirm)
+        MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.backup_restore_title).setMessage(R.string.backup_restore_confirm)
             .setPositiveButton(R.string.backup_restore_go) { _, _ -> restore(uri) }.setNegativeButton(R.string.cancel, null).show()
     }
 
@@ -160,7 +129,7 @@ class LanguagesFragment : BaseFragment(R.xml.prefs_languages, R.string.screen_la
             val all = app.layouts.all().values.toList()
             val current = app.prefs.languages.toMutableSet()
             val checked = BooleanArray(all.size) { all[it].id in current }
-            AlertDialog.Builder(requireContext()).setTitle(R.string.pref_languages_title)
+            MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.pref_languages_title)
                 .setMultiChoiceItems(all.map { it.name }.toTypedArray(), checked) { _, i, on -> checked[i] = on }
                 .setPositiveButton(R.string.ok) { _, _ ->
                     val picked = all.filterIndexed { i, _ -> checked[i] }.map { it.id }.ifEmpty { listOf("en") }
@@ -181,7 +150,7 @@ class LanguagesFragment : BaseFragment(R.xml.prefs_languages, R.string.screen_la
                 "Wiktionary frequency lists" to "https://en.wiktionary.org/wiki/Wiktionary:Frequency_lists",
                 "Leipzig Corpora Collection (word lists)" to "https://wortschatz.uni-leipzig.de/en/download",
             )
-            AlertDialog.Builder(requireContext()).setTitle(R.string.pref_dictionary_sources_title).setMessage(R.string.dictionary_sources_note)
+            MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.pref_dictionary_sources_title).setMessage(R.string.dictionary_sources_note)
                 .setItems(sources.map { it.first }.toTypedArray()) { _, i ->
                     runCatching { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(sources[i].second))) }
                 }
@@ -231,7 +200,7 @@ class AppearanceFragment : BaseFragment(R.xml.prefs_appearance, R.string.screen_
             if (value == true) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) { toast(R.string.adaptive_old_android); return@setOnPreferenceChangeListener false }
                 if (!serviceEnabled()) {
-                    AlertDialog.Builder(requireContext()).setTitle(R.string.adaptive_dialog_title).setMessage(R.string.adaptive_dialog_text)
+                    MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.adaptive_dialog_title).setMessage(R.string.adaptive_dialog_text)
                         .setPositiveButton(R.string.adaptive_open) { _, _ -> startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)) }
                         .setNegativeButton(R.string.cancel, null).show()
                 }
@@ -245,38 +214,21 @@ class AppearanceFragment : BaseFragment(R.xml.prefs_appearance, R.string.screen_
         return Settings.Secure.getString(requireContext().contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)?.split(':')?.any { it.equals(me, true) } == true
     }
 
+    /** One colour of your own for the keyboard's accent; without it the look decides (Modern Droid follows the wallpaper). */
     private fun showAccentDialog() {
         val ctx = requireContext()
-        val d = ctx.resources.displayMetrics.density
-        val grid = GridLayout(ctx).apply { columnCount = 5; setPadding((16 * d).toInt(), (12 * d).toInt(), (16 * d).toInt(), 0) }
-        val dialog = AlertDialog.Builder(ctx).setTitle(R.string.accent_dialog_title).setView(grid)
-            .setNeutralButton(R.string.accent_custom, null).setNegativeButton(R.string.accent_reset, null).create()
-        Accents.metro.forEachIndexed { i, color ->
-            val dot = android.view.View(ctx).apply {
-                background = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(color) }
-                setOnClickListener {
-                    app.prefs.sp.edit().putInt(K.ACCENT_INDEX, i).putInt(K.CUSTOM_ACCENT, 0).putBoolean(K.DYNAMIC_COLOR, false).apply()
-                    dialog.dismiss()
-                }
-            }
-            grid.addView(dot, GridLayout.LayoutParams().apply { width = (44 * d).toInt(); height = (44 * d).toInt(); setMargins((5 * d).toInt(), (5 * d).toInt(), (5 * d).toInt(), (5 * d).toInt()) })
+        val input = EditText(ctx).apply {
+            hint = getString(R.string.accent_custom_hint); setSingleLine()
+            app.prefs.customAccent.takeIf { it != 0 }?.let { setText(String.format("#%06X", it and 0xFFFFFF)) }
         }
-        dialog.setOnShowListener {
-            dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
-                val input = EditText(ctx).apply { hint = getString(R.string.accent_custom_hint); setSingleLine() }
-                AlertDialog.Builder(ctx).setTitle(R.string.accent_custom).setView(input)
-                    .setPositiveButton(R.string.ok) { _, _ ->
-                        val parsed = runCatching { Color.parseColor(input.text.toString().trim().let { if (it.startsWith("#")) it else "#$it" }) }.getOrNull()
-                        if (parsed == null) toast(R.string.accent_invalid) else {
-                            app.prefs.sp.edit().putInt(K.CUSTOM_ACCENT, parsed or 0xFF000000.toInt()).apply(); dialog.dismiss()
-                        }
-                    }.setNegativeButton(R.string.cancel, null).show()
+        val box = android.widget.FrameLayout(ctx).apply { setPadding(ctx.dp(24f).toInt(), ctx.dp(8f).toInt(), ctx.dp(24f).toInt(), 0); addView(input) }
+        MaterialAlertDialogBuilder(ctx).setTitle(R.string.accent_dialog_title).setMessage(R.string.accent_dialog_message).setView(box)
+            .setPositiveButton(R.string.ok) { _, _ ->
+                val parsed = runCatching { Color.parseColor(input.text.toString().trim().let { if (it.startsWith("#")) it else "#$it" }) }.getOrNull()
+                if (parsed == null) toast(R.string.accent_invalid) else app.prefs.sp.edit().putInt(K.CUSTOM_ACCENT, parsed or 0xFF000000.toInt()).apply()
             }
-            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
-                app.prefs.sp.edit().putInt(K.CUSTOM_ACCENT, 0).putBoolean(K.DYNAMIC_COLOR, true).apply(); dialog.dismiss()
-            }
-        }
-        dialog.show()
+            .setNeutralButton(R.string.accent_reset) { _, _ -> app.prefs.sp.edit().putInt(K.CUSTOM_ACCENT, 0).putBoolean(K.DYNAMIC_COLOR, true).apply() }
+            .setNegativeButton(R.string.cancel, null).show()
     }
 }
 
@@ -321,7 +273,7 @@ class SuggestionsFragment : BaseFragment(R.xml.prefs_suggestions, R.string.scree
     override fun setup() {
         click("export_learned") { export.launch("metrowin-keyboard-learned.txt") }
         click("clear_learned") {
-            AlertDialog.Builder(requireContext()).setMessage(R.string.clear_learned_confirm)
+            MaterialAlertDialogBuilder(requireContext()).setMessage(R.string.clear_learned_confirm)
                 .setPositiveButton(R.string.ok) { _, _ -> app.clearLearned(); toast(R.string.cleared) }
                 .setNegativeButton(R.string.cancel, null).show()
         }

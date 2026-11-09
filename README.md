@@ -38,6 +38,8 @@ Compared with the original MetroWin Keyboard (version 26.1.2S):
 - **A new identity**: application id `com.phayz.keyboard`, so it coexists with the original.
 
 **Changed**
+- **The settings app is Material 3**, not Windows Phone style: a top app bar, a scrolling home with cards and lists, Material 3 type, buttons and switches, and the wallpaper colours (Material You) on Android 12+. The keyboard's own looks, including the Metro ones (Classic and Glass), are untouched.
+- **Accent colour**: the 20 Windows Phone colours are gone; you get Material You (Modern Droid follows the wallpaper) and one custom colour. Classic keeps its cyan by default.
 - The globe key is **hidden by default** (*Settings → Size and layout → Show the globe key* brings it back).
 - The update check points at placeholder repository values (`Repo.OWNER` and `Repo.NAME` in [`UpdateChecker.kt`](app/src/main/java/com/metrowin/keyboard/update/UpdateChecker.kt)) until this fork publishes its own releases, so it finds nothing for now.
 - Release signing is read from `keystore.properties`; [`keystore.properties.example`](keystore.properties.example) shows the values to fill in.
@@ -80,7 +82,7 @@ Android 8.0 (API 26) or newer.
 
 **Languages**: 17 layouts included (English, Italiano, Español, Français, Deutsch, Português, Nederlands, Polski, Türkçe, Русский, Українська, Ελληνικά, Čeština, Svenska, Română, العربية, עברית). Any other layout is a small text file ([docs/LAYOUTS.md](docs/LAYOUTS.md)); any dictionary can be imported (word lists, frequency lists, Hunspell `.dic`). Only small starter word lists are bundled (en, it, es, fr, de, pt), so import a full dictionary for the best predictions.
 
-**Looks**: *Classic* (flat Windows Phone), *Modern Glass*, *Modern Droid* (Material You colours on Android 12+), *iPhone* and *Modern Slate*; dark / light / system, 20 Windows Phone colours or your own, pure black, a photo behind the keys (its colour becomes the accent), and, optionally, a keyboard that follows the colour of the app under it. Key letters in the font and weight you choose.
+**Looks**: *Classic* (flat Windows Phone), *Modern Glass*, *Modern Droid* (Material You colours on Android 12+), *iPhone* and *Modern Slate*; dark / light / system, one colour of your own (Modern Droid follows the wallpaper), pure black, a photo behind the keys (its colour becomes the accent), and, optionally, a keyboard that follows the colour of the app under it. Key letters in the font and weight you choose.
 
 **Size**: a live preview, key height (portrait and landscape), keyboard width with left / centre / right position, key spacing, number row on or off, and an automatic calibration that learns from a few typed sentences where your fingers land.
 

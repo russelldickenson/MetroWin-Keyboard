@@ -21,7 +21,6 @@ import com.metrowin.keyboard.calibration.Bias
 import com.metrowin.keyboard.calibration.Calibrator
 import com.metrowin.keyboard.calibration.Metrics
 import com.metrowin.keyboard.calibration.Result
-import com.metrowin.keyboard.ui.Fonts
 import com.metrowin.keyboard.ui.dp
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -59,11 +58,11 @@ class CalibrationActivity : AppCompatActivity() {
         original = metrics()
         val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         // On its side the screen is too short for a big title and a keyboard: the title goes, so the sentence stays in sight.
-        root.addView(MetroUi.header(this, getString(R.string.calib_title)).apply { if (land) visibility = android.view.View.GONE })
-        body = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(24f).toInt(), dp(12f).toInt(), dp(24f).toInt(), dp(12f).toInt()) }
+        root.addView(Ui.toolbar(this, getString(R.string.calib_title)).apply { if (land) visibility = android.view.View.GONE })
+        body = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(16f).toInt(), dp(12f).toInt(), dp(16f).toInt(), dp(12f).toInt()) }
         root.addView(android.widget.ScrollView(this).apply { addView(body) }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
         setContentView(root)
-        MetroUi.applyInsets(root)
+        Ui.applyInsets(root)
         start(fresh = true)
     }
 
@@ -98,24 +97,24 @@ class CalibrationActivity : AppCompatActivity() {
         cal.onChange = ::refresh
         Calibrator.current = cal
         body.removeAllViews()
-        progress = MetroUi.label(this, "", 14f, MetroUi.subtle(this), Fonts.semibold(this))
-        sentence = MetroUi.label(this, "", 26f, MetroUi.fg(this), Fonts.light(this)).apply { setLineSpacing(0f, 1.2f) }
-        hold = MetroUi.label(this, "", 14f, MetroUi.accent(this), Fonts.semibold(this))
+        progress = Ui.text(this, "", Ui.Type.LABEL, Ui.onSurfaceVariant(this))
+        sentence = Ui.text(this, "", Ui.Type.HEADLINE).apply { setLineSpacing(0f, 1.2f) }
+        hold = Ui.text(this, "", Ui.Type.LABEL, Ui.primary(this))
         field = EditText(this).apply {
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-            setSingleLine(); textSize = 18f; typeface = Fonts.light(this@CalibrationActivity)
-            setTextColor(MetroUi.fg(this@CalibrationActivity)); setHintTextColor(MetroUi.subtle(this@CalibrationActivity))
+            setSingleLine(); textSize = 18f
+            setTextColor(Ui.onSurface(this@CalibrationActivity)); setHintTextColor(Ui.onSurfaceVariant(this@CalibrationActivity))
             setHint(R.string.calib_hint)
         }
-        finishButton = MetroUi.button(this, getString(R.string.calib_finish), filled = false) { showResult() }
+        finishButton = Ui.button(this, getString(R.string.calib_finish), filled = false) { showResult() }
         body.addView(progress)
-        body.addView(MetroUi.space(this, 12))
+        body.addView(Ui.space(this, 12))
         body.addView(sentence)
-        body.addView(MetroUi.space(this, 8))
+        body.addView(Ui.space(this, 8))
         body.addView(hold)
-        body.addView(MetroUi.space(this, 16))
+        body.addView(Ui.space(this, 16))
         body.addView(field, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
-        body.addView(MetroUi.space(this, 16))
+        body.addView(Ui.space(this, 16))
         body.addView(finishButton)
         clearNext = false
         field.requestFocus()
@@ -131,12 +130,12 @@ class CalibrationActivity : AppCompatActivity() {
         val pct = if (cal.taps == 0) 0 else (100f * cal.misses / cal.taps).roundToInt()
         val head = precisionMm?.let { getString(R.string.calib_progress_live, cal.sentenceNumber, cal.sentenceCount, pct, it) }
             ?: getString(R.string.calib_progress, cal.sentenceNumber, cal.sentenceCount, pct)
-        progress.text = head.uppercase()
+        progress.text = head
         val s = cal.sentence; val i = cal.position
         sentence.text = SpannableString(s).apply {
-            setSpan(ForegroundColorSpan(MetroUi.accent(this@CalibrationActivity)), 0, i, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            setSpan(ForegroundColorSpan(Ui.primary(this@CalibrationActivity)), 0, i, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             if (i < s.length) setSpan(UnderlineSpan(), i, i + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            if (i + 1 < s.length) setSpan(ForegroundColorSpan(MetroUi.subtle(this@CalibrationActivity)), i + 1, s.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            if (i + 1 < s.length) setSpan(ForegroundColorSpan(Ui.onSurfaceVariant(this@CalibrationActivity)), i + 1, s.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         val h = cal.holdHint()
         hold.text = h?.let { getString(R.string.calib_hold, it.first, it.second) } ?: ""
@@ -160,14 +159,14 @@ class CalibrationActivity : AppCompatActivity() {
         val r = cal.fit()
         if (r == null) {
             line(getString(R.string.calib_result_few))
-            body.addView(MetroUi.space(this, 20))
-            body.addView(MetroUi.button(this, getString(R.string.calib_more)) { start(fresh = false) })
-            body.addView(MetroUi.space(this, 12))
-            body.addView(MetroUi.button(this, getString(R.string.calib_retry), filled = false) { start(fresh = true) })
+            body.addView(Ui.space(this, 20))
+            body.addView(Ui.button(this, getString(R.string.calib_more)) { start(fresh = false) })
+            body.addView(Ui.space(this, 12))
+            body.addView(Ui.button(this, getString(R.string.calib_retry), filled = false) { start(fresh = true) })
             return
         }
         val next = Calibrator.advise(metrics(), r)
-        line(getString(R.string.calib_result_misses, (r.before * 100).roundToInt(), (r.after * 100).roundToInt()), 22f)
+        line(getString(R.string.calib_result_misses, (r.before * 100).roundToInt(), (r.after * 100).roundToInt()), Ui.Type.SUBTITLE)
         line(getString(R.string.calib_result_precision, r.errBeforePx * mmPerPx, r.errAfterPx * mmPerPx))
         if (r.bias != null) {
             val dx = r.meanDx * mmPerPx; val dy = r.meanDy * mmPerPx
@@ -178,16 +177,16 @@ class CalibrationActivity : AppCompatActivity() {
         if (next.widthPct != original.widthPct) line(getString(R.string.calib_result_width, original.widthPct, next.widthPct))
         val change = r.bias != null || next != original
         if (!change) line(getString(R.string.calib_result_none))
-        body.addView(MetroUi.space(this, 20))
-        if (change) body.addView(MetroUi.button(this, getString(R.string.calib_apply)) { apply(r, next) })
-        body.addView(MetroUi.space(this, 12))
-        body.addView(MetroUi.button(this, getString(R.string.calib_more), filled = !change) { start(fresh = false) })
-        body.addView(MetroUi.space(this, 12))
-        body.addView(MetroUi.button(this, getString(R.string.calib_retry), filled = false) { start(fresh = true) })
+        body.addView(Ui.space(this, 20))
+        if (change) body.addView(Ui.button(this, getString(R.string.calib_apply)) { apply(r, next) })
+        body.addView(Ui.space(this, 12))
+        body.addView(Ui.button(this, getString(R.string.calib_more), filled = !change) { start(fresh = false) })
+        body.addView(Ui.space(this, 12))
+        body.addView(Ui.button(this, getString(R.string.calib_retry), filled = false) { start(fresh = true) })
     }
 
-    private fun line(text: String, sp: Float = 16f) {
-        body.addView(MetroUi.label(this, text, sp, MetroUi.fg(this), Fonts.light(this)).apply { setPadding(0, 0, 0, dp(8f).toInt()) })
+    private fun line(text: String, type: Ui.Type = Ui.Type.BODY) {
+        body.addView(Ui.text(this, text, type).apply { setPadding(0, 0, 0, dp(8f).toInt()) })
     }
 
     /** One write, so the keyboard refreshes once. A calibration that found nothing to correct removes the old correction. */

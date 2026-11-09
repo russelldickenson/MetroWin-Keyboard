@@ -14,7 +14,6 @@ import android.widget.ScrollView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.metrowin.keyboard.R
-import com.metrowin.keyboard.ui.Fonts
 import com.metrowin.keyboard.ui.dp
 
 /**
@@ -42,18 +41,18 @@ class ProjectsFragment : Fragment() {
     override fun onResume() { super.onResume(); requireActivity().setTitle(R.string.screen_projects) }
 
     private fun section(c: Context, list: LinearLayout, title: Int, projects: List<Project>) {
-        list.addView(MetroUi.label(c, getString(title).uppercase(), 13f, MetroUi.accent(c), Fonts.semibold(c)).apply { setPadding(c.dp(24f).toInt(), c.dp(16f).toInt(), c.dp(24f).toInt(), c.dp(8f).toInt()) })
+        list.addView(Ui.text(c, getString(title), Ui.Type.LABEL, Ui.primary(c)).apply { setPadding(c.dp(16f).toInt(), c.dp(16f).toInt(), c.dp(16f).toInt(), c.dp(8f).toInt()) })
         for (p in projects) list.addView(block(c, p))
     }
 
     private fun block(c: Context, p: Project): View {
-        val pad = c.dp(24f).toInt()
+        val pad = c.dp(16f).toInt()
         val box = LinearLayout(c).apply { orientation = LinearLayout.VERTICAL; setPadding(0, c.dp(8f).toInt(), 0, c.dp(20f).toInt()) }
         val head = LinearLayout(c).apply { orientation = LinearLayout.HORIZONTAL; gravity = android.view.Gravity.CENTER_VERTICAL; setPadding(pad, 0, pad, 0) }
         head.addView(ImageView(c).apply { setImageResource(p.icon); contentDescription = null }, LinearLayout.LayoutParams(c.dp(48f).toInt(), c.dp(48f).toInt()))
-        head.addView(MetroUi.label(c, getString(p.title), 26f, MetroUi.fg(c), Fonts.light(c)).apply { includeFontPadding = true; setPadding(c.dp(14f).toInt(), 0, 0, 0) })
+        head.addView(Ui.text(c, getString(p.title), Ui.Type.TITLE).apply { setPadding(c.dp(14f).toInt(), 0, 0, 0) })
         box.addView(head)
-        box.addView(MetroUi.label(c, getString(p.text), 14f, MetroUi.subtle(c), Fonts.regular(c)).apply { includeFontPadding = true; setLineSpacing(0f, 1.15f); setPadding(pad, c.dp(8f).toInt(), pad, c.dp(10f).toInt()) })
+        box.addView(Ui.text(c, getString(p.text), Ui.Type.BODY_SMALL, Ui.onSurfaceVariant(c)).apply { setLineSpacing(0f, 1.15f); setPadding(pad, c.dp(8f).toInt(), pad, c.dp(10f).toInt()) })
         if (p.shots.isNotEmpty()) {
             val strip = LinearLayout(c).apply { orientation = LinearLayout.HORIZONTAL; setPadding(pad, 0, pad, 0) }
             for (id in p.shots) strip.addView(
@@ -62,7 +61,7 @@ class ProjectsFragment : Fragment() {
             )
             box.addView(HorizontalScrollView(c).apply { isHorizontalScrollBarEnabled = false; addView(strip) })
         }
-        box.addView(MetroUi.button(c, getString(p.button), filled = false) { view(c, p.url) }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { setMargins(pad, c.dp(12f).toInt(), pad, 0) })
+        box.addView(Ui.button(c, getString(p.button), filled = false) { view(c, p.url) }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { setMargins(pad, c.dp(12f).toInt(), pad, 0) })
         return box
     }
 

@@ -59,7 +59,7 @@
     <string name="pref_theme_style_title">Stile</string>
     <string name="pref_theme_mode_title">Scuro o chiaro</string>
     <string name="pref_accent_title">Colore principale</string>
-    <string name="pref_accent_summary">I 20 colori di Windows Phone, o uno tuo</string>
+    <string name="pref_accent_summary">Un colore tuo per la tastiera, o segui l\'aspetto</string>
     <string name="pref_dynamic_title">Colori dallo sfondo</string>
     <string name="pref_dynamic_summary">Solo Modern Droid, Android 12 o successivo: usa la tavolozza di sistema</string>
     <string name="pref_oled_title">Nero puro</string>
@@ -80,8 +80,8 @@
     <string name="adaptive_dialog_text">Android richiede di attivare \"Phayz Keyboard\" nelle impostazioni di accessibilità. Il servizio fa solo istantanee della striscia sopra la tastiera per scegliere un colore; non legge testo e non invia nulla.</string>
     <string name="adaptive_open">Apri impostazioni</string>
     <string name="adaptive_old_android">Serve Android 11 o successivo</string>
+    <string name="accent_dialog_message">Un colore tuo per la tastiera. Senza, decide l\'aspetto: Modern Droid segue lo sfondo.</string>
     <string name="accent_dialog_title">Colore principale</string>
-    <string name="accent_custom">Colore personalizzato…</string>
     <string name="accent_custom_hint">Colore come #RRGGBB</string>
     <string name="accent_invalid">Non è un colore valido</string>
     <string name="accent_reset">Torna al colore del tema</string>
@@ -270,7 +270,7 @@
     <string name="tut_voice_title">Digitazione vocale</string>
     <string name="tut_voice_body">Tocca il microfono nella cassetta degli strumenti e parla: le parole compaiono mentre parli. Con \"Continua ad ascoltare\" attivo (Impostazioni → Voce) continua a trascrivere finché non tocchi di nuovo il microfono. La prima volta Android chiede di consentire il microfono.</string>
     <string name="tut_looks_title">Aspetto e colori</string>
-    <string name="tut_looks_body">Tre aspetti: Classic (Windows Phone piatto), Modern Glass e Modern Droid, ciascuno scuro, chiaro o secondo il sistema. Scegli uno dei 20 colori di Windows Phone o uno tuo, oppure metti una foto dietro i tasti: il suo colore più vivo diventa il tuo colore. \"Il colore segue l\'app\" può anche tingere la tastiera come l\'app sotto (richiede un servizio di accessibilità che non legge testo).</string>
+    <string name="tut_looks_body">Cinque aspetti: Classic (Windows Phone piatto), Modern Glass, Modern Droid, iPhone e Modern Slate, ciascuno scuro, chiaro o secondo il sistema. Scegli un colore tuo (Modern Droid segue lo sfondo), oppure metti una foto dietro i tasti: il suo colore più vivo diventa il tuo colore. \"Il colore segue l\'app\" può anche tingere la tastiera come l\'app sotto (richiede un servizio di accessibilità che non legge testo).</string>
     <string name="tut_size_title">Dimensioni e disposizione</string>
     <string name="tut_size_body">In Impostazioni → Dimensioni e disposizione puoi rendere i tasti più alti o più bassi (separatamente in orizzontale), stringere la tastiera e metterla a sinistra o a destra per usarla con una mano, cambiare lo spazio tra i tasti e mostrare la riga dei numeri.</string>
     <string name="tut_languages_title">Lingue e vocabolari</string>
@@ -322,10 +322,10 @@
     <string name="project_keyboard_desc">La tastiera di Windows Phone per Android: tasti Metro piatti, scrittura a scorrimento, una calibrazione che impara dove cadono le tue dita, correzione intelligente e cronologia degli appunti. Ciò che scrivi resta sul telefono.</string>
     <string name="project_open_github">Apri su GitHub</string>
     <string name="no_browser">Nessun browser per aprire il link</string>
-    <string name="pivot_start">inizio</string>
-    <string name="pivot_settings">impostazioni</string>
-    <string name="pivot_about">info</string>
-    <string name="pivot_tab">scheda</string>
+    <string name="back">Indietro</string>
+    <string name="pivot_start">Inizio</string>
+    <string name="pivot_settings">Impostazioni</string>
+    <string name="pivot_about">Info</string>
     <string name="calib_title">Calibrazione</string>
     <string name="calib_hint">Scrivi la frase qui sopra</string>
     <string name="calib_progress">Frase %1$d di %2$d · %3$d%% errori</string>

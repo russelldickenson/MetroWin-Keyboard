@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.metrowin.keyboard.calibration.Bias
-import com.metrowin.keyboard.theme.Accents
 import java.util.Locale
 
 /** The keys of the settings; they are the same strings as in res/xml/prefs_*.xml. */
@@ -14,7 +13,6 @@ object K {
 
     const val THEME_STYLE = "theme_style"
     const val THEME_MODE = "theme_mode"
-    const val ACCENT_INDEX = "accent_index"
     const val CUSTOM_ACCENT = "custom_accent"          // ARGB int, 0 = off
     const val DYNAMIC_COLOR = "dynamic_color"
     const val IMAGE_BACKGROUND = "image_background"
@@ -101,7 +99,6 @@ class Prefs(context: Context) {
 
     val themeStyle get() = s(K.THEME_STYLE, "classic")
     val themeMode get() = s(K.THEME_MODE, "system")
-    val accentIndex get() = i(K.ACCENT_INDEX, Accents.DEFAULT_INDEX).coerceIn(0, Accents.metro.size - 1)
     val customAccent get() = i(K.CUSTOM_ACCENT, 0)
     val dynamicColor get() = b(K.DYNAMIC_COLOR, true)
     val imageBackground get() = b(K.IMAGE_BACKGROUND, false)

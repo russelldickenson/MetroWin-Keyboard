@@ -70,7 +70,7 @@ object KeyboardTheme {
             system != null -> if (dark) system.accent200 else system.accent600
             style == ThemeStyle.IPHONE -> 0xFF007AFF.toInt()
             style == ThemeStyle.SLATE -> 0xFF8AB4F8.toInt()
-            else -> Accents.metro[p.accentIndex]
+            else -> Accents.DEFAULT
         }
 
         var bg = when {

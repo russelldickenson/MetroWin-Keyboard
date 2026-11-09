@@ -13,9 +13,9 @@ import com.metrowin.keyboard.R
 class TestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val pad = (resources.displayMetrics.density * 24).toInt()
+        val pad = (resources.displayMetrics.density * 16).toInt()
         val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        root.addView(MetroUi.header(this, getString(R.string.test_title)))
+        root.addView(Ui.toolbar(this, getString(R.string.test_title)))
         root.addView(EditText(this).apply {
             setHint(R.string.test_hint)
             gravity = Gravity.TOP or Gravity.START
@@ -23,10 +23,10 @@ class TestActivity : AppCompatActivity() {
             setPadding(pad, pad, pad, pad)
             background = null
             textSize = 20f
-            typeface = com.metrowin.keyboard.ui.Fonts.light(this@TestActivity)
-            setTextColor(MetroUi.fg(this@TestActivity)); setHintTextColor(MetroUi.subtle(this@TestActivity))
+            setTextColor(Ui.onSurface(this@TestActivity)); setHintTextColor(Ui.onSurfaceVariant(this@TestActivity))
             requestFocus()
         }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
         setContentView(root)
-        MetroUi.applyInsets(root)    }
+        Ui.applyInsets(root)
+    }
 }

@@ -1,6 +1,6 @@
 The Windows Phone keyboard, on Android.
 
-• Flat Metro keys with big light type, in three looks: Classic, Modern Glass and Modern Droid, with the 20 Windows Phone colours or your own, or a photo behind the keys
+• Flat Metro keys with big light type, in five looks (Classic, Modern Glass, Modern Droid, iPhone and Modern Slate), with one colour of your own, or a photo behind the keys
 • Swipe typing, hold a key for accents and symbols, double space for a full stop, slide on the space bar to move the cursor
 • Correction that you can undo with Backspace, next-word and phrase prediction, offensive words blocked, everything learned on your phone only
 • 17 languages included; add any language or dictionary yourself

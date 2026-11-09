@@ -1,23 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Flat, black or white, no action bar: the screens draw their own big light title, like Windows Phone. -->
-    <style name="Theme.MetroWinKeyboard" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/metro_cyan</item>
-        <item name="colorPrimaryDark">@color/metro_bg</item>
-        <item name="colorAccent">@color/metro_cyan</item>
-        <item name="android:windowBackground">@color/metro_bg</item>
-        <item name="android:statusBarColor">@color/metro_bg</item>
-        <item name="android:navigationBarColor">@color/metro_bg</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="alertDialogTheme">@style/Theme.MetroWinKeyboard.Dialog</item>
+    <!--
+        Material 3. On Android 12+ the colours come from the wallpaper (DynamicColors, see KeyboardApp); the colours below are the
+        fallback for older phones, a blue scheme that matches the app icon.
+    -->
+    <style name="Theme.PhayzKeyboard" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/m3_primary</item>
+        <item name="colorOnPrimary">@color/m3_on_primary</item>
+        <item name="colorPrimaryContainer">@color/m3_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/m3_on_primary_container</item>
+        <item name="colorSecondary">@color/m3_secondary</item>
+        <item name="colorOnSecondary">@color/m3_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/m3_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/m3_on_secondary_container</item>
+        <item name="colorSurface">@color/m3_surface</item>
+        <item name="colorOnSurface">@color/m3_on_surface</item>
+        <item name="colorSurfaceVariant">@color/m3_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/m3_on_surface_variant</item>
+        <item name="colorOutline">@color/m3_outline</item>
+        <item name="android:colorBackground">@color/m3_surface</item>
+        <item name="android:windowBackground">@color/m3_surface</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">@bool/m3_light</item>
+        <item name="preferenceTheme">@style/PhayzPreferenceTheme</item>
     </style>
 
-    <style name="Theme.MetroWinKeyboard.Dialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">
-        <item name="colorAccent">@color/metro_cyan</item>
-        <item name="android:windowBackground">@color/metro_tile</item>
+    <!-- The preference screens: the stock rows, with the Material 3 switch. -->
+    <style name="PhayzPreferenceTheme" parent="PreferenceThemeOverlay">
+        <item name="switchPreferenceCompatStyle">@style/PhayzSwitchPreference</item>
+    </style>
+    <style name="PhayzSwitchPreference" parent="Preference.SwitchPreferenceCompat.Material">
+        <item name="widgetLayout">@layout/pref_widget_material_switch</item>
     </style>
 
-    <style name="Theme.MetroWinKeyboard.Transparent" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Theme.PhayzKeyboard.Transparent" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
