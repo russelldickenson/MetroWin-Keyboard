@@ -231,7 +231,7 @@ class KeyboardView(context: Context) : View(context) {
         if (pressed) { val inset = minOf(k.width, k.height) * 0.05f; rect.set(k.left + inset, k.top + inset, k.right - inset, k.bottom - inset) }
         else rect.set(k.left, k.top, k.right, k.bottom)
         if (c.shadowDp > 0f && !pressed) {
-            keyPaint.color = if (c.dark) 0xFF000000.toInt() else 0xFF898A8D.toInt()
+            keyPaint.color = if (c.style == ThemeStyle.SLATE) 0x66000000 else if (c.dark) 0xFF000000.toInt() else 0xFF898A8D.toInt()
             canvas.drawRoundRect(rect.left, rect.top + dp(c.shadowDp), rect.right, rect.bottom + dp(c.shadowDp), corner, corner, keyPaint)
         }
         keyPaint.color = fill
@@ -241,11 +241,11 @@ class KeyboardView(context: Context) : View(context) {
             canvas.drawRoundRect(rect, corner, corner, strokePaint)
         }
         val fg = when {
-            ios -> c.text
+            ios -> c.keyText
             isEnter || (pressed && c.style != ThemeStyle.CLASSIC) -> if (isEnter) c.onAccent else ColorMath.onColor(fill)
             shiftOn && c.style == ThemeStyle.CLASSIC -> c.onAccent
             pressed -> c.onAccent
-            else -> c.text
+            else -> c.keyText
         }
         iconPaint.color = fg
         val cx = k.centerX; val cy = k.centerY
@@ -259,13 +259,13 @@ class KeyboardView(context: Context) : View(context) {
             KeyType.EMOJI -> Icons.draw(canvas, Icon.EMOJI, cx, cy, iconSize, iconPaint)
             KeyType.LANGUAGE -> Icons.draw(canvas, Icon.GLOBE, cx, cy, iconSize, iconPaint)
             KeyType.SPACE -> if (ios) drawLabel(canvas, context.getString(R.string.key_space), cx, cy, k.height * 0.28f, fg, false)
-                else if (languageName.isNotEmpty()) drawLabel(canvas, languageName, cx, cy, k.height * 0.26f, ColorMath.withAlpha(c.text, 0x90), false)
+                else if (languageName.isNotEmpty()) drawLabel(canvas, languageName, cx, cy, k.height * 0.26f, ColorMath.withAlpha(c.keyText, 0x90), false)
             KeyType.SYMBOLS, KeyType.SYMBOLS_PAGE -> drawLabel(canvas, k.label, cx, cy, k.height * 0.30f, fg, false)
             KeyType.CHAR -> {
                 val label = if (shift != 0) k.label.uppercase() else k.label
                 drawLabel(canvas, label, cx, cy, k.height * (if (label.length > 1) 0.30f else 0.42f), fg, false)
                 if (showHints && k.hint != null) {
-                    hintPaint.color = c.subtle; hintPaint.textSize = k.height * 0.22f
+                    hintPaint.color = ColorMath.withAlpha(c.keyText, 0xB0); hintPaint.textSize = k.height * 0.22f
                     canvas.drawText(k.hint, k.right - dp(5f), k.top + k.height * 0.28f, hintPaint)
                 }
             }
@@ -332,7 +332,7 @@ class KeyboardView(context: Context) : View(context) {
                     canvas.drawRoundRect(rect, corner, corner, keyPaint)
                 }
                 val shown = if (shift != 0) s.uppercase() else s
-                drawLabel(canvas, shown, x + itemW / 2f, top + h / 2f, h * 0.45f, if (i == p.popupIndex) c.onAccent else c.text, false)
+                drawLabel(canvas, shown, x + itemW / 2f, top + h / 2f, h * 0.45f, if (i == p.popupIndex) c.onAccent else c.keyText, false)
             }
         }
     }

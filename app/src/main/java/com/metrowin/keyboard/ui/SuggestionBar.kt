@@ -75,7 +75,7 @@ class SuggestionBar(context: Context) : View(context) {
         val h = height.toFloat()
         val bw = buttonWidth()
         if (pressedIndex == LEFT) highlight(canvas, c, 0f, bw)
-        icon.color = if (toolsOpen) c.accent else c.subtle
+        icon.color = if (toolsOpen) c.barAccent else c.subtle
         Icons.draw(canvas, Icon.ELLIPSIS, bw / 2f, h / 2f, h * 0.42f, icon)
 
         // The quick button, drawn where the Windows Phone app bar keeps its main action.
@@ -83,21 +83,21 @@ class SuggestionBar(context: Context) : View(context) {
         if (pressedIndex == QUICK) highlight(canvas, c, qx, width.toFloat())
         icon.color = c.text
         Icons.draw(canvas, quick.icon, qx + bw / 2f, h / 2f, h * 0.42f, icon)
-        if (badge) { fill.color = c.accent; canvas.drawCircle(qx + bw / 2f + h * 0.2f, h / 2f - h * 0.2f, h * 0.075f, fill) }
+        if (badge) { fill.color = c.barAccent; canvas.drawCircle(qx + bw / 2f + h * 0.2f, h / 2f - h * 0.2f, h * 0.075f, fill) }
 
         val x0 = bw
         val w = width - 2 * bw
         val text = status
         if (text != null) {
             drawText(canvas, text, x0 + w / 2f, h / 2f, w - PAD, c.text, false, false)
-            if (voiceActive) { icon.color = c.accent; Icons.draw(canvas, Icon.MIC, qx + bw / 2f, h / 2f, h * 0.42f, icon) }
+            if (voiceActive) { icon.color = c.barAccent; Icons.draw(canvas, Icon.MIC, qx + bw / 2f, h / 2f, h * 0.42f, icon) }
             return
         }
         if (toolsOpen) {
             val cell = w / tools.size
             tools.forEachIndexed { i, t ->
                 if (pressedIndex == i) highlight(canvas, c, x0 + cell * i, x0 + cell * (i + 1))
-                icon.color = if (t == Tool.MIC && voiceActive) c.accent else c.text
+                icon.color = if (t == Tool.MIC && voiceActive) c.barAccent else c.text
                 Icons.draw(canvas, t.icon, x0 + cell * i + cell / 2f, h / 2f, h * 0.4f, icon)
             }
             return
@@ -112,8 +112,8 @@ class SuggestionBar(context: Context) : View(context) {
             val s = slots.getOrNull(i) ?: continue
             if (pressedIndex == i) highlight(canvas, c, x0 + e[i], x0 + e[i + 1])
             // The word space will insert is in the accent colour, unless that colour would not read on this bar.
-            val readable = ColorMath.luminance(c.accent).let { kotlin.math.abs(it - ColorMath.luminance(c.bar)) > 0.12 }
-            drawText(canvas, shown(s), x0 + (e[i] + e[i + 1]) / 2f, h / 2f, e[i + 1] - e[i] - PAD, if (s.best && readable) c.accent else c.text, s.best, s.phrase)
+            val readable = ColorMath.luminance(c.barAccent).let { kotlin.math.abs(it - ColorMath.luminance(c.bar)) > 0.12 }
+            drawText(canvas, shown(s), x0 + (e[i] + e[i + 1]) / 2f, h / 2f, e[i + 1] - e[i] - PAD, if (s.best && readable) c.barAccent else c.text, s.best, s.phrase)
         }
     }
 

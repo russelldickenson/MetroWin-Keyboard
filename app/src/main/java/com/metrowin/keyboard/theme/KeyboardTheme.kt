@@ -16,7 +16,10 @@ enum class ThemeStyle(val code: String) {
     DROID("droid"),
 
     /** The iOS keyboard: pale grey, white rounded keys with a thin shadow under them, darker grey for the special keys. */
-    IPHONE("iphone");
+    IPHONE("iphone"),
+
+    /** Dark grey keys with light grey symbols, on a light grey surround (a dark one in dark mode). */
+    SLATE("slate");
 
     companion object { fun from(code: String?) = entries.firstOrNull { it.code == code } ?: CLASSIC }
 }
@@ -41,7 +44,14 @@ data class KeyboardColors(
     val translucent: Boolean,
     /** A line under each key, as on iOS; 0 for none. */
     val shadowDp: Float = 0f,
-)
+    /** The colour of what is written on the keys, when it is not [text] (the keys are dark on a light surround); 0 for [text]. */
+    val keyTextColor: Int = 0,
+    /** The accent as seen on the bar above the keys, when the surround is so light that [accent] would not read there; 0 for [accent]. */
+    val barAccentColor: Int = 0,
+) {
+    val barAccent get() = if (barAccentColor != 0) barAccentColor else accent
+    val keyText get() = if (keyTextColor != 0) keyTextColor else text
+}
 
 object KeyboardTheme {
     /**
@@ -59,12 +69,14 @@ object KeyboardTheme {
             pictureAccent != 0 -> pictureAccent
             system != null -> if (dark) system.accent200 else system.accent600
             style == ThemeStyle.IPHONE -> 0xFF007AFF.toInt()
+            style == ThemeStyle.SLATE -> 0xFF8AB4F8.toInt()
             else -> Accents.metro[p.accentIndex]
         }
 
         var bg = when {
             style == ThemeStyle.DROID && system != null -> if (dark) system.neutral900 else system.neutral50
             style == ThemeStyle.DROID -> if (dark) ColorMath.mix(0xFF101114.toInt(), accent, 0.10f) else ColorMath.mix(0xFFFBFBFD.toInt(), accent, 0.06f)
+            style == ThemeStyle.SLATE -> if (dark) 0xFF263238.toInt() else 0xFFD3D6DB.toInt()
             style == ThemeStyle.IPHONE -> if (dark) 0xFF1C1C1E.toInt() else 0xFFD2D4DA.toInt()
             style == ThemeStyle.GLASS -> if (dark) ColorMath.mix(0xFF0A1020.toInt(), accent, 0.22f) else ColorMath.mix(0xFFEAF1FA.toInt(), accent, 0.12f)
             else -> if (dark) (if (p.oledBlack) 0xFF000000.toInt() else 0xFF1B1B1B.toInt()) else 0xFFD6D6D6.toInt()
@@ -103,6 +115,16 @@ object KeyboardTheme {
                 text = text, subtle = subtle, accent = accent, onAccent = onAccent, stroke = 0,
                 popup = if (dark) 0xFF6B6B6E.toInt() else 0xFFFFFFFF.toInt(), cornerDp = 5f, strokeDp = 0f, translucent = false,
                 shadowDp = 1f,
+            )
+            ThemeStyle.SLATE -> KeyboardColors(
+                style, dark, bg, bg,
+                key = if (dark) 0xFF444B50.toInt() else 0xFF41474C.toInt(),
+                keyPressed = 0xFF68717A.toInt(),
+                special = if (dark) 0xFF323A40.toInt() else 0xFF2E3338.toInt(),
+                text = text, subtle = subtle, accent = accent, onAccent = onAccent, stroke = 0,
+                popup = if (dark) 0xFF444B50.toInt() else 0xFF41474C.toInt(), cornerDp = 9f, strokeDp = 0f, translucent = false,
+                shadowDp = 1.5f, keyTextColor = 0xFFE3E5E8.toInt(),
+                barAccentColor = if (!dark && p.customAccent == 0 && pictureAccent == 0) 0xFF1A66D6.toInt() else 0,
             )
             ThemeStyle.DROID -> {
                 val keyColor = system?.let { if (dark) it.neutral800 else it.neutral0 } ?: ColorMath.mix(bg, text, if (dark) 0.10f else 0.0f).let { if (dark) it else ColorMath.lighten(bg, 0.6f) }
