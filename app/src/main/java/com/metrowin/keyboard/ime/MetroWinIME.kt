@@ -373,6 +373,7 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
         kb.setBackgroundImage(backgroundBitmap(), prefs.imageDim)
         val land = resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
         kb.setMetrics(if (land) prefs.keyHeightLand else prefs.keyHeight, prefs.keyGap, prefs.keyboardWidth, prefs.keyboardAlign)
+        kb.setKeyFont(prefs.keyFont, prefs.keyWeight)
         kb.setBias(prefs.calibBias(land)); kb.setTouchSigma(prefs.calibSigma)
         kb.setBehavior(prefs.longPressSymbols, prefs.longPressMs, prefs.swipe && field == Field.TEXT, prefs.spaceCursor, prefs.keyHints, prefs.keyPreview)
         bar?.setQuickTool(Tool.from(prefs.quickTool)); bar?.setBadge(clipBadge && Tool.from(prefs.quickTool) == Tool.CLIPBOARD)

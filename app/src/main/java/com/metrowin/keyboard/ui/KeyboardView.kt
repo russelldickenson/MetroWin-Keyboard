@@ -119,6 +119,8 @@ class KeyboardView(context: Context) : View(context) {
         this.longPressEnabled = longPress; this.longPressMs = longPressMs.toLong(); this.swipeEnabled = swipe
         this.spaceCursorEnabled = spaceCursor; this.showHints = hints; invalidate()
     }
+    private var keyTypeface: Typeface = Typeface.DEFAULT
+    fun setKeyFont(family: String, weight: Int) { keyTypeface = KeyFonts.get(context, family, weight); invalidate() }
     fun setSpaceLanguageSwitch(on: Boolean) { spaceSwitchesLanguage = on }
     /** The touch correction learned by the calibration (see [Bias]); null for none. It changes only where touches land, never how the keys look. */
     fun setBias(c: DoubleArray?) { bias = c }
@@ -261,7 +263,7 @@ class KeyboardView(context: Context) : View(context) {
 
     private fun drawLabel(canvas: Canvas, text: String, cx: Float, cy: Float, size: Float, color: Int, bold: Boolean) {
         textPaint.color = color; textPaint.textSize = size
-        textPaint.typeface = if (bold) Fonts.semibold(context) else Fonts.light(context)
+        textPaint.typeface = if (bold) Fonts.semibold(context) else keyTypeface
         val m = textPaint.fontMetrics
         canvas.drawText(text, cx, cy - (m.ascent + m.descent) / 2f, textPaint)
     }

@@ -210,6 +210,26 @@
     <string name="ok">OK</string>
     <string name="cancel">Annulla</string>
     <string name="pref_space_cursor_summary">Tieni premuto e scorri a sinistra o destra sulla barra spaziatrice</string>
+    <string name="pref_key_font_title">Carattere dei tasti</string>
+    <string name="pref_key_weight_title">Spessore dei tasti</string>
+    <string-array name="key_font_names">
+        <item>Sistema</item>
+        <item>Open Sans</item>
+        <item>Roboto</item>
+        <item>Atkinson Hyperlegible</item>
+    </string-array>
+    <string-array name="key_font_values">
+        <item>system</item>
+        <item>opensans</item>
+        <item>roboto</item>
+        <item>atkinson</item>
+    </string-array>
+    <string-array name="key_weight_values" translatable="false">
+        <item>200</item>
+        <item>300</item>
+        <item>400</item>
+        <item>500</item>
+    </string-array>
     <string-array name="theme_style_names">
         <item>Classic (Windows Phone piatto)</item>
         <item>Modern Glass</item>

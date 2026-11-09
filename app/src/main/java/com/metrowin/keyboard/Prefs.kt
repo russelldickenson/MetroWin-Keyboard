@@ -38,6 +38,8 @@ object K {
     const val UPDATE_RELEASE = "update_release"          // the newer release the last look found, as JSON, "" = none
     const val NUMBER_ROW = "number_row"
     const val KEY_HINTS = "key_hints"
+    const val KEY_FONT = "key_font"
+    const val KEY_WEIGHT = "key_weight"
 
     const val DOUBLE_SPACE = "double_space_period"
     const val LONG_PRESS_SYMBOLS = "long_press_symbols"
@@ -159,6 +161,8 @@ class Prefs(context: Context) {
         get() = sp.getString(K.TRANSLATE_TARGET, null) ?: (languages.map { it.substringBefore('-') }.firstOrNull { it != java.util.Locale.getDefault().language } ?: "en")
         set(v) { putString(K.TRANSLATE_TARGET, v) }
     val keyHints get() = b(K.KEY_HINTS, true)
+    val keyFont get() = s(K.KEY_FONT, "opensans")
+    val keyWeight get() = com.metrowin.keyboard.ui.KeyFonts.snap(keyFont, s(K.KEY_WEIGHT, "300").toIntOrNull() ?: 300)
 
     val doubleSpace get() = b(K.DOUBLE_SPACE, true)
     val longPressSymbols get() = b(K.LONG_PRESS_SYMBOLS, true)

@@ -211,7 +211,20 @@ class AppearanceFragment : BaseFragment(R.xml.prefs_appearance, R.string.screen_
         background({ BackgroundImage.save(ctx, uri) }) { ok -> toast(if (ok) R.string.picture_saved else R.string.picture_failed) }
     }
 
+    /** Lists only the weights that look different in [family], and moves the chosen weight to the nearest of them. */
+    private fun showWeights(family: String) {
+        val pref = findPreference<androidx.preference.ListPreference>(K.KEY_WEIGHT) ?: return
+        val list = com.metrowin.keyboard.ui.KeyFonts.weightsFor(family).map { it.toString() }.toTypedArray()
+        pref.entries = list; pref.entryValues = list
+        val now = com.metrowin.keyboard.ui.KeyFonts.snap(family, pref.value?.toIntOrNull() ?: 300).toString()
+        if (pref.value != now) pref.value = now
+    }
+
     override fun setup() {
+        findPreference<androidx.preference.ListPreference>(K.KEY_FONT)?.let { f ->
+            showWeights(f.value ?: "opensans")
+            f.setOnPreferenceChangeListener { _, v -> showWeights(v as String); true }
+        }
         click("accent_pick") { showAccentDialog() }
         click("image_pick") { pickImage.launch("image/*") }
         click("image_remove") { BackgroundImage.remove(requireContext()); toast(R.string.removed) }

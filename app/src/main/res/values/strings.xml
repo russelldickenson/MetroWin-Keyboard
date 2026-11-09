@@ -210,6 +210,26 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="pref_space_cursor_summary">Hold and slide left or right on the space bar</string>
+    <string name="pref_key_font_title">Key font</string>
+    <string name="pref_key_weight_title">Key weight</string>
+    <string-array name="key_font_names">
+        <item>System</item>
+        <item>Open Sans</item>
+        <item>Roboto</item>
+        <item>Atkinson Hyperlegible</item>
+    </string-array>
+    <string-array name="key_font_values">
+        <item>system</item>
+        <item>opensans</item>
+        <item>roboto</item>
+        <item>atkinson</item>
+    </string-array>
+    <string-array name="key_weight_values" translatable="false">
+        <item>200</item>
+        <item>300</item>
+        <item>400</item>
+        <item>500</item>
+    </string-array>
     <string-array name="theme_style_names">
         <item>Classic (flat Windows Phone)</item>
         <item>Modern Glass</item>

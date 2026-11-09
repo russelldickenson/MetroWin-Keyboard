@@ -54,6 +54,7 @@ class KeyboardPreview(context: Context, attrs: AttributeSet?) : Preference(conte
         val layout = app.layouts.get(p.currentLanguage ?: p.languages.first()) ?: app.layouts.forLanguage(java.util.Locale.getDefault().language)
         val colors = KeyboardTheme.resolve(context, p, KeyboardTheme.isSystemDark(context), null, if (p.usePictureAccent && p.imageBackground) p.pictureAccent else 0)
         kb.setColors(colors)
+        kb.setKeyFont(p.keyFont, p.keyWeight)
         kb.setMetrics(p.keyHeight, p.keyGap, p.keyboardWidth, p.keyboardAlign)
         kb.setBehavior(false, p.longPressMs, false, false, p.keyHints, false)
         kb.setPage(KeyboardBuilder.letters(layout, p.numberRow, p.keyHints, p.languages.size > 1 && p.languageKey))
