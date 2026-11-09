@@ -17,6 +17,7 @@ class KeyboardApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        java.io.File(filesDir, "background.jpg").delete() // the picture behind the keys of an earlier version
         // Material You: on Android 12+ the settings take their colours from the wallpaper.
         com.google.android.material.color.DynamicColors.applyToActivitiesIfAvailable(this)
     }

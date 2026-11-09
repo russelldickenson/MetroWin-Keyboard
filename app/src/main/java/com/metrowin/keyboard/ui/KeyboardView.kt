@@ -64,8 +64,6 @@ class KeyboardView(context: Context) : View(context) {
     private var languageName = ""
     private var enterIcon: Icon = Icon.ENTER
     private var enterLabel: String? = null
-    private var backgroundBitmap: Bitmap? = null
-    private var bgDim = 55
 
     private var heightPct = 100
     private var gapDp = 3f
@@ -114,7 +112,6 @@ class KeyboardView(context: Context) : View(context) {
     fun setShift(state: Int) { if (shift != state) { shift = state; invalidate() } }
     fun setLanguageName(name: String) { languageName = name; invalidate() }
     fun setEnterAction(icon: Icon, label: String?) { enterIcon = icon; enterLabel = label; invalidate() }
-    fun setBackgroundImage(b: Bitmap?, dim: Int) { backgroundBitmap = b; bgDim = dim; invalidate() }
     fun setBehavior(longPress: Boolean, longPressMs: Int, swipe: Boolean, spaceCursor: Boolean, hints: Boolean, preview: Boolean = true) {
         this.preview = preview
         this.longPressEnabled = longPress; this.longPressMs = longPressMs.toLong(); this.swipeEnabled = swipe
@@ -207,16 +204,7 @@ class KeyboardView(context: Context) : View(context) {
         drawTrail(canvas, c)
     }
 
-    private fun drawBackground(canvas: Canvas, c: KeyboardColors) {
-        canvas.drawColor(c.background)
-        val bmp = backgroundBitmap ?: return
-        val scale = maxOf(width / bmp.width.toFloat(), height / bmp.height.toFloat())
-        val dw = bmp.width * scale; val dh = bmp.height * scale
-        rect.set((width - dw) / 2f, (height - dh) / 2f, (width + dw) / 2f, (height + dh) / 2f)
-        canvas.drawBitmap(bmp, null, rect, bgPaint)
-        // The dim keeps the keys readable over any picture.
-        canvas.drawColor(ColorMath.withAlpha(if (c.dark) 0xFF000000.toInt() else 0xFFFFFFFF.toInt(), bgDim * 255 / 100))
-    }
+    private fun drawBackground(canvas: Canvas, c: KeyboardColors) { canvas.drawColor(c.background) }
 
     private fun isPressed(k: Key): Boolean = pointers.values.any { it.key === k && it.popupKey == null && !it.swiping }
 

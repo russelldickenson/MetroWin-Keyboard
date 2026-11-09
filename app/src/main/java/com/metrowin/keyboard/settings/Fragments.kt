@@ -173,12 +173,6 @@ class LanguagesFragment : BaseFragment(R.xml.prefs_languages, R.string.screen_la
 }
 
 class AppearanceFragment : BaseFragment(R.xml.prefs_appearance, R.string.screen_appearance) {
-    private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        if (uri == null) return@registerForActivityResult
-        val ctx = requireContext().applicationContext
-        background({ BackgroundImage.save(ctx, uri) }) { ok -> toast(if (ok) R.string.picture_saved else R.string.picture_failed) }
-    }
-
     /** Lists only the weights that look different in [family], and moves the chosen weight to the nearest of them. */
     private fun showWeights(family: String) {
         val pref = findPreference<androidx.preference.ListPreference>(K.KEY_WEIGHT) ?: return
@@ -194,8 +188,6 @@ class AppearanceFragment : BaseFragment(R.xml.prefs_appearance, R.string.screen_
             f.setOnPreferenceChangeListener { _, v -> showWeights(v as String); true }
         }
         click("accent_pick") { showAccentDialog() }
-        click("image_pick") { pickImage.launch("image/*") }
-        click("image_remove") { BackgroundImage.remove(requireContext()); toast(R.string.removed) }
         findPreference<Preference>("adaptive_color")?.setOnPreferenceChangeListener { _, value ->
             if (value == true) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) { toast(R.string.adaptive_old_android); return@setOnPreferenceChangeListener false }

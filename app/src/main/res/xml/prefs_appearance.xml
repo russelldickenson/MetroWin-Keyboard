@@ -8,13 +8,6 @@
     <Preference android:key="accent_pick" android:title="@string/pref_accent_title" android:summary="@string/pref_accent_summary" />
     <SwitchPreferenceCompat android:key="dynamic_color" android:title="@string/pref_dynamic_title" android:summary="@string/pref_dynamic_summary" android:defaultValue="true" />
     <SwitchPreferenceCompat android:key="oled_black" android:title="@string/pref_oled_title" android:summary="@string/pref_oled_summary" android:defaultValue="false" />
-    <PreferenceCategory android:title="@string/cat_picture">
-        <SwitchPreferenceCompat android:key="image_background" android:title="@string/pref_image_bg_title" android:summary="@string/pref_image_bg_summary" android:defaultValue="false" />
-        <Preference android:key="image_pick" android:title="@string/pref_image_pick_title" android:summary="@string/pref_image_pick_summary" />
-        <Preference android:key="image_remove" android:title="@string/pref_image_remove_title" />
-        <SeekBarPreference android:key="image_dim" android:title="@string/pref_image_dim_title" android:defaultValue="55" android:max="90" app:min="0" app:showSeekBarValue="true" />
-        <SwitchPreferenceCompat android:key="use_picture_accent" android:title="@string/pref_picture_accent_title" android:summary="@string/pref_picture_accent_summary" android:defaultValue="true" />
-    </PreferenceCategory>
     <PreferenceCategory android:title="@string/cat_adaptive">
         <SwitchPreferenceCompat android:key="adaptive_color" android:title="@string/pref_adaptive_title" android:summary="@string/pref_adaptive_summary" android:defaultValue="false" />
     </PreferenceCategory>

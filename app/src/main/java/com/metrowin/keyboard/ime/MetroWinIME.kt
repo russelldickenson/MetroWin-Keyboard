@@ -126,8 +126,6 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
     private var autoSpace = false
     private var lastSwipe: SwipeResult? = null
     private var lastSpaceTime = 0L
-    private var bgBitmap: Bitmap? = null
-    private var bgStamp = -1L
     private var refreshPending = false
 
     private val prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
@@ -332,25 +330,13 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
         blockOffensive = prefs.blockOffensive, usePersonal = learningOn || prefs.learn, smart = prefs.smartCorrect,
     )
 
-    private fun backgroundBitmap(): Bitmap? {
-        if (!prefs.imageBackground) return null
-        val f = File(filesDir, "background.jpg")
-        if (!f.exists()) return null
-        if (f.lastModified() == bgStamp && bgBitmap != null) return bgBitmap
-        bgStamp = f.lastModified()
-        bgBitmap = runCatching { BitmapFactory.decodeFile(f.absolutePath) }.getOrNull()
-        return bgBitmap
-    }
-
     /** Applies every setting to the views. Cheap enough to run on any change. */
     private fun applyAll() {
         val kb = keyboard ?: return
-        val picture = if (prefs.usePictureAccent && prefs.imageBackground) prefs.pictureAccent else 0
-        val c = KeyboardTheme.resolve(this, prefs, KeyboardTheme.isSystemDark(this), if (prefs.adaptiveColor) AdaptiveColor.color else null, picture)
+        val c = KeyboardTheme.resolve(this, prefs, KeyboardTheme.isSystemDark(this), if (prefs.adaptiveColor) AdaptiveColor.color else null)
         colors = c
         kb.setColors(c); bar?.setColors(c); emoji?.setColors(c); emojiResults?.setColors(c); clipboardPanel?.setColors(c); tutorialPanel?.setColors(c)
         root?.setBackgroundColor(c.background)
-        kb.setBackgroundImage(backgroundBitmap(), prefs.imageDim)
         val land = resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
         kb.setMetrics(if (land) prefs.keyHeightLand else prefs.keyHeight, prefs.keyGap, prefs.keyboardWidth, prefs.keyboardAlign)
         kb.setKeyFont(prefs.keyFont, prefs.keyWeight)

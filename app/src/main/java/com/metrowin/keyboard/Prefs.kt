@@ -15,8 +15,6 @@ object K {
     const val THEME_MODE = "theme_mode"
     const val CUSTOM_ACCENT = "custom_accent"          // ARGB int, 0 = off
     const val DYNAMIC_COLOR = "dynamic_color"
-    const val IMAGE_BACKGROUND = "image_background"
-    const val IMAGE_DIM = "image_dim"
     const val ADAPTIVE_COLOR = "adaptive_color"
     const val OLED_BLACK = "oled_black"
 
@@ -66,15 +64,12 @@ object K {
 
     const val EMOJI_RECENT = "emoji_recent"
     const val SOUND_FILE = "sound_file_set"
-    const val BG_IMAGE_SET = "bg_image_set"
     const val QUICK_TOOL = "quick_tool"
     const val LANGUAGE_KEY = "language_key"
     const val KEY_PREVIEW = "key_preview"
     const val BOTTOM_PADDING = "bottom_padding"
     const val ONBOARDING_DONE = "onboarding_done"
     const val TUTORIAL_SEEN = "tutorial_seen_version"
-    const val PICTURE_ACCENT = "picture_accent"
-    const val USE_PICTURE_ACCENT = "use_picture_accent"
 }
 
 /** Typed access to the settings, with the defaults in one place. */
@@ -98,12 +93,8 @@ class Prefs(context: Context) {
     val themeMode get() = s(K.THEME_MODE, "system")
     val customAccent get() = i(K.CUSTOM_ACCENT, 0)
     val dynamicColor get() = b(K.DYNAMIC_COLOR, true)
-    val imageBackground get() = b(K.IMAGE_BACKGROUND, false)
-    val imageDim get() = i(K.IMAGE_DIM, 55)
     val adaptiveColor get() = b(K.ADAPTIVE_COLOR, false)
     val oledBlack get() = b(K.OLED_BLACK, false)
-    val usePictureAccent get() = b(K.USE_PICTURE_ACCENT, true)
-    val pictureAccent get() = i(K.PICTURE_ACCENT, 0)
 
     val keyHeight get() = i(K.KEY_HEIGHT, 100)
     val keyHeightLand get() = i(K.KEY_HEIGHT_LAND, 100)

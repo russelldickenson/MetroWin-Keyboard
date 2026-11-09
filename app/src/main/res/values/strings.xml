@@ -18,7 +18,7 @@
     <string name="screen_languages">Languages and dictionaries</string>
     <string name="screen_languages_summary">Layouts, word lists, your own languages</string>
     <string name="screen_appearance">Appearance</string>
-    <string name="screen_appearance_summary">Themes, colours, your own picture</string>
+    <string name="screen_appearance_summary">Looks, fonts, colours</string>
     <string name="screen_size">Size and layout</string>
     <string name="screen_size_summary">Key height and width, number row</string>
     <string name="screen_typing">Typing</string>
@@ -64,15 +64,6 @@
     <string name="pref_dynamic_summary">Modern Droid only, Android 12 or newer: use the system palette</string>
     <string name="pref_oled_title">Pure black</string>
     <string name="pref_oled_summary">Darkest background, saves battery on OLED screens</string>
-    <string name="cat_picture">Your picture</string>
-    <string name="pref_image_bg_title">Picture behind the keys</string>
-    <string name="pref_image_bg_summary">Use a photo as the keyboard background</string>
-    <string name="pref_image_pick_title">Choose a picture…</string>
-    <string name="pref_image_pick_summary">Stays on your phone</string>
-    <string name="pref_image_remove_title">Remove the picture</string>
-    <string name="pref_image_dim_title">Dim the picture</string>
-    <string name="pref_picture_accent_title">Accent colour from the picture</string>
-    <string name="pref_picture_accent_summary">Takes the most vivid colour of the picture</string>
     <string name="cat_adaptive">Follow the app</string>
     <string name="pref_adaptive_title">Keyboard colour follows the app below</string>
     <string name="pref_adaptive_summary">Samples a strip of the screen above the keys (chat, website…). Needs an accessibility service, Android 11 or newer. It reads no text.</string>
@@ -85,8 +76,6 @@
     <string name="accent_custom_hint">Colour as #RRGGBB</string>
     <string name="accent_invalid">That is not a colour</string>
     <string name="accent_reset">Back to the theme colour</string>
-    <string name="picture_saved">Picture saved</string>
-    <string name="picture_failed">That picture could not be used</string>
     <string name="pref_key_height_title">Key height (portrait, %)</string>
     <string name="pref_key_height_land_title">Key height (landscape, %)</string>
     <string name="pref_width_title">Keyboard width (%)</string>
@@ -274,7 +263,7 @@
     <string name="tut_voice_title">Voice typing</string>
     <string name="tut_voice_body">Tap the microphone in the toolbox and speak: the words appear as you talk. With \"Keep listening\" on (Settings → Voice) it keeps transcribing until you tap the microphone again. The first time Android asks to allow the microphone.</string>
     <string name="tut_looks_title">Looks and colours</string>
-    <string name="tut_looks_body">Five looks: Classic (flat Windows Phone), Modern Glass, Modern Droid, iPhone and Modern Slate, each dark, light or following the system. Pick one colour of your own (Modern Droid follows your wallpaper), or use a photo behind the keys: its brightest colour becomes your colour. \"Colour follows the app\" can also tint the keyboard like the app under it (it needs an accessibility service that reads no text).</string>
+    <string name="tut_looks_body">Five looks: Classic (flat Windows Phone), Modern Glass, Modern Droid, iPhone and Modern Slate, each dark, light or following the system. Pick one colour of your own (Modern Droid follows your wallpaper). \"Colour follows the app\" can also tint the keyboard like the app under it (it needs an accessibility service that reads no text).</string>
     <string name="tut_size_title">Size and layout</string>
     <string name="tut_size_body">In Settings → Size and layout you can make the keys taller or shorter (separately in landscape), make the keyboard narrower and put it on the left or right for one-handed use, change the space between keys, and show a number row.</string>
     <string name="tut_languages_title">Languages and dictionaries</string>
@@ -375,5 +364,5 @@
     <string name="tut_smart_title">Smart correction</string>
     <string name="tut_smart_body">The keyboard does not only look for the nearest word: it weighs where your finger landed (a tap between two keys makes either one likely), the word you wrote before, how common each word is and which corrections you undid. When two fixes are equally likely it shows both and changes nothing. It also offers a missing space ("thankyou" → "thank you"). All of this runs on the phone and learns only from what you type; switch it off in Settings → Suggestions.</string>
     <string name="tut_backup_title">Backup and restore</string>
-    <string name="tut_backup_body">In Settings → Backup and restore you can save everything the app keeps in one file: settings, learned words, imported dictionaries and layouts, the clipboard and your picture. Restore it on another phone, or after installing the app again with another signature. The file holds your keys and what you typed, so keep it private.</string>
+    <string name="tut_backup_body">In Settings → Backup and restore you can save everything the app keeps in one file: settings, learned words, imported dictionaries and layouts, and the clipboard. Restore it on another phone, or after installing the app again with another signature. The file holds what you typed, so keep it private.</string>
 </resources>

@@ -46,45 +46,6 @@ object ColorMath {
         return floatArrayOf((h + 360f) % 360f, if (mx == 0f) 0f else d / mx, mx)
     }
 
-    /**
-     * The colour that best stands for a picture: the pixels are grouped in coarse colour buckets, and the bucket that is most
-     * colourful (and common) wins, so a grey wall with a red door gives red. Falls back to the average for a grey picture.
-     */
-    fun dominant(pixels: IntArray): Int {
-        if (pixels.isEmpty()) return Accents.DEFAULT
-        val count = IntArray(4096); val sr = LongArray(4096); val sg = LongArray(4096); val sb = LongArray(4096)
-        var tr = 0L; var tg = 0L; var tb = 0L
-        for (p in pixels) {
-            val r = red(p); val g = green(p); val b = blue(p)
-            tr += r; tg += g; tb += b
-            val i = (r shr 4 shl 8) or (g shr 4 shl 4) or (b shr 4)
-            count[i]++; sr[i] += r.toLong(); sg[i] += g.toLong(); sb[i] += b.toLong()
-        }
-        var best = -1; var bestScore = 0.0
-        for (i in 0 until 4096) {
-            if (count[i] == 0) continue
-            val c = argb(255, (sr[i] / count[i]).toInt(), (sg[i] / count[i]).toInt(), (sb[i] / count[i]).toInt())
-            val hsv = hsv(c)
-            // Near-black and near-white buckets carry no colour; a vivid bucket is worth more than a pale one.
-            val vividness = hsv[1] * min(1f, hsv[2] * 1.6f) * (if (hsv[2] > 0.97f && hsv[1] < 0.1f) 0f else 1f)
-            val score = count[i] * (0.15 + vividness)
-            if (vividness > 0.18f && score > bestScore) { bestScore = score; best = i }
-        }
-        if (best < 0) {
-            val n = pixels.size
-            return argb(255, (tr / n).toInt(), (tg / n).toInt(), (tb / n).toInt())
-        }
-        return argb(255, (sr[best] / count[best]).toInt(), (sg[best] / count[best]).toInt(), (sb[best] / count[best]).toInt())
-    }
-
-    /** The colour to use as an accent: the picture's colour, pushed away from muddy or washed-out values. */
-    fun asAccent(c: Int): Int {
-        val h = hsv(c)
-        val s = h[1].coerceIn(0.45f, 0.95f)
-        val v = h[2].coerceIn(0.55f, 0.95f)
-        return hsvToArgb(h[0], s, v)
-    }
-
     fun hsvToArgb(h: Float, s: Float, v: Float): Int {
         val c = v * s; val x = c * (1 - kotlin.math.abs((h / 60f) % 2 - 1)); val m = v - c
         val (r, g, b) = when {

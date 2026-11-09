@@ -69,17 +69,15 @@ object KeyboardTheme {
     /**
      * @param adaptive the colour sampled from the app under the keyboard (see ScreenColorService), or null
      * @param systemDark whether Android is in dark mode
-     * @param pictureAccent the accent taken from the user's picture, or 0
      */
-    fun resolve(context: Context, p: Prefs, systemDark: Boolean, adaptive: Int?, pictureAccent: Int = 0): KeyboardColors {
+    fun resolve(context: Context, p: Prefs, systemDark: Boolean, adaptive: Int?): KeyboardColors {
         val chosen = ThemeStyle.from(p.themeStyle)
         val style = chosen.base
         var dark = when (p.themeMode) { "dark" -> true; "light" -> false; else -> systemDark }
-        val system = if (style == ThemeStyle.DROID && p.dynamicColor && p.customAccent == 0 && pictureAccent == 0) SystemTones.read(context) else null
+        val system = if (style == ThemeStyle.DROID && p.dynamicColor && p.customAccent == 0) SystemTones.read(context) else null
 
         val accent = when {
             p.customAccent != 0 -> p.customAccent or 0xFF000000.toInt()
-            pictureAccent != 0 -> pictureAccent
             system != null -> if (dark) system.accent200 else system.accent600
             style == ThemeStyle.IPHONE -> 0xFF007AFF.toInt()
             style == ThemeStyle.SLATE -> 0xFF8AB4F8.toInt()
@@ -114,7 +112,7 @@ object KeyboardTheme {
                 popup = ColorMath.mix(bg, text, 0.22f), cornerDp = 1f, strokeDp = 0f, translucent = false,
             )
             ThemeStyle.GLASS -> KeyboardColors(
-                style, dark, ColorMath.withAlpha(bg, if (p.imageBackground) 0xB0 else 0xE6), ColorMath.withAlpha(bg, 0x30),
+                style, dark, ColorMath.withAlpha(bg, 0xE6), ColorMath.withAlpha(bg, 0x30),
                 key = ColorMath.withAlpha(text, if (dark) 0x26 else 0x30),
                 keyPressed = ColorMath.withAlpha(accent, 0xC0), special = ColorMath.withAlpha(text, 0x14),
                 text = text, subtle = subtle, accent = accent, onAccent = onAccent, stroke = ColorMath.withAlpha(text, 0x48),
@@ -137,7 +135,7 @@ object KeyboardTheme {
                 text = text, subtle = subtle, accent = accent, onAccent = onAccent, stroke = 0,
                 popup = if (dark) 0xFF444B50.toInt() else 0xFF41474C.toInt(), cornerDp = 9f, strokeDp = 0f, translucent = false,
                 shadowDp = 1.5f, keyTextColor = 0xFFE3E5E8.toInt(),
-                barAccentColor = if (!dark && p.customAccent == 0 && pictureAccent == 0) 0xFF1A66D6.toInt() else 0,
+                barAccentColor = if (!dark && p.customAccent == 0) 0xFF1A66D6.toInt() else 0,
             )
             ThemeStyle.DROID, ThemeStyle.DROID_SPACED -> {
                 val keyColor = system?.let { if (dark) it.neutral800 else it.neutral0 } ?: ColorMath.mix(bg, text, if (dark) 0.10f else 0.0f).let { if (dark) it else ColorMath.lighten(bg, 0.6f) }

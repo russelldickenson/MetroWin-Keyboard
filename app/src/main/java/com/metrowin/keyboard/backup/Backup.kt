@@ -14,7 +14,7 @@ import java.util.zip.ZipOutputStream
 
 /**
  * A backup of everything the app keeps, in one zip file the user stores wherever they want: the settings, what the keyboard learned,
- * the imported dictionaries and layouts, the clipboard history, the picture behind the keys and the custom key sound. It is what makes
+ * the imported dictionaries and layouts, the clipboard history and the custom key sound. It is what makes
  * moving to another phone, or to an app signed with another key (which needs a reinstall), cost nothing.
  *
  * The file holds the user's own data (what they typed and learned): it is theirs to keep private. A file that is read back
@@ -26,7 +26,7 @@ object Backup {
     private const val JSON = "backup.json"
     private const val FILES = "files/"
     private const val MAX_TOTAL = 256L shl 20
-    private val roots = listOf("user", "dictionaries", "layouts", "clipboard", "background.jpg", "custom_sound")
+    private val roots = listOf("user", "dictionaries", "layouts", "clipboard", "custom_sound")
 
     class Invalid(message: String) : IOException(message)
 
@@ -88,6 +88,7 @@ object Backup {
                     if (e.name == JSON) { json = JSONObject(readSmall(zip).toString(Charsets.UTF_8)); continue }
                     if (!e.name.startsWith(FILES)) throw Invalid("unexpected entry")
                     val rel = e.name.removePrefix(FILES)
+                    if (rel == "background.jpg") continue // from a version that had a picture behind the keys: no longer used
                     val parts = rel.split('/')
                     if (rel.startsWith("/") || '\\' in rel || parts.any { it.isEmpty() || it == ".." || it == "." } || parts[0] !in roots) throw Invalid("unexpected path")
                     val target = File(tmp, rel)

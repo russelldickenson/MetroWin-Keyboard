@@ -18,7 +18,7 @@
     <string name="screen_languages">Lingue e vocabolari</string>
     <string name="screen_languages_summary">Layout, liste di parole, lingue tue</string>
     <string name="screen_appearance">Aspetto</string>
-    <string name="screen_appearance_summary">Temi, colori, la tua immagine</string>
+    <string name="screen_appearance_summary">Aspetti, caratteri, colori</string>
     <string name="screen_size">Dimensioni e disposizione</string>
     <string name="screen_size_summary">Altezza e larghezza dei tasti, riga dei numeri</string>
     <string name="screen_typing">Digitazione</string>
@@ -64,15 +64,6 @@
     <string name="pref_dynamic_summary">Solo Modern Droid, Android 12 o successivo: usa la tavolozza di sistema</string>
     <string name="pref_oled_title">Nero puro</string>
     <string name="pref_oled_summary">Sfondo il più scuro possibile, risparmia batteria sugli schermi OLED</string>
-    <string name="cat_picture">La tua immagine</string>
-    <string name="pref_image_bg_title">Immagine dietro i tasti</string>
-    <string name="pref_image_bg_summary">Usa una foto come sfondo della tastiera</string>
-    <string name="pref_image_pick_title">Scegli un\'immagine…</string>
-    <string name="pref_image_pick_summary">Resta sul tuo telefono</string>
-    <string name="pref_image_remove_title">Rimuovi l\'immagine</string>
-    <string name="pref_image_dim_title">Oscura l\'immagine</string>
-    <string name="pref_picture_accent_title">Colore principale dall\'immagine</string>
-    <string name="pref_picture_accent_summary">Prende il colore più vivo dell\'immagine</string>
     <string name="cat_adaptive">Segui l\'app</string>
     <string name="pref_adaptive_title">Il colore segue l\'app sottostante</string>
     <string name="pref_adaptive_summary">Campiona una striscia di schermo sopra i tasti (chat, sito…). Richiede un servizio di accessibilità, Android 11 o successivo. Non legge testo.</string>
@@ -85,8 +76,6 @@
     <string name="accent_custom_hint">Colore come #RRGGBB</string>
     <string name="accent_invalid">Non è un colore valido</string>
     <string name="accent_reset">Torna al colore del tema</string>
-    <string name="picture_saved">Immagine salvata</string>
-    <string name="picture_failed">Impossibile usare quell\'immagine</string>
     <string name="pref_key_height_title">Altezza dei tasti (verticale, %)</string>
     <string name="pref_key_height_land_title">Altezza dei tasti (orizzontale, %)</string>
     <string name="pref_width_title">Larghezza della tastiera (%)</string>
@@ -274,7 +263,7 @@
     <string name="tut_voice_title">Digitazione vocale</string>
     <string name="tut_voice_body">Tocca il microfono nella cassetta degli strumenti e parla: le parole compaiono mentre parli. Con \"Continua ad ascoltare\" attivo (Impostazioni → Voce) continua a trascrivere finché non tocchi di nuovo il microfono. La prima volta Android chiede di consentire il microfono.</string>
     <string name="tut_looks_title">Aspetto e colori</string>
-    <string name="tut_looks_body">Cinque aspetti: Classic (Windows Phone piatto), Modern Glass, Modern Droid, iPhone e Modern Slate, ciascuno scuro, chiaro o secondo il sistema. Scegli un colore tuo (Modern Droid segue lo sfondo), oppure metti una foto dietro i tasti: il suo colore più vivo diventa il tuo colore. \"Il colore segue l\'app\" può anche tingere la tastiera come l\'app sotto (richiede un servizio di accessibilità che non legge testo).</string>
+    <string name="tut_looks_body">Cinque aspetti: Classic (Windows Phone piatto), Modern Glass, Modern Droid, iPhone e Modern Slate, ciascuno scuro, chiaro o secondo il sistema. Scegli un colore tuo (Modern Droid segue lo sfondo). \"Il colore segue l\'app\" può anche tingere la tastiera come l\'app sotto (richiede un servizio di accessibilità che non legge testo).</string>
     <string name="tut_size_title">Dimensioni e disposizione</string>
     <string name="tut_size_body">In Impostazioni → Dimensioni e disposizione puoi rendere i tasti più alti o più bassi (separatamente in orizzontale), stringere la tastiera e metterla a sinistra o a destra per usarla con una mano, cambiare lo spazio tra i tasti e mostrare la riga dei numeri.</string>
     <string name="tut_languages_title">Lingue e vocabolari</string>
@@ -375,5 +364,5 @@
     <string name="tut_smart_title">Correzione intelligente</string>
     <string name="tut_smart_body">La tastiera non cerca solo la parola più vicina: pesa dove è caduto il dito (un tocco tra due tasti rende probabili entrambi), la parola scritta prima, quanto è comune ogni parola e quali correzioni hai annullato. Se due correzioni sono ugualmente probabili le mostra entrambe e non cambia nulla. Propone anche lo spazio mancante ("ilgatto" → "il gatto"). Tutto gira sul telefono e impara solo da ciò che scrivi; si disattiva in Impostazioni → Suggerimenti.</string>
     <string name="tut_backup_title">Backup e ripristino</string>
-    <string name="tut_backup_body">In Impostazioni → Backup e ripristino puoi salvare in un solo file tutto ciò che l\'app conserva: impostazioni, parole apprese, dizionari e layout importati, appunti e la tua immagine. Ripristinalo su un altro telefono, o dopo aver reinstallato l\'app con un\'altra firma. Il file contiene le tue chiavi e ciò che hai scritto: tienilo privato.</string>
+    <string name="tut_backup_body">In Impostazioni → Backup e ripristino puoi salvare in un solo file tutto ciò che l\'app conserva: impostazioni, parole apprese, dizionari e layout importati, e appunti. Ripristinalo su un altro telefono, o dopo aver reinstallato l\'app con un\'altra firma. Il file contiene ciò che hai scritto: tienilo privato.</string>
 </resources>
