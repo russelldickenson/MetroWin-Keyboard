@@ -56,6 +56,8 @@
     <string name="import_failed">That file could not be used</string>
     <string name="import_layout_done">Layout \"%1$s\" added</string>
     <string name="removed">Removed</string>
+    <string name="key_space">space</string>
+    <string name="key_return">return</string>
     <string name="pref_theme_style_title">Look</string>
     <string name="pref_theme_mode_title">Dark or light</string>
     <string name="pref_accent_title">Accent colour</string>
@@ -209,11 +211,13 @@
         <item>Classic (flat Windows Phone)</item>
         <item>Modern Glass</item>
         <item>Modern Droid</item>
+        <item>iPhone</item>
     </string-array>
     <string-array name="theme_style_values">
         <item>classic</item>
         <item>glass</item>
         <item>droid</item>
+        <item>iphone</item>
     </string-array>
     <string-array name="theme_mode_names">
         <item>Follow the system</item>

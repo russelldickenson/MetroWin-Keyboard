@@ -104,6 +104,10 @@ class SuggestionBar(context: Context) : View(context) {
         }
         if (scrolling()) { drawRow(canvas, c, x0, w); return }
         val e = edges(w)
+        if (c.style == com.metrowin.keyboard.theme.ThemeStyle.IPHONE) {
+            fill.color = ColorMath.withAlpha(c.text, 0x30)
+            for (i in 1..2) canvas.drawRect(x0 + e[i] - dp(0.5f), h * 0.2f, x0 + e[i] + dp(0.5f), h * 0.8f, fill)
+        }
         for (i in 0 until 3) {
             val s = slots.getOrNull(i) ?: continue
             if (pressedIndex == i) highlight(canvas, c, x0 + e[i], x0 + e[i + 1])

@@ -19,6 +19,7 @@ import com.metrowin.keyboard.layout.KeyType
 import com.metrowin.keyboard.layout.KeyboardPage
 import com.metrowin.keyboard.theme.ColorMath
 import com.metrowin.keyboard.theme.KeyboardColors
+import com.metrowin.keyboard.R
 import com.metrowin.keyboard.theme.ThemeStyle
 import kotlin.math.abs
 import kotlin.math.hypot
@@ -219,14 +220,20 @@ class KeyboardView(context: Context) : View(context) {
         val pressed = isPressed(k)
         val isEnter = k.type == KeyType.ENTER
         val shiftOn = k.type == KeyType.SHIFT && shift != 0
+        val ios = c.style == ThemeStyle.IPHONE
         val fill = when {
             pressed -> c.keyPressed
+            ios -> if (shiftOn) c.key else if (k.special) c.special else c.key
             isEnter || shiftOn && c.style == ThemeStyle.CLASSIC -> c.accent
             k.special -> c.special
             else -> c.key
         }
         if (pressed) { val inset = minOf(k.width, k.height) * 0.05f; rect.set(k.left + inset, k.top + inset, k.right - inset, k.bottom - inset) }
         else rect.set(k.left, k.top, k.right, k.bottom)
+        if (c.shadowDp > 0f && !pressed) {
+            keyPaint.color = if (c.dark) 0xFF000000.toInt() else 0xFF898A8D.toInt()
+            canvas.drawRoundRect(rect.left, rect.top + dp(c.shadowDp), rect.right, rect.bottom + dp(c.shadowDp), corner, corner, keyPaint)
+        }
         keyPaint.color = fill
         canvas.drawRoundRect(rect, corner, corner, keyPaint)
         if (c.strokeDp > 0f && !pressed) {
@@ -234,6 +241,7 @@ class KeyboardView(context: Context) : View(context) {
             canvas.drawRoundRect(rect, corner, corner, strokePaint)
         }
         val fg = when {
+            ios -> c.text
             isEnter || (pressed && c.style != ThemeStyle.CLASSIC) -> if (isEnter) c.onAccent else ColorMath.onColor(fill)
             shiftOn && c.style == ThemeStyle.CLASSIC -> c.onAccent
             pressed -> c.onAccent
@@ -243,12 +251,15 @@ class KeyboardView(context: Context) : View(context) {
         val cx = k.centerX; val cy = k.centerY
         val iconSize = minOf(k.height, k.width) * 0.46f
         when (k.type) {
-            KeyType.SHIFT -> Icons.draw(canvas, if (shift == 2) Icon.SHIFT_LOCK else Icon.SHIFT, cx, cy, iconSize, iconPaint.apply { color = if (shiftOn && c.style != ThemeStyle.CLASSIC) c.accent else fg })
+            KeyType.SHIFT -> Icons.draw(canvas, if (shift == 2) Icon.SHIFT_LOCK else Icon.SHIFT, cx, cy, iconSize, iconPaint.apply { color = if (shiftOn && c.style != ThemeStyle.CLASSIC && !ios) c.accent else fg })
             KeyType.BACKSPACE -> Icons.draw(canvas, Icon.BACKSPACE, cx, cy, iconSize, iconPaint)
-            KeyType.ENTER -> if (enterLabel != null) drawLabel(canvas, enterLabel!!, cx, cy, k.height * 0.30f, fg, true) else Icons.draw(canvas, enterIcon, cx, cy, iconSize, iconPaint)
+            KeyType.ENTER -> if (enterLabel != null) drawLabel(canvas, enterLabel!!, cx, cy, k.height * 0.30f, fg, !ios)
+                else if (ios && enterIcon == Icon.ENTER) drawLabel(canvas, context.getString(R.string.key_return), cx, cy, k.height * 0.28f, fg, false)
+                else Icons.draw(canvas, enterIcon, cx, cy, iconSize, iconPaint)
             KeyType.EMOJI -> Icons.draw(canvas, Icon.EMOJI, cx, cy, iconSize, iconPaint)
             KeyType.LANGUAGE -> Icons.draw(canvas, Icon.GLOBE, cx, cy, iconSize, iconPaint)
-            KeyType.SPACE -> if (languageName.isNotEmpty()) drawLabel(canvas, languageName, cx, cy, k.height * 0.26f, ColorMath.withAlpha(c.text, 0x90), false)
+            KeyType.SPACE -> if (ios) drawLabel(canvas, context.getString(R.string.key_space), cx, cy, k.height * 0.28f, fg, false)
+                else if (languageName.isNotEmpty()) drawLabel(canvas, languageName, cx, cy, k.height * 0.26f, ColorMath.withAlpha(c.text, 0x90), false)
             KeyType.SYMBOLS, KeyType.SYMBOLS_PAGE -> drawLabel(canvas, k.label, cx, cy, k.height * 0.30f, fg, false)
             KeyType.CHAR -> {
                 val label = if (shift != 0) k.label.uppercase() else k.label
@@ -279,10 +290,11 @@ class KeyboardView(context: Context) : View(context) {
             left = left.coerceIn(0f, maxOf(0f, width - w))
             val top = maxOf(0f, k.top - h - dp(4f))
             rect.set(left, top, left + w, top + h)
-            keyPaint.color = c.accent
-            canvas.drawRect(rect, keyPaint)
+            val ios = c.style == ThemeStyle.IPHONE
+            keyPaint.color = if (ios) c.popup else c.accent
+            if (ios) { val r = dp(8f); canvas.drawRoundRect(rect, r, r, keyPaint) } else canvas.drawRect(rect, keyPaint)
             val label = if (shift != 0) k.label.uppercase() else k.label
-            drawLabel(canvas, label, rect.centerX(), rect.centerY(), h * 0.55f, c.onAccent, false)
+            drawLabel(canvas, label, rect.centerX(), rect.centerY(), h * 0.55f, if (ios) c.text else c.onAccent, false)
         }
     }
 

@@ -3,6 +3,7 @@
 ## Unreleased
 
 - **Key font:** *Settings → Appearance* chooses the font of the key letters (system, Open Sans, Roboto, Atkinson Hyperlegible) and its weight (200 to 500; only the weights that look different for the font are listed).
+- **iPhone look:** a fourth look in *Settings → Appearance → Look*: pale grey (or dark) keyboard, white rounded keys with a thin shadow, darker special keys, "space" and "return" labels, dividers between the suggestions, and a white balloon over the pressed key.
 - **Removed:** the GIF and translation features, with their settings, panels and the services they called. The `INTERNET` permission stays for the update check only. A quick button that was set to Translate or GIF goes back to the clipboard.
 
 ## 26.1.2S
