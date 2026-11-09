@@ -111,9 +111,7 @@ class SuggestionBar(context: Context) : View(context) {
         for (i in 0 until 3) {
             val s = slots.getOrNull(i) ?: continue
             if (pressedIndex == i) highlight(canvas, c, x0 + e[i], x0 + e[i + 1])
-            // The word space will insert is in the accent colour, unless that colour would not read on this bar.
-            val readable = ColorMath.luminance(c.barAccent).let { kotlin.math.abs(it - ColorMath.luminance(c.bar)) > 0.12 }
-            drawText(canvas, shown(s), x0 + (e[i] + e[i + 1]) / 2f, h / 2f, e[i + 1] - e[i] - PAD, if (s.best && readable) c.barAccent else c.text, s.best, s.phrase)
+            drawText(canvas, shown(s), x0 + (e[i] + e[i + 1]) / 2f, h / 2f, e[i + 1] - e[i] - PAD, c.text, s.best, s.phrase)
         }
     }
 
