@@ -17,7 +17,7 @@ import java.util.zip.ZipOutputStream
  * the imported dictionaries and layouts, the clipboard history, the picture behind the keys and the custom key sound. It is what makes
  * moving to another phone, or to an app signed with another key (which needs a reinstall), cost nothing.
  *
- * The file holds the user's own data and their service keys (GIF, translation): it is theirs to keep private. A file that is read back
+ * The file holds the user's own data (what they typed and learned): it is theirs to keep private. A file that is read back
  * is checked before anything is touched: only known folders, no path that leaves them, and a limit on the size.
  */
 object Backup {

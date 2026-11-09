@@ -4,8 +4,7 @@ La tastiera di Windows Phone su Android, pensata per funzionare insieme a MetroW
 • Scrittura a scorrimento, tocco prolungato per accenti e simboli, doppio spazio per il punto, scorrimento sulla barra spaziatrice per muovere il cursore
 • Correzione annullabile con Backspace, previsione della parola successiva e della frase, parole offensive bloccate, tutto appreso solo sul tuo telefono
 • 17 lingue incluse; aggiungi tu qualsiasi lingua o dizionario
-• Traduci ciò che hai scritto, o che hai appena copiato, da una lingua all'altra (di default Google; Google Cloud, DeepL, LibreTranslate o MyMemory se preferisci)
-• Cronologia degli appunti con immagini, tasto rapido sulla barra, emoji ed emoticon classiche, GIF dalla fonte che scegli, digitazione vocale
+• Cronologia degli appunti con immagini, tasto rapido sulla barra, emoji ed emoticon classiche, digitazione vocale
 • Altezza, larghezza e spaziatura dei tasti regolabili; suono (stile Windows Phone) e vibrazione con intensità regolabile
 • Una guida all'attivazione e un tutorial, nell'app e dentro la tastiera
 

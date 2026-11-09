@@ -296,7 +296,12 @@ class SizeFragment : BaseFragment(R.xml.prefs_size, R.string.screen_size) {
     override fun onStop() { app.prefs.sp.unregisterOnSharedPreferenceChangeListener(listener); super.onStop() }
 }
 
-class TypingFragment : BaseFragment(R.xml.prefs_typing, R.string.screen_typing) { override fun setup() {} }
+class TypingFragment : BaseFragment(R.xml.prefs_typing, R.string.screen_typing) {
+    override fun setup() {
+        // The quick button used to be able to open the translation and GIF tools: a phone that had one of them chosen goes back to the clipboard.
+        findPreference<androidx.preference.ListPreference>(K.QUICK_TOOL)?.let { if (it.value !in it.entryValues.map { v -> v.toString() }) it.value = "clipboard" }
+    }
+}
 
 class SuggestionsFragment : BaseFragment(R.xml.prefs_suggestions, R.string.screen_suggestions) {
     private val export = registerForActivityResult(ActivityResultContracts.CreateDocument("text/plain")) { uri ->
@@ -349,40 +354,6 @@ class ClipboardFragment : BaseFragment(R.xml.prefs_clipboard, R.string.screen_cl
     }
 }
 
-class GifFragment : BaseFragment(R.xml.prefs_gif, R.string.screen_gif) {
-    private val pickFolder = registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
-        if (uri == null) return@registerForActivityResult
-        runCatching { requireContext().contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
-        app.prefs.putString(K.GIF_FOLDER, uri.toString())
-        toast(R.string.gif_folder_saved)
-    }
-
-    override fun setup() {
-        click("gif_folder_pick") { pickFolder.launch(null) }
-        click("gif_get_key") {
-            com.metrowin.keyboard.gif.GifSourceType.from(app.prefs.gifSource).keyPage?.let { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it))) }
-        }
-        findPreference<Preference>("gif_source")?.setOnPreferenceChangeListener { _, v -> showFor(v as String); true }
-        showFor(app.prefs.gifSource)
-    }
-
-    /** Only the settings the chosen source uses are shown. */
-    private fun showFor(source: String) {
-        val type = com.metrowin.keyboard.gif.GifSourceType.from(source)
-        val online = type != com.metrowin.keyboard.gif.GifSourceType.FOLDER
-        findPreference<Preference>("gif_api_key")?.isVisible = online
-        // The button that opens the page where the key is obtained, for the services that give one.
-        findPreference<Preference>("gif_get_key")?.apply {
-            isVisible = type.keyPage != null
-            type.keyPage?.let { summary = Uri.parse(it).host }
-        }
-        findPreference<Preference>("gif_rating")?.isVisible = type.hasRating
-        findPreference<Preference>("gif_folder_pick")?.isVisible = source == "folder"
-        listOf("gif_custom_url", "gif_custom_list", "gif_custom_preview", "gif_custom_full").forEach { findPreference<Preference>(it)?.isVisible = source == "custom" }
-        findPreference<Preference>("gif_link_fallback")?.isVisible = online
-    }
-}
-
 class VoiceFragment : BaseFragment(R.xml.prefs_voice, R.string.screen_voice) {
     private val ask = registerForActivityResult(ActivityResultContracts.RequestPermission()) { refresh() }
     override fun setup() { click("voice_permission") { ask.launch(Manifest.permission.RECORD_AUDIO) } }
@@ -419,48 +390,4 @@ class AboutFragment : BaseFragment(R.xml.prefs_about, R.string.screen_about) {
         val v = runCatching { requireContext().packageManager.getPackageInfo(requireContext().packageName, 0).versionName }.getOrNull().orEmpty()
         findPreference<Preference>("about_version")?.summary = v
     }
-}
-
-class TranslateFragment : BaseFragment(R.xml.prefs_translate, R.string.screen_translate) {
-    private val translator by lazy { com.metrowin.keyboard.translate.Translator(app.prefs) }
-
-    override fun setup() {
-        findPreference<Preference>("translate_provider")?.setOnPreferenceChangeListener { _, v ->
-            showFor(v as String); view?.post { checkUsage() }; true
-        }
-        findPreference<Preference>("translate_key")?.setOnPreferenceChangeListener { _, _ -> view?.post { checkUsage() }; true }
-        click("translate_usage") { checkUsage() }
-        showFor(app.prefs.translateProvider)
-    }
-
-    override fun onResume() { super.onResume(); checkUsage() }
-
-    private fun showFor(code: String) {
-        val p = com.metrowin.keyboard.translate.Provider.from(code)
-        findPreference<Preference>("translate_key")?.isVisible = p.needsKey || p == com.metrowin.keyboard.translate.Provider.LIBRE
-        findPreference<Preference>("translate_url")?.isVisible = p.needsUrl
-        // Only DeepL tells how much of the plan is left.
-        findPreference<Preference>("translate_usage")?.isVisible = com.metrowin.keyboard.translate.Providers.usageRequest(p, "x") != null
-    }
-
-    /** Asks the service how much of the free plan is left and shows it. Only DeepL offers this. */
-    private fun checkUsage() {
-        val pref = findPreference<Preference>("translate_usage") ?: return
-        if (!pref.isVisible) return
-        if (app.prefs.translateKey.isBlank()) { pref.summary = getString(R.string.pref_translate_usage_summary); return }
-        pref.summary = getString(R.string.usage_checking)
-        translator.usage { r ->
-            if (!isAdded || r == null) return@usage
-            val nf = java.text.NumberFormat.getIntegerInstance()
-            pref.summary = r.fold(
-                onSuccess = { u ->
-                    if (u.limit > 0) getString(R.string.usage_result, nf.format(u.used), nf.format(u.limit), nf.format(u.remaining))
-                    else getString(R.string.usage_unlimited, nf.format(u.used))
-                },
-                onFailure = { e -> getString(if (e.message?.contains("403") == true) R.string.usage_bad_key else R.string.usage_error) },
-            )
-        }
-    }
-
-    override fun onDestroyView() { translator.shutdown(); super.onDestroyView() }
 }

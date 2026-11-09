@@ -66,15 +66,6 @@ object K {
     const val CLIPBOARD_MAX = "clipboard_max"
     const val CLIPBOARD_IMAGES = "clipboard_images"
 
-    const val GIF_SOURCE = "gif_source"
-    const val GIF_API_KEY = "gif_api_key"
-    const val GIF_FOLDER = "gif_folder"
-    const val GIF_CUSTOM_URL = "gif_custom_url"
-    const val GIF_CUSTOM_LIST = "gif_custom_list"
-    const val GIF_CUSTOM_PREVIEW = "gif_custom_preview"
-    const val GIF_CUSTOM_FULL = "gif_custom_full"
-    const val GIF_LINK_FALLBACK = "gif_link_fallback"
-    const val GIF_RATING = "gif_rating"
 
     const val VOICE_CONTINUOUS = "voice_continuous"
     const val VOICE_OFFLINE = "voice_offline"
@@ -88,11 +79,6 @@ object K {
     const val BOTTOM_PADDING = "bottom_padding"
     const val ONBOARDING_DONE = "onboarding_done"
     const val TUTORIAL_SEEN = "tutorial_seen_version"
-    const val TRANSLATE_PROVIDER = "translate_provider"
-    const val TRANSLATE_KEY = "translate_key"
-    const val TRANSLATE_URL = "translate_url"
-    const val TRANSLATE_SOURCE = "translate_source"
-    const val TRANSLATE_TARGET = "translate_target"
     const val PICTURE_ACCENT = "picture_accent"
     const val USE_PICTURE_ACCENT = "use_picture_accent"
 }
@@ -151,15 +137,6 @@ class Prefs(context: Context) {
     var tutorialSeen: Int
         get() = i(K.TUTORIAL_SEEN, 0)
         set(v) { sp.edit().putInt(K.TUTORIAL_SEEN, v).apply() }
-    val translateProvider get() = s(K.TRANSLATE_PROVIDER, "google")
-    val translateKey get() = s(K.TRANSLATE_KEY, "").trim()
-    val translateUrl get() = s(K.TRANSLATE_URL, "").trim()
-    var translateSource: String
-        get() = s(K.TRANSLATE_SOURCE, "auto")
-        set(v) { putString(K.TRANSLATE_SOURCE, v) }
-    var translateTarget: String
-        get() = sp.getString(K.TRANSLATE_TARGET, null) ?: (languages.map { it.substringBefore('-') }.firstOrNull { it != java.util.Locale.getDefault().language } ?: "en")
-        set(v) { putString(K.TRANSLATE_TARGET, v) }
     val keyHints get() = b(K.KEY_HINTS, true)
     val keyFont get() = s(K.KEY_FONT, "opensans")
     val keyWeight get() = com.metrowin.keyboard.ui.KeyFonts.snap(keyFont, s(K.KEY_WEIGHT, "300").toIntOrNull() ?: 300)
@@ -189,15 +166,6 @@ class Prefs(context: Context) {
     val clipboardMax get() = i(K.CLIPBOARD_MAX, 20).coerceIn(1, 500)
     val clipboardImages get() = b(K.CLIPBOARD_IMAGES, true)
 
-    val gifSource get() = s(K.GIF_SOURCE, "giphy")
-    val gifApiKey get() = s(K.GIF_API_KEY, "").trim()
-    val gifFolder get() = s(K.GIF_FOLDER, "")
-    val gifCustomUrl get() = s(K.GIF_CUSTOM_URL, "").trim()
-    val gifCustomList get() = s(K.GIF_CUSTOM_LIST, "data").trim()
-    val gifCustomPreview get() = s(K.GIF_CUSTOM_PREVIEW, "images.fixed_width_small.url").trim()
-    val gifCustomFull get() = s(K.GIF_CUSTOM_FULL, "images.original.url").trim()
-    val gifLinkFallback get() = b(K.GIF_LINK_FALLBACK, true)
-    val gifRating get() = s(K.GIF_RATING, "pg-13")
 
     val voiceContinuous get() = b(K.VOICE_CONTINUOUS, true)
     val voiceOffline get() = b(K.VOICE_OFFLINE, false)

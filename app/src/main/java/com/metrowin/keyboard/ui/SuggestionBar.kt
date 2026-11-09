@@ -13,7 +13,7 @@ import com.metrowin.keyboard.theme.KeyboardColors
 
 /** What the toolbox offers. The same list feeds the quick button setting. */
 enum class Tool(val code: String, val icon: Icon) {
-    CLIPBOARD("clipboard", Icon.CLIPBOARD), TRANSLATE("translate", Icon.TRANSLATE), GIF("gif", Icon.GIF), EMOJI("emoji", Icon.EMOJI),
+    CLIPBOARD("clipboard", Icon.CLIPBOARD), EMOJI("emoji", Icon.EMOJI),
     MIC("mic", Icon.MIC), HELP("help", Icon.HELP), SETTINGS("settings", Icon.SETTINGS);
 
     companion object { fun from(code: String?) = entries.firstOrNull { it.code == code } ?: CLIPBOARD }
@@ -25,7 +25,7 @@ data class Slot(val text: String, val best: Boolean = false, val literal: Boolea
 /**
  * The strip above the keys, laid out like an app bar: the three dots on the left open the toolbox, the middle holds three
  * suggestions (or the tools, when the toolbox is open), and on the right a quick button goes straight to one tool (the clipboard
- * by default), with a dot when something new was copied. Also shows a short status text (a GIF search, "listening"). With more than
+ * by default), with a dot when something new was copied. Also shows a short status text (an emoji search, "listening"). With more than
  * three slots (emoji found by ":dog") the middle is a row that slides sideways.
  */
 class SuggestionBar(context: Context) : View(context) {

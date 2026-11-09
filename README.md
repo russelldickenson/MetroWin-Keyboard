@@ -2,7 +2,7 @@
 
 <p align="center">
   <b>The Windows Phone keyboard, on Android.</b><br>
-  Flat Metro keys, big light type, swipe typing, translation, GIFs, clipboard history, voice typing.<br>
+  Flat Metro keys, big light type, swipe typing, clipboard history, voice typing.<br>
   Free software. No ads, no analytics, no trackers: what you type stays on your phone.
 </p>
 
@@ -48,8 +48,6 @@ Android 8.0 (API 26) or newer.
 
 **Tools**, one tap from the bar: the three dots open the toolbox, and a **quick button** goes straight to the clipboard (or any tool you choose), with a dot when something new was copied.
 - **Clipboard** history with a limit you choose, pinned items and **pictures**.
-- **Translate** the field, or what you just copied (handy for messages you received), between 40 languages. Google by default; Google Cloud, DeepL, LibreTranslate or MyMemory can be chosen.
-- **GIF** from a source you choose: GIPHY, Tenor, Klipy or Imgur (your own free key; a button opens the page to get it), a folder on the phone, or any JSON service you describe, with a content level from G to R.
 - **Emoji** and **classic emoticons** (`:-)`, kaomoji), with skin tones.
 - **Voice typing**, also continuous transcription, optionally on-device only.
 
@@ -74,7 +72,7 @@ No analytics, ads or trackers. The full list is in [PRIVACY.md](PRIVACY.md).
 | Permission | Why |
 | --- | --- |
 | `RECORD_AUDIO` | Voice typing only; asked when you tap the microphone |
-| `INTERNET` | Only for GIFs and translation, from the service you chose, when you ask; and the update check, which asks this keyboard's own repository on GitHub every 12 hours (can be switched off) |
+| `INTERNET` | Only for the update check, which asks this keyboard's own repository on GitHub every 12 hours (can be switched off) |
 | `REQUEST_INSTALL_PACKAGES` | Only to open the installer on a new version you chose to download in *Settings → Updates* |
 | `RECEIVE_BOOT_COMPLETED` | Keeps the 12-hour update check after a restart |
 | `VIBRATE` | Key vibration |

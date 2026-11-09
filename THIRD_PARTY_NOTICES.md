@@ -25,8 +25,4 @@ CLDR (Unicode License v3), built by [`tools/build_emoji_index.py`](tools/build_e
 
 AndroidX (core, appcompat, preference, recyclerview), Apache License 2.0. Tests only: JUnit (EPL 1.0), Robolectric (MIT), org.json (JSON License).
 
-## Services (never contacted unless you use them)
-
-GIPHY, Tenor, Klipy, Imgur, Google Translate, Google Cloud Translation, DeepL, LibreTranslate and MyMemory are third-party services with their own terms; the keyboard only calls the one you choose, when you ask.
-
 Windows Phone is a trademark of Microsoft Corporation. MetroWin Keyboard is an independent project, not affiliated with or endorsed by Microsoft or Google.

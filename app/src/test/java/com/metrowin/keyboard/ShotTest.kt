@@ -6,10 +6,8 @@ import android.os.SystemClock
 import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
-import com.metrowin.keyboard.translate.Translator
 import com.metrowin.keyboard.ui.Slot
 import com.metrowin.keyboard.ui.SuggestionBar
-import com.metrowin.keyboard.ui.TranslatePanel
 import com.metrowin.keyboard.ui.TutorialPanel
 import com.metrowin.keyboard.tutorial.Tutorial
 import androidx.test.core.app.ApplicationProvider
@@ -82,7 +80,5 @@ class ShotTest {
         val c = KeyboardTheme.resolve(app, app.prefs, true, null)
         val tut = TutorialPanel(app).also { it.setColors(c); it.open(Tutorial.startIndex(1)) }
         render(tut, 1080, 760, File(out, "panel-tutorial.png"))
-        val tr = TranslatePanel(app, Translator(app.prefs), app.prefs).also { it.setColors(c) }
-        render(tr, 1080, 760, File(out, "panel-translate.png"))
     }
 }

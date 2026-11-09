@@ -12,7 +12,7 @@ import androidx.core.view.inputmethod.InputConnectionCompat
 import androidx.core.view.inputmethod.InputContentInfoCompat
 import java.io.File
 
-/** Sends a picture or a GIF into the app being typed in, the way keyboards do (rich content). */
+/** Sends a picture into the app being typed in, the way keyboards do (rich content). */
 object ContentSender {
     fun authority(c: Context) = "${c.packageName}.files"
 

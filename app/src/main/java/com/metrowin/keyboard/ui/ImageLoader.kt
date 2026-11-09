@@ -7,10 +7,9 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.util.LruCache
-import com.metrowin.keyboard.gif.Net
 import java.util.concurrent.Executors
 
-/** Small pictures for the panels: decoded smaller than the screen, cached, loaded off the main thread. GIFs show their first frame. */
+/** Small pictures for the panels: decoded smaller than the screen, cached, loaded off the main thread. */
 class ImageLoader(private val context: Context) {
     private val cache = object : LruCache<String, Bitmap>(24 * 1024 * 1024) {
         override fun sizeOf(key: String, value: Bitmap) = value.byteCount
@@ -29,8 +28,7 @@ class ImageLoader(private val context: Context) {
     }
 
     private fun decode(url: String, target: Int): Bitmap? {
-        val bytes = if (url.startsWith("https://")) Net.getBytes(url, 6 * 1024 * 1024)
-        else context.contentResolver.openInputStream(Uri.parse(url))?.use { it.readBytes() } ?: return null
+        val bytes = context.contentResolver.openInputStream(Uri.parse(url))?.use { it.readBytes() } ?: return null
         val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
         BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bounds)
         var sample = 1

@@ -2,7 +2,7 @@
 
 <p align="center">
   <b>La tastiera di Windows Phone su Android.</b><br>
-  Tasti Metro piatti, caratteri grandi e leggeri, scrittura a scorrimento, traduzione, GIF, appunti, digitazione vocale.<br>
+  Tasti Metro piatti, caratteri grandi e leggeri, scrittura a scorrimento, appunti, digitazione vocale.<br>
   Software libero. Nessuna pubblicità, nessuna analisi, nessun tracker: ciò che scrivi resta sul tuo telefono.
 </p>
 
@@ -43,8 +43,6 @@ Android 8.0 (API 26) o successivo.
 
 **Strumenti**, a un tocco dalla barra: i tre puntini aprono la cassetta degli strumenti e il **tasto rapido** porta dritto agli appunti (o a qualsiasi strumento scelto), con un puntino quando hai copiato qualcosa.
 - **Appunti** con limite a scelta, elementi fissati e **immagini**.
-- **Traduci** il campo, o ciò che hai appena copiato (utile per i messaggi ricevuti), tra 40 lingue. Di default Google; si possono scegliere Google Cloud, DeepL, LibreTranslate o MyMemory.
-- **GIF** da una fonte a scelta: GIPHY, Tenor, Klipy o Imgur (con una tua chiave gratuita; un pulsante apre la pagina dove prenderla), una cartella del telefono o un servizio JSON che descrivi tu, con un livello dei contenuti da G a R.
 - **Emoji** ed **emoticon classiche** (`:-)`, kaomoji), con i toni della pelle.
 - **Digitazione vocale**, anche trascrizione continua, volendo solo sul telefono.
 
@@ -69,7 +67,7 @@ Nessuna analisi, pubblicità o tracker. L'elenco completo è in [PRIVACY.md](PRI
 | Permesso | Perché |
 | --- | --- |
 | `RECORD_AUDIO` | Solo digitazione vocale; richiesto quando tocchi il microfono |
-| `INTERNET` | Solo per GIF e traduzione, dal servizio scelto, quando lo chiedi; e per il controllo degli aggiornamenti, che interroga il repository di questa tastiera su GitHub ogni 12 ore (si può disattivare) |
+| `INTERNET` | Solo per il controllo degli aggiornamenti, che interroga il repository di questa tastiera su GitHub ogni 12 ore (si può disattivare) |
 | `REQUEST_INSTALL_PACKAGES` | Solo per aprire l'installer su una nuova versione che hai scelto di scaricare in *Impostazioni → Aggiornamenti* |
 | `RECEIVE_BOOT_COMPLETED` | Mantiene il controllo ogni 12 ore dopo un riavvio |
 | `VIBRATE` | Vibrazione dei tasti |

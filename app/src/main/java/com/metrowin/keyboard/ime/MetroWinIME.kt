@@ -36,8 +36,6 @@ import com.metrowin.keyboard.engine.SwipePoint
 import com.metrowin.keyboard.engine.Text
 import com.metrowin.keyboard.engine.WordSuggestions
 import com.metrowin.keyboard.feedback.Feedback
-import com.metrowin.keyboard.gif.GifItem
-import com.metrowin.keyboard.gif.GifRepository
 import com.metrowin.keyboard.integration.LauncherLink
 import com.metrowin.keyboard.layout.Key
 import com.metrowin.keyboard.layout.KeyType
@@ -49,14 +47,11 @@ import com.metrowin.keyboard.settings.HelperActivity
 import com.metrowin.keyboard.settings.SettingsActivity
 import com.metrowin.keyboard.theme.KeyboardColors
 import com.metrowin.keyboard.theme.KeyboardTheme
-import com.metrowin.keyboard.translate.Translator
 import com.metrowin.keyboard.tutorial.Tutorial
 import com.metrowin.keyboard.ui.ClipboardPanel
-import com.metrowin.keyboard.ui.TranslatePanel
 import com.metrowin.keyboard.ui.TutorialPanel
 import com.metrowin.keyboard.ui.EmojiPanel
 import com.metrowin.keyboard.ui.EmojiResults
-import com.metrowin.keyboard.ui.GifPanel
 import com.metrowin.keyboard.ui.Icon
 import com.metrowin.keyboard.ui.ImageLoader
 import com.metrowin.keyboard.ui.KeyboardListener
@@ -75,7 +70,7 @@ import java.util.concurrent.Executors
  */
 open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.Listener {
     private enum class Field { TEXT, PASSWORD, EMAIL, URI, NUMBER, PHONE, NONE }
-    private enum class Panel { NONE, EMOJI, CLIPBOARD, GIF, TRANSLATE, TUTORIAL }
+    private enum class Panel { NONE, EMOJI, CLIPBOARD, TUTORIAL }
 
     private class Correction(val typed: String, val corrected: String, val delimiter: String)
     private class SwipeResult(val word: String, val inserted: String)
@@ -83,9 +78,7 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
     private lateinit var app: KeyboardApp
     private lateinit var feedback: Feedback
     private lateinit var images: ImageLoader
-    private lateinit var gifRepo: GifRepository
     private lateinit var voice: VoiceInput
-    private lateinit var translator: Translator
     private val main = Handler(Looper.getMainLooper())
     private val pool = Executors.newSingleThreadExecutor()
 
@@ -102,8 +95,6 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
     private var emoji: EmojiPanel? = null
     private var emojiResults: EmojiResults? = null
     private var clipboardPanel: ClipboardPanel? = null
-    private var gifPanel: GifPanel? = null
-    private var translatePanel: TranslatePanel? = null
     private var tutorialPanel: TutorialPanel? = null
     private var clipBadge = false
     private var lastEdit = 0L
@@ -120,8 +111,6 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
     private var predictionOn = false
     private var learningOn = false
     private var inLauncher = false
-    private var gifSearching = false
-    private val gifQuery = StringBuilder()
     private var emojiSearching = false
     private val emojiQuery = StringBuilder()
     private val composing = StringBuilder()
@@ -166,9 +155,7 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
         app = KeyboardApp.of(this)
         feedback = Feedback(this, prefs)
         images = ImageLoader(this)
-        gifRepo = GifRepository(this, prefs)
         voice = VoiceInput(this, prefs, voiceCallbacks)
-        translator = Translator(prefs)
         prefs.sp.registerOnSharedPreferenceChangeListener(prefsListener)
         AdaptiveColor.add(adaptiveListener)
         (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).addPrimaryClipChangedListener(clipListener)
@@ -180,7 +167,7 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
         (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).removePrimaryClipChangedListener(clipListener)
         voice.stop()
         app.saveAll()
-        feedback.release(); translator.shutdown(); gifRepo.shutdown(); images.shutdown(); pool.shutdownNow()
+        feedback.release(); images.shutdown(); pool.shutdownNow()
         super.onDestroy()
     }
 
@@ -193,12 +180,10 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
         val emoji = EmojiPanel(ctx).also { it.listener = emojiListener }
         emojiResults = EmojiResults(ctx).also { it.onPick = { e -> emojiListener.onEmoji(e) } }
         val clip = ClipboardPanel(ctx, app.clipboard, images).also { it.listener = clipListener2 }
-        val gif = GifPanel(ctx, gifRepo, images).also { it.listener = gifListener }
-        val translate = TranslatePanel(ctx, translator, prefs).also { it.listener = translateListener }
         val tutorial = TutorialPanel(ctx).also { it.onBack = { showPanel(Panel.NONE) }; it.onSeen = { prefs.tutorialSeen = Tutorial.VERSION } }
         val frame = FrameLayout(ctx)
         frame.addView(kb, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
-        for (p in listOf(emoji, clip, gif, translate, tutorial)) {
+        for (p in listOf(emoji, clip, tutorial)) {
             p.visibility = View.GONE
             frame.addView(p, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
         }
@@ -222,7 +207,7 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
             if (root.paddingBottom != wanted) root.setPadding(0, 0, 0, wanted)
         }
         this.root = root; this.bar = bar; this.strip = strip; this.frame = frame; this.keyboard = kb
-        this.emoji = emoji; this.clipboardPanel = clip; this.gifPanel = gif; this.translatePanel = translate; this.tutorialPanel = tutorial
+        this.emoji = emoji; this.clipboardPanel = clip; this.tutorialPanel = tutorial
         applyAll()
         return root
     }
@@ -237,7 +222,6 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
         super.onStartInputView(info, restarting)
         classify(info)
         AdaptiveColor.keyboardShown = true
-        gifSearching = false; gifQuery.setLength(0)
         showPanel(Panel.NONE)
         page = if (field == Field.NUMBER || field == Field.PHONE) Page.NUMBERS else Page.LETTERS
         applyAll()
@@ -368,7 +352,7 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
         val picture = if (prefs.usePictureAccent && prefs.imageBackground) prefs.pictureAccent else 0
         val c = KeyboardTheme.resolve(this, prefs, KeyboardTheme.isSystemDark(this), if (prefs.adaptiveColor) AdaptiveColor.color else null, picture)
         colors = c
-        kb.setColors(c); bar?.setColors(c); emoji?.setColors(c); emojiResults?.setColors(c); clipboardPanel?.setColors(c); gifPanel?.setColors(c); translatePanel?.setColors(c); tutorialPanel?.setColors(c)
+        kb.setColors(c); bar?.setColors(c); emoji?.setColors(c); emojiResults?.setColors(c); clipboardPanel?.setColors(c); tutorialPanel?.setColors(c)
         root?.setBackgroundColor(c.background)
         kb.setBackgroundImage(backgroundBitmap(), prefs.imageDim)
         val land = resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
@@ -498,7 +482,6 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
 
     private fun typeTextNow(text: String) {
         lastEdit = SystemClock.uptimeMillis()
-        if (gifSearching) { typeIntoGifSearch(text); return }
         if (emojiSearching) { typeIntoEmojiSearch(text); return }
         val ic = currentInputConnection ?: return
         lastCorrection = null
@@ -529,7 +512,6 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
 
     private fun space() {
         lastEdit = SystemClock.uptimeMillis()
-        if (gifSearching) { typeIntoGifSearch(" "); return }
         if (emojiSearching) { typeIntoEmojiSearch(" "); return }
         val ic = currentInputConnection ?: return
         val now = SystemClock.uptimeMillis()
@@ -556,7 +538,6 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
 
     private fun enter() {
         lastEdit = SystemClock.uptimeMillis()
-        if (gifSearching) { gifPanel?.run(gifQuery.toString().ifBlank { null }); exitGifSearch(); return }
         if (emojiSearching) { showPanel(Panel.EMOJI); return }
         val ic = currentInputConnection ?: return
         finishWord(autocorrect = true, delimiter = "\n")
@@ -571,7 +552,6 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
 
     private fun backspace(repeat: Boolean) {
         lastEdit = SystemClock.uptimeMillis()
-        if (gifSearching) { if (gifQuery.isNotEmpty()) gifQuery.deleteCharAt(gifQuery.length - 1); showGifQuery(); return }
         if (emojiSearching) {
             if (emojiQuery.isEmpty()) showPanel(Panel.EMOJI) else { emojiQuery.deleteCharAt(emojiQuery.length - 1); showEmojiQuery() }
             return
@@ -636,8 +616,8 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
     private fun updateSuggestions() {
         val b = bar ?: return
         val eng = engine
-        if (gifSearching || emojiSearching) return
-        // A panel (GIFs, clipboard, translation...) has the place of the keys: the bar must not go on offering the words of what was
+        if (emojiSearching) return
+        // A panel (emoji, clipboard...) has the place of the keys: the bar must not go on offering the words of what was
         // just typed above it, as if the keys were still there.
         if (panel != Panel.NONE) { latest = null; suggestSeq++; b.setSlots(listOf(null, null, null)); return }
         // ":dog": the emoji for the word after a colon take the bar (the colon itself is already in the text, the word is being composed).
@@ -770,9 +750,7 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
     override fun onTool(tool: Tool) {
         when (tool) {
             Tool.CLIPBOARD -> { finishWord(false); showPanel(Panel.CLIPBOARD) }
-            Tool.GIF -> { finishWord(false); showPanel(Panel.GIF) }
             Tool.EMOJI -> { finishWord(false); showPanel(Panel.EMOJI) }
-            Tool.TRANSLATE -> { if (field == Field.PASSWORD) toastPrivate() else { finishWord(false); showPanel(Panel.TRANSLATE) } }
             Tool.HELP -> { finishWord(false); showPanel(Panel.TUTORIAL) }
             Tool.MIC -> toggleVoice()
             Tool.SETTINGS -> startActivity(Intent(this, SettingsActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
@@ -783,14 +761,11 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
     private fun showPanel(p: Panel) {
         exitEmojiSearch()
         panel = p
-        if (p != Panel.GIF) { exitGifSearch(); strip?.removeAllViews(); strip?.visibility = View.GONE }
         if (p != Panel.NONE) { bar?.closeTools(); bar?.setStatus(null) }
         keyboard?.visibility = if (p == Panel.NONE) View.VISIBLE else View.INVISIBLE
-        translatePanel?.visibility = if (p == Panel.TRANSLATE) View.VISIBLE else View.GONE
         tutorialPanel?.visibility = if (p == Panel.TUTORIAL) View.VISIBLE else View.GONE
         emoji?.visibility = if (p == Panel.EMOJI) View.VISIBLE else View.GONE
         clipboardPanel?.visibility = if (p == Panel.CLIPBOARD) View.VISIBLE else View.GONE
-        gifPanel?.visibility = if (p == Panel.GIF) View.VISIBLE else View.GONE
         when (p) {
             Panel.EMOJI -> {
                 // As tall as the keyboard, never more: the panel takes its place and nothing else.
@@ -799,9 +774,7 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
                 emoji?.open(prefs.emojiRecent)
             }
             Panel.CLIPBOARD -> { clipBadge = false; bar?.setBadge(false); clipboardPanel?.refresh() }
-            Panel.TRANSLATE -> translatePanel?.open()
             Panel.TUTORIAL -> tutorialPanel?.open(Tutorial.startIndex(prefs.tutorialSeen))
-            Panel.GIF -> { gifPanel?.setLanguage(currentLayout().locale.language); gifPanel?.run(null) }
             Panel.NONE -> {}
         }
         if (p == Panel.NONE) updateSuggestions()
@@ -906,121 +879,6 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
             clipBadge = true
             if (Tool.from(prefs.quickTool) == Tool.CLIPBOARD) bar?.setBadge(true)
         }
-    }
-
-    private fun toastPrivate() = Toast.makeText(this, R.string.tr_private_field, Toast.LENGTH_SHORT).show()
-
-    // --- translation ------------------------------------------------------------------------------------------------
-
-    private val translateListener = object : TranslatePanel.Listener {
-        override fun onBack() = showPanel(Panel.NONE)
-
-        override fun readField(): Pair<String, Boolean> {
-            val ic = currentInputConnection ?: return "" to false
-            val selected = ic.getSelectedText(0)?.toString().orEmpty()
-            if (selected.isNotEmpty()) return selected to true
-            val before = ic.getTextBeforeCursor(4000, 0)?.toString().orEmpty()
-            val after = ic.getTextAfterCursor(4000, 0)?.toString().orEmpty()
-            return (before + after) to false
-        }
-
-        override fun readClipboard(): String? = app.clipboard.all().firstOrNull { !it.image }?.text
-
-        override fun replace(text: String, wasSelection: Boolean) {
-            val ic = currentInputConnection ?: return
-            ic.beginBatchEdit()
-            if (!wasSelection) {
-                // The whole field was translated: replace all of it.
-                val before = ic.getTextBeforeCursor(4000, 0)?.length ?: 0
-                val after = ic.getTextAfterCursor(4000, 0)?.length ?: 0
-                ic.deleteSurroundingText(before, after)
-            }
-            ic.commitText(text, 1)
-            ic.endBatchEdit()
-            showPanel(Panel.NONE)
-        }
-
-        override fun insert(text: String) {
-            val ic = currentInputConnection ?: return
-            val before = ic.getTextBeforeCursor(1, 0)
-            ic.commitText((if (!before.isNullOrEmpty() && !before.last().isWhitespace()) " " else "") + text, 1)
-            showPanel(Panel.NONE)
-        }
-
-        override fun copy(text: String) {
-            (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(ClipData.newPlainText("translation", text))
-            Toast.makeText(this@MetroWinIME, R.string.tr_copied, Toast.LENGTH_SHORT).show()
-        }
-
-        override fun openSettings() {
-            startActivity(Intent(this@MetroWinIME, SettingsActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-        }
-    }
-
-    // --- GIF --------------------------------------------------------------------------------------------------------
-
-    private val gifListener = object : GifPanel.Listener {
-        override fun onGif(item: GifItem) = sendGif(item)
-        override fun onBack() = showPanel(Panel.NONE)
-        override fun onOpenSettings() { startActivity(Intent(this@MetroWinIME, SettingsActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
-        override fun onSearch() = enterGifSearch()
-    }
-
-    private fun sendGif(item: GifItem) {
-        val info = currentInputEditorInfo
-        val canSend = ContentSender.supports(info, "image/gif")
-        if (!canSend) {
-            // The app takes no pictures: give the link instead, which most chats turn into the GIF.
-            if (prefs.gifLinkFallback && item.fullUrl.startsWith("https://")) { currentInputConnection?.commitText(item.fullUrl + " ", 1); exitGifSearch(); showPanel(Panel.NONE) }
-            else Toast.makeText(this, R.string.gif_not_supported, Toast.LENGTH_SHORT).show()
-            return
-        }
-        gifRepo.prepare(item) { r ->
-            r.onSuccess { f ->
-                if (ContentSender.send(this, currentInputConnection, currentInputEditorInfo, f, "image/gif", item.title.ifBlank { "GIF" })) { exitGifSearch(); showPanel(Panel.NONE) }
-                else Toast.makeText(this, R.string.gif_not_supported, Toast.LENGTH_SHORT).show()
-            }.onFailure { Toast.makeText(this, R.string.gif_error, Toast.LENGTH_SHORT).show() }
-        }
-    }
-
-    /** The search is typed with the keyboard itself: the panel becomes a strip above the keys and the bar shows the words typed. */
-    private fun enterGifSearch() {
-        val p = gifPanel ?: return
-        gifSearching = true
-        gifQuery.setLength(0)
-        (p.parent as? ViewGroup)?.removeView(p)
-        p.visibility = View.VISIBLE
-        p.setStrip(true)
-        strip?.removeAllViews(); strip?.addView(p, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)); strip?.visibility = View.VISIBLE
-        keyboard?.visibility = View.VISIBLE
-        gifPanel?.visibility = View.VISIBLE
-        showGifQuery()
-    }
-
-    private fun exitGifSearch() {
-        if (!gifSearching) return
-        gifSearching = false
-        bar?.setStatus(null)
-        val p = gifPanel ?: return
-        (p.parent as? ViewGroup)?.removeView(p)
-        p.setStrip(false)
-        frame?.addView(p, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-        strip?.visibility = View.GONE
-    }
-
-    private val gifSearchRun = Runnable { gifPanel?.run(gifQuery.toString().ifBlank { null }) }
-
-    private fun typeIntoGifSearch(text: String) {
-        gifQuery.append(text)
-        showGifQuery()
-        main.removeCallbacks(gifSearchRun)
-        main.postDelayed(gifSearchRun, 600)
-    }
-
-    private fun showGifQuery() {
-        bar?.setStatus(getString(R.string.gif_search_prefix) + " " + gifQuery.toString().ifEmpty { "…" })
-        main.removeCallbacks(gifSearchRun)
-        main.postDelayed(gifSearchRun, 600)
     }
 
     // --- voice ------------------------------------------------------------------------------------------------------

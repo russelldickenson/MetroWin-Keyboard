@@ -29,8 +29,6 @@
     <string name="screen_feedback_summary">Suono dei tasti, intensità della vibrazione</string>
     <string name="screen_clipboard">Appunti</string>
     <string name="screen_clipboard_summary">Cronologia di testi e immagini</string>
-    <string name="screen_gif">GIF</string>
-    <string name="screen_gif_summary">Scegli da dove arrivano le GIF</string>
     <string name="screen_voice">Digitazione vocale</string>
     <string name="screen_voice_summary">Dettatura e trascrizione</string>
     <string name="screen_launcher">MetroWin Launcher</string>
@@ -157,29 +155,6 @@
     <string name="clipboard_title">Appunti</string>
     <string name="clipboard_empty">Nulla di copiato finora</string>
     <string name="clipboard_no_images">Questa app non accetta immagini</string>
-    <string name="pref_gif_source_title">Da dove arrivano le GIF</string>
-    <string name="pref_gif_key_title">Chiave API</string>
-    <string name="pref_gif_key_summary">Serve per GIPHY, Tenor, Klipy e Imgur (per Imgur è il Client ID). Il pulsante sopra apre la pagina dove ottenerla, gratis.</string>
-    <string name="pref_gif_key_message">Incolla la chiave. Resta su questo telefono.</string>
-    <string name="pref_gif_folder_title">Cartella di GIF…</string>
-    <string name="pref_gif_folder_summary">Per \"Una cartella del telefono\": le GIF che hai salvato</string>
-    <string name="cat_gif_custom">Un servizio tuo</string>
-    <string name="pref_gif_custom_url_title">Indirizzo</string>
-    <string name="pref_gif_custom_url_summary">Indirizzo https con {query}, {key}, {limit}, {lang} e {rating}</string>
-    <string name="pref_gif_custom_list_title">Dove sono i risultati nella risposta</string>
-    <string name="pref_gif_custom_preview_title">Immagine piccola, in ogni risultato</string>
-    <string name="pref_gif_custom_full_title">GIF completa, in ogni risultato</string>
-    <string name="pref_gif_link_title">Invia il link se le immagini non sono accettate</string>
-    <string name="pref_gif_link_summary">Molte chat trasformano il link nella GIF</string>
-    <string name="gif_needs_key">Aggiungi una chiave API in Impostazioni → GIF. Tocca qui.</string>
-    <string name="gif_needs_folder">Scegli una cartella di GIF in Impostazioni → GIF. Tocca qui.</string>
-    <string name="gif_needs_url">Aggiungi l\'indirizzo del tuo servizio in Impostazioni → GIF. Tocca qui.</string>
-    <string name="gif_loading">Caricamento…</string>
-    <string name="gif_none">Nessuna GIF trovata</string>
-    <string name="gif_error">Impossibile caricare le GIF</string>
-    <string name="gif_not_supported">Questa app non accetta GIF</string>
-    <string name="gif_search_prefix">GIF:</string>
-    <string name="gif_folder_saved">Cartella salvata</string>
     <string name="pref_voice_permission_title">Consenti il microfono</string>
     <string name="pref_voice_permission_summary">Necessario per la digitazione vocale</string>
     <string name="pref_voice_continuous_title">Continua ad ascoltare</string>
@@ -201,7 +176,7 @@
     <string name="theme_imported">Tema applicato</string>
     <string name="theme_invalid">Non è un file tema MetroWin</string>
     <string name="about_privacy_title">Privacy</string>
-    <string name="about_privacy_text">Nessuna analisi, nessuna pubblicità, nessun tracker. Ciò che scrivi, ciò che la tastiera impara e i tuoi appunti restano su questo telefono e sono esclusi dai backup. Internet serve solo per scaricare le GIF dalla fonte che hai scelto, quando apri il pannello GIF; il microfono solo per la digitazione vocale.</string>
+    <string name="about_privacy_text">Nessuna analisi, nessuna pubblicità, nessun tracker. Ciò che scrivi, ciò che la tastiera impara e i tuoi appunti restano su questo telefono e sono esclusi dai backup. Internet serve solo per cercare una nuova versione della tastiera sulla sua pagina GitHub; il microfono solo per la digitazione vocale.</string>
     <string name="about_version_title">Versione</string>
     <string name="about_license_title">Licenza</string>
     <string name="about_license_text">Software libero, GNU GPL v3 o successiva. Non affiliato a Microsoft; Windows Phone è un marchio di Microsoft Corporation.</string>
@@ -272,18 +247,6 @@
         <item>custom</item>
         <item>off</item>
     </string-array>
-    <string-array name="gif_chips">
-        <item>Di tendenza</item>
-        <item>Grazie</item>
-        <item>Ahah</item>
-        <item>Amore</item>
-        <item>Wow</item>
-        <item>Sì</item>
-        <item>No</item>
-        <item>Triste</item>
-        <item>Festa</item>
-        <item>Buongiorno</item>
-    </string-array>
     <string name="tutorial_title">Tutorial</string>
     <string name="tutorial_new">Novità</string>
     <string name="tutorial_back">Indietro</string>
@@ -303,17 +266,13 @@
     <string name="tut_suggestions_title">Suggerimenti e correzione</string>
     <string name="tut_suggestions_body">Mentre scrivi, sopra i tasti compaiono tre parole; quella colorata è quella che inserirà lo spazio. I refusi si correggono a fine parola, e se la correzione è sbagliata Backspace subito dopo restituisce ciò che avevi scritto. Dopo una parola viene proposta la successiva più probabile, e a volte una frase intera segnata con \"…\". Le parole offensive non vengono mai suggerite. Tutto si impara solo su questo telefono.</string>
     <string name="tut_toolbox_title">I tre puntini e il tasto rapido</string>
-    <string name="tut_toolbox_body">I tre puntini a sinistra della barra aprono la cassetta degli strumenti: appunti, traduci, GIF, emoji, voce, aiuto e impostazioni. Il tasto a destra porta direttamente a uno strumento, di default gli appunti, e mostra un puntino quando hai appena copiato qualcosa. Quale strumento apre si sceglie in Impostazioni → Digitazione.</string>
+    <string name="tut_toolbox_body">I tre puntini a sinistra della barra aprono la cassetta degli strumenti: appunti, emoji, voce, aiuto e impostazioni. Il tasto a destra porta direttamente a uno strumento, di default gli appunti, e mostra un puntino quando hai appena copiato qualcosa. Quale strumento apre si sceglie in Impostazioni → Digitazione.</string>
     <string name="tut_clipboard_title">Appunti</string>
     <string name="tut_clipboard_body">Tutto ciò che copi viene conservato, solo su questo telefono. Tocca un elemento per incollarlo, la puntina per tenerlo per sempre, la croce per eliminarlo. Anche le foto copiate vengono conservate e si incollano come immagini dove l\'app lo permette. Quanti elementi tenere si sceglie in Impostazioni → Appunti.</string>
     <string name="tut_smartemoji_title">Trova un\'emoji dal nome</string>
     <string name="tut_smartemoji_body">Scrivi i due punti e una parola, come :cane, e le emoji corrispondenti compaiono nella barra dei suggerimenti: falle scorrere di lato e tocca quella che vuoi al posto di quello che hai scritto. Nel pannello emoji, la lente cerca per nome usando la tastiera stessa. I nomi sono nella tua lingua e in inglese. La ricerca emoji intelligente si disattiva in Impostazioni → Suggerimenti.</string>
     <string name="tut_emoji_title">Emoji ed emoticon classiche</string>
     <string name="tut_emoji_body">Il tasto con la faccina apre le emoji per categoria, con le recenti per prime. Tieni premuta una mano o una persona per i toni della pelle. Le ultime due schede contengono le emoticon classiche, :-) e compagnia, e i kaomoji giapponesi, che funzionano in ogni app.</string>
-    <string name="tut_gif_title">GIF</string>
-    <string name="tut_gif_body">Apri GIF dalla cassetta degli strumenti. Toccane una per inviarla. Con il pulsante di ricerca scrivi con la tastiera per cercarne altre. La fonte si sceglie in Impostazioni → GIF: GIPHY, Tenor, Klipy o Imgur (con una tua chiave gratuita; un pulsante apre la pagina dove prenderla), una cartella del telefono o un tuo servizio, e si decide quanto è severa la ricerca (da G a R).</string>
-    <string name="tut_translate_title">Traduci</string>
-    <string name="tut_translate_body">Apri Traduci dalla cassetta degli strumenti. Prende il testo selezionato, o tutto quello del campo, e lo traduce. Tocca i nomi delle lingue per cambiarle, le frecce per scambiarle. \"Appunti\" traduce ciò che hai appena copiato, utile per i messaggi ricevuti. Poi sostituisci il testo, inserisci la traduzione dopo o copiala. Di default usa Google; il servizio si cambia in Impostazioni → Traduzione, dove DeepL mostra anche quanti caratteri restano nel tuo piano. Il testo viene inviato al servizio solo quando traduci.</string>
     <string name="tut_voice_title">Digitazione vocale</string>
     <string name="tut_voice_body">Tocca il microfono nella cassetta degli strumenti e parla: le parole compaiono mentre parli. Con \"Continua ad ascoltare\" attivo (Impostazioni → Voce) continua a trascrivere finché non tocchi di nuovo il microfono. La prima volta Android chiede di consentire il microfono.</string>
     <string name="tut_looks_title">Aspetto e colori</string>
@@ -323,7 +282,7 @@
     <string name="tut_languages_title">Lingue e vocabolari</string>
     <string name="tut_languages_body">Attiva le lingue in cui scrivi (Impostazioni → Lingue) e cambia con il tasto globo. Sono inclusi diciassette layout; puoi importarne altri e un dizionario completo per qualsiasi lingua, per correzioni e previsioni migliori.</string>
     <string name="tut_privacy_title">La tua privacy</string>
-    <string name="tut_privacy_body">Nessun tracker, nessuna analisi. Ciò che scrivi, ciò che la tastiera impara e i tuoi appunti restano su questo telefono e sono esclusi dai backup. Nei campi password non si impara nulla. Internet serve solo per GIF e traduzione, quando lo chiedi, e il microfono solo per la digitazione vocale. Puoi esportare o cancellare ciò che è stato appreso in Impostazioni → Suggerimenti.</string>
+    <string name="tut_privacy_body">Nessun tracker, nessuna analisi. Ciò che scrivi, ciò che la tastiera impara e i tuoi appunti restano su questo telefono e sono esclusi dai backup. Nei campi password non si impara nulla. Internet serve solo per cercare una nuova versione della tastiera, e il microfono solo per la digitazione vocale. Puoi esportare o cancellare ciò che è stato appreso in Impostazioni → Suggerimenti.</string>
     <string name="tut_launcher_title">Con MetroWin Launcher</string>
     <string name="tut_launcher_body">La tastiera condivide i tre aspetti e i 20 colori del launcher, può importarne il file tema (Impostazioni → MetroWin Launcher) e non intralcia nella casella di ricerca del launcher: lì non corregge e non impara nulla.</string>
     <string name="setup_tutorial_title">Tutorial</string>
@@ -353,60 +312,23 @@
     <string name="onb_next">Avanti</string>
     <string name="onb_tour">Fai il giro</string>
     <string name="onb_finish">Fine</string>
-    <string name="screen_translate">Traduzione</string>
-    <string name="screen_translate_summary">Quale servizio traduce e la tua chiave</string>
-    <string name="pref_translate_provider_title">Servizio di traduzione</string>
-    <string name="pref_translate_key_title">Chiave API</string>
-    <string name="pref_translate_key_summary">Per Google Cloud, DeepL e, se il tuo la richiede, LibreTranslate</string>
-    <string name="pref_translate_url_title">Indirizzo del server</string>
-    <string name="pref_translate_url_summary">Indirizzo https del tuo server LibreTranslate</string>
-    <string name="pref_translate_note_title">Da sapere</string>
-    <string name="pref_translate_note_text">\"Google\" usa il servizio web di Google Traduttore, che non richiede chiave ma non è un\'API ufficiale: può cambiare o limitare l\'uso. Google Cloud, DeepL e LibreTranslate sono ufficiali e usano la tua chiave. Il testo che traduci viene inviato al servizio scelto, solo quando traduci; mai nei campi password.</string>
     <string name="pref_bottom_padding_title">Spazio extra in basso (dp)</string>
     <string name="pref_bottom_padding_summary">Alza la tastiera se una barra copre l\'ultima riga</string>
     <string name="pref_key_preview_title">Lettera grande sopra il tasto</string>
     <string name="pref_key_preview_summary">Mostra in colore il tasto che stai premendo</string>
     <string name="pref_quick_tool_title">Tasto rapido</string>
-    <string name="tr_field">Campo</string>
-    <string name="tr_clipboard">Appunti</string>
-    <string name="tr_replace">Sostituisci</string>
-    <string name="tr_insert">Inserisci</string>
-    <string name="tr_copy">Copia</string>
-    <string name="tr_empty_field">Niente da tradurre: scrivi o seleziona prima del testo</string>
-    <string name="tr_empty_clipboard">Nulla di copiato finora</string>
-    <string name="tr_needs_key">Aggiungi una chiave API in Impostazioni → Traduzione. Tocca qui.</string>
-    <string name="tr_needs_url">Aggiungi l\'indirizzo del server in Impostazioni → Traduzione. Tocca qui.</string>
-    <string name="tr_working">Traduzione in corso…</string>
-    <string name="tr_error">Impossibile tradurre. Controlla la connessione e il servizio in Impostazioni → Traduzione.</string>
-    <string name="tr_private_field">La traduzione è disattivata nei campi password</string>
-    <string name="tr_copied">Copiato</string>
-    <string-array name="translate_provider_names"><item>Google (senza chiave)</item><item>Google Cloud (tua chiave)</item><item>DeepL (tua chiave)</item><item>LibreTranslate (tuo server)</item><item>MyMemory</item></string-array>
-    <string-array name="translate_provider_values"><item>google</item><item>google_cloud</item><item>deepl</item><item>libre</item><item>mymemory</item></string-array>
-    <string-array name="quick_tool_names"><item>Appunti</item><item>Traduci</item><item>GIF</item><item>Emoji</item><item>Voce</item><item>Aiuto</item><item>Impostazioni</item></string-array>
-    <string-array name="quick_tool_values"><item>clipboard</item><item>translate</item><item>gif</item><item>emoji</item><item>mic</item><item>help</item><item>settings</item></string-array>
+    <string-array name="quick_tool_names"><item>Appunti</item><item>Emoji</item><item>Voce</item><item>Aiuto</item><item>Impostazioni</item></string-array>
+    <string-array name="quick_tool_values"><item>clipboard</item><item>emoji</item><item>mic</item><item>help</item><item>settings</item></string-array>
     <string name="pref_language_key_title">Mostra il tasto mondo</string>
     <string name="pref_language_key_summary">Nascondilo per allargare la barra spaziatrice. Con più lingue, tieni premuta la barra spaziatrice per cambiare lingua.</string>
-    <string name="pref_translate_usage_title">Caratteri rimasti nel tuo piano</string>
-    <string name="pref_translate_usage_summary">Aggiungi la chiave per vederli. Lo dice solo DeepL.</string>
-    <string name="usage_checking">Controllo in corso…</string>
-    <string name="usage_result">%1$s usati su %2$s · %3$s rimasti</string>
-    <string name="usage_unlimited">%1$s usati (nessun limite in questo piano)</string>
-    <string name="usage_bad_key">DeepL non accetta questa chiave</string>
-    <string name="usage_error">Impossibile controllare. Tocca per riprovare.</string>
     <string name="pref_try_title">Prova la tastiera</string>
     <string name="pref_try_summary">Apre un campo di testo con la tastiera, per vedere le modifiche dal vivo</string>
-    <string name="pref_gif_get_key_title">Prendi la chiave dal sito del servizio</string>
-    <string name="pref_gif_rating_title">Livello dei contenuti</string>
-    <string-array name="gif_source_names"><item>GIPHY</item><item>Tenor</item><item>Klipy</item><item>Imgur</item><item>Una cartella del telefono</item><item>Un servizio tuo</item></string-array>
-    <string-array name="gif_source_values"><item>giphy</item><item>tenor</item><item>klipy</item><item>imgur</item><item>folder</item><item>custom</item></string-array>
-    <string-array name="gif_rating_names"><item>Tutti (G)</item><item>Con la guida dei genitori (PG)</item><item>Adolescenti (PG-13)</item><item>Adulti (R): tutto ciò che il servizio consente</item></string-array>
-    <string-array name="gif_rating_values"><item>g</item><item>pg</item><item>pg-13</item><item>r</item></string-array>
     <string name="screen_projects">Altri progetti</string>
     <string name="screen_projects_summary">Altre app dello stesso autore</string>
     <string name="cat_foss">Open source</string>
     <string name="cat_nonfoss">Non open source</string>
     <string name="project_keyboard_title">MetroWin Keyboard</string>
-    <string name="project_keyboard_desc">La tastiera di Windows Phone per Android: tasti Metro piatti, scrittura a scorrimento, una calibrazione che impara dove cadono le tue dita, correzione intelligente, traduzione, GIF e cronologia degli appunti. Ciò che scrivi resta sul telefono.</string>
+    <string name="project_keyboard_desc">La tastiera di Windows Phone per Android: tasti Metro piatti, scrittura a scorrimento, una calibrazione che impara dove cadono le tue dita, correzione intelligente e cronologia degli appunti. Ciò che scrivi resta sul telefono.</string>
     <string name="project_launcher_title">MetroWin Launcher</string>
     <string name="project_launcher_desc">La schermata Start di Windows Phone per Android: tile animate con contenuti veri, elenco delle app alfabetico, Action Center e schermata di blocco Metro. Libero, senza pubblicità né analisi. Decide l\'aspetto che questa tastiera segue.</string>
     <string name="project_spesatracker_title">SpesaTracker</string>
@@ -457,7 +379,7 @@
     <string name="backup_restore_title">Ripristina un backup</string>
     <string name="backup_restore_summary">Sostituisce ciò che è nell\'app con il file che scegli</string>
     <string name="backup_info_title">Tieni il file privato</string>
-    <string name="backup_info_text">Contiene ciò che hai scritto e imparato, gli appunti e le chiavi dei servizi che usi (GIF, traduzione). Conservalo dove solo tu puoi arrivare. Usalo per passare a un altro telefono, o a un\'app firmata con un\'altra chiave, che va reinstallata.</string>
+    <string name="backup_info_text">Contiene ciò che hai scritto e imparato, e gli appunti. Conservalo dove solo tu puoi arrivare. Usalo per passare a un altro telefono, o a un\'app firmata con un\'altra chiave, che va reinstallata.</string>
     <string name="backup_done">Backup salvato</string>
     <string name="backup_failed">Non è stato possibile salvare il backup</string>
     <string name="backup_restore_confirm">Impostazioni e dati appresi vengono sostituiti da quelli del file. Poi l\'app si chiude e si riapre.</string>

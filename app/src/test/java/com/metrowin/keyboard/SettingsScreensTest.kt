@@ -19,7 +19,7 @@ import java.io.File
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 class SettingsScreensTest {
     private val screens = listOf(
-        "Languages", "Appearance", "Size", "Typing", "Suggestions", "Feedback", "Clipboard", "Gif", "Translate", "Voice", "Launcher", "Backup", "Update", "About", "Projects",
+        "Languages", "Appearance", "Size", "Typing", "Suggestions", "Feedback", "Clipboard", "Voice", "Launcher", "Backup", "Update", "About", "Projects",
     ).map { "com.metrowin.keyboard.settings.${it}Fragment" }
 
     @Test fun calibrationScreenOpens() {
@@ -48,24 +48,5 @@ class SettingsScreensTest {
             root.draw(Canvas(bmp))
             File(out, "settings-${name.substringAfterLast('.')}.png").outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 90, it) }
         }
-    }
-
-    @Test fun theGifScreenShowsOnlyWhatTheChosenServiceUses() {
-        val app = androidx.test.core.app.ApplicationProvider.getApplicationContext<KeyboardApp>()
-        val activity = Robolectric.buildActivity(SettingsActivity::class.java).setup().get()
-        fun open(source: String): PreferenceFragmentCompat {
-            app.prefs.putString(K.GIF_SOURCE, source)
-            val f = activity.supportFragmentManager.fragmentFactory.instantiate(activity.classLoader, "com.metrowin.keyboard.settings.GifFragment") as PreferenceFragmentCompat
-            activity.supportFragmentManager.beginTransaction().replace(R.id.settings_container, f).commitNow()
-            return f
-        }
-        fun visible(f: PreferenceFragmentCompat, key: String) = f.findPreference<Preference>(key)!!.isVisible
-        for (s in listOf("giphy", "tenor", "klipy", "imgur")) {
-            val f = open(s)
-            assertTrue("$s button", visible(f, "gif_get_key")); assertTrue("$s key", visible(f, "gif_api_key")); assertTrue("$s rating", visible(f, "gif_rating"))
-            assertFalse("$s folder", visible(f, "gif_folder_pick"))
-        }
-        open("folder").let { assertFalse(visible(it, "gif_get_key")); assertFalse(visible(it, "gif_api_key")); assertFalse(visible(it, "gif_rating")); assertTrue(visible(it, "gif_folder_pick")) }
-        open("custom").let { assertFalse(visible(it, "gif_get_key")); assertTrue(visible(it, "gif_rating")); assertTrue(visible(it, "gif_custom_url")) }
     }
 }

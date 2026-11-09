@@ -41,8 +41,6 @@ object Home {
         screen("Suggestions", R.string.screen_suggestions, R.string.screen_suggestions_summary),
         screen("Feedback", R.string.screen_feedback, R.string.screen_feedback_summary),
         screen("Clipboard", R.string.screen_clipboard, R.string.screen_clipboard_summary),
-        screen("Translate", R.string.screen_translate, R.string.screen_translate_summary),
-        screen("Gif", R.string.screen_gif, R.string.screen_gif_summary),
         screen("Voice", R.string.screen_voice, R.string.screen_voice_summary),
         screen("Launcher", R.string.screen_launcher, R.string.screen_launcher_summary),
         screen("Backup", R.string.screen_backup, R.string.screen_backup_summary),

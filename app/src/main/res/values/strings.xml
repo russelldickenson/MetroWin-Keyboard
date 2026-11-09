@@ -29,8 +29,6 @@
     <string name="screen_feedback_summary">Key click, vibration strength</string>
     <string name="screen_clipboard">Clipboard</string>
     <string name="screen_clipboard_summary">History of text and pictures</string>
-    <string name="screen_gif">GIF</string>
-    <string name="screen_gif_summary">Choose where GIFs come from</string>
     <string name="screen_voice">Voice typing</string>
     <string name="screen_voice_summary">Dictation and transcription</string>
     <string name="screen_launcher">MetroWin Launcher</string>
@@ -157,29 +155,6 @@
     <string name="clipboard_title">Clipboard</string>
     <string name="clipboard_empty">Nothing copied yet</string>
     <string name="clipboard_no_images">This app does not accept pictures</string>
-    <string name="pref_gif_source_title">Where GIFs come from</string>
-    <string name="pref_gif_key_title">API key</string>
-    <string name="pref_gif_key_summary">Needed for GIPHY, Tenor, Klipy and Imgur (for Imgur it is the Client ID). The button above opens the page where you get one, free.</string>
-    <string name="pref_gif_key_message">Paste the key. It stays on this phone.</string>
-    <string name="pref_gif_folder_title">GIF folder…</string>
-    <string name="pref_gif_folder_summary">For \"A folder on this phone\": the GIFs you saved</string>
-    <string name="cat_gif_custom">Your own service</string>
-    <string name="pref_gif_custom_url_title">Address</string>
-    <string name="pref_gif_custom_url_summary">https address with {query}, {key}, {limit}, {lang} and {rating}</string>
-    <string name="pref_gif_custom_list_title">Where the results are in the answer</string>
-    <string name="pref_gif_custom_preview_title">Small picture, inside each result</string>
-    <string name="pref_gif_custom_full_title">Full GIF, inside each result</string>
-    <string name="pref_gif_link_title">Send the link when pictures are not accepted</string>
-    <string name="pref_gif_link_summary">Many chats turn the link into the GIF</string>
-    <string name="gif_needs_key">Add an API key in Settings → GIF. Tap here.</string>
-    <string name="gif_needs_folder">Choose a GIF folder in Settings → GIF. Tap here.</string>
-    <string name="gif_needs_url">Add the address of your service in Settings → GIF. Tap here.</string>
-    <string name="gif_loading">Loading…</string>
-    <string name="gif_none">No GIFs found</string>
-    <string name="gif_error">Could not load GIFs</string>
-    <string name="gif_not_supported">This app does not accept GIFs</string>
-    <string name="gif_search_prefix">GIF:</string>
-    <string name="gif_folder_saved">Folder saved</string>
     <string name="pref_voice_permission_title">Allow the microphone</string>
     <string name="pref_voice_permission_summary">Needed for voice typing</string>
     <string name="pref_voice_continuous_title">Keep listening</string>
@@ -201,7 +176,7 @@
     <string name="theme_imported">Theme applied</string>
     <string name="theme_invalid">That is not a MetroWin theme file</string>
     <string name="about_privacy_title">Privacy</string>
-    <string name="about_privacy_text">No analytics, no ads, no trackers. What you type, what the keyboard learns and your clipboard stay on this phone and are excluded from backups. The internet is used only to fetch GIFs from the source you chose, when you open the GIF panel; the microphone only for voice typing.</string>
+    <string name="about_privacy_text">No analytics, no ads, no trackers. What you type, what the keyboard learns and your clipboard stay on this phone and are excluded from backups. The internet is used only to look for a new version of the keyboard on its own GitHub page; the microphone only for voice typing.</string>
     <string name="about_version_title">Version</string>
     <string name="about_license_title">License</string>
     <string name="about_license_text">Free software, GNU GPL v3 or later. Not affiliated with Microsoft; Windows Phone is a trademark of Microsoft Corporation.</string>
@@ -272,18 +247,6 @@
         <item>custom</item>
         <item>off</item>
     </string-array>
-    <string-array name="gif_chips">
-        <item>Trending</item>
-        <item>Thanks</item>
-        <item>Haha</item>
-        <item>Love</item>
-        <item>Wow</item>
-        <item>Yes</item>
-        <item>No</item>
-        <item>Sad</item>
-        <item>Party</item>
-        <item>Good morning</item>
-    </string-array>
     <string name="tutorial_title">Tutorial</string>
     <string name="tutorial_new">New</string>
     <string name="tutorial_back">Back</string>
@@ -303,17 +266,13 @@
     <string name="tut_suggestions_title">Suggestions and correction</string>
     <string name="tut_suggestions_body">Three words appear above the keys while you type; the one in colour is what space will insert. Typos are fixed when you end a word, and if the fix is wrong, Backspace right away gives back what you typed. After a word, the likely next word is offered, and sometimes a whole phrase marked with \"…\". Offensive words are never suggested. Everything is learned on this phone only.</string>
     <string name="tut_toolbox_title">The three dots and the quick button</string>
-    <string name="tut_toolbox_body">The three dots on the left of the bar open the toolbox: clipboard, translate, GIF, emoji, voice, help and settings. The button on the right goes straight to one tool, the clipboard by default, and shows a dot when you have just copied something. Choose which tool it opens in Settings → Typing.</string>
+    <string name="tut_toolbox_body">The three dots on the left of the bar open the toolbox: clipboard, emoji, voice, help and settings. The button on the right goes straight to one tool, the clipboard by default, and shows a dot when you have just copied something. Choose which tool it opens in Settings → Typing.</string>
     <string name="tut_clipboard_title">Clipboard</string>
     <string name="tut_clipboard_body">Everything you copy is kept, on this phone only. Tap an item to paste it, the pin to keep it for good, the cross to delete it. Copied photos are kept too and are pasted as pictures where the app allows it. You choose how many items are kept in Settings → Clipboard.</string>
     <string name="tut_smartemoji_title">Find an emoji by name</string>
     <string name="tut_smartemoji_body">Type a colon and a word, like :dog, and the matching emoji appear in the suggestion bar: slide them sideways and tap one to replace what you typed. In the emoji panel, the magnifier searches by name with the keyboard itself. The names are in your language and in English. Smart emoji search can be switched off in Settings → Suggestions.</string>
     <string name="tut_emoji_title">Emoji and classic emoticons</string>
     <string name="tut_emoji_body">The smiley key opens emoji by category, with the recent ones first. Hold a hand or a person for skin tones. The last two tabs hold the classic emoticons, :-) and friends, and the Japanese kaomoji, which work in every app.</string>
-    <string name="tut_gif_title">GIF</string>
-    <string name="tut_gif_body">Open GIF from the toolbox. Tap one to send it. Use the search button and type with the keyboard to look for others. You choose where GIFs come from in Settings → GIF: GIPHY, Tenor, Klipy or Imgur (with your own free key; a button opens the page to get it), a folder on your phone, or your own service, and how strict the search is (G to R).</string>
-    <string name="tut_translate_title">Translate</string>
-    <string name="tut_translate_body">Open Translate from the toolbox. It takes the selected text, or everything in the field, and translates it. Tap the language names to change them, the arrows to swap. \"Clipboard\" translates what you just copied, handy for messages you received. Then replace the text, insert the translation after it, or copy it. Google is used by default; you can change the service in Settings → Translate, where DeepL also shows how many characters are left in your plan. The text is sent to the service only when you translate.</string>
     <string name="tut_voice_title">Voice typing</string>
     <string name="tut_voice_body">Tap the microphone in the toolbox and speak: the words appear as you talk. With \"Keep listening\" on (Settings → Voice) it keeps transcribing until you tap the microphone again. The first time Android asks to allow the microphone.</string>
     <string name="tut_looks_title">Looks and colours</string>
@@ -323,7 +282,7 @@
     <string name="tut_languages_title">Languages and dictionaries</string>
     <string name="tut_languages_body">Turn on the languages you write in (Settings → Languages) and switch with the globe key. Seventeen layouts are included; you can import any other layout, and a full dictionary for any language, to get better corrections and predictions.</string>
     <string name="tut_privacy_title">Your privacy</string>
-    <string name="tut_privacy_body">No trackers, no analytics. What you type, what the keyboard learns and your clipboard stay on this phone and are left out of backups. Nothing is learned in password fields. The internet is used only for GIFs and translation, when you ask, and the microphone only for voice typing. You can export or erase what was learned in Settings → Suggestions.</string>
+    <string name="tut_privacy_body">No trackers, no analytics. What you type, what the keyboard learns and your clipboard stay on this phone and are left out of backups. Nothing is learned in password fields. The internet is used only to look for a new version of the keyboard, and the microphone only for voice typing. You can export or erase what was learned in Settings → Suggestions.</string>
     <string name="tut_launcher_title">With MetroWin Launcher</string>
     <string name="tut_launcher_body">The keyboard shares the launcher\'s three looks and 20 colours, can import its theme file (Settings → MetroWin Launcher), and keeps out of the way in the launcher\'s search box: no correction and nothing learned there.</string>
     <string name="setup_tutorial_title">Tutorial</string>
@@ -353,60 +312,23 @@
     <string name="onb_next">Next</string>
     <string name="onb_tour">Take the tour</string>
     <string name="onb_finish">Finish</string>
-    <string name="screen_translate">Translation</string>
-    <string name="screen_translate_summary">Which service translates, and your key</string>
-    <string name="pref_translate_provider_title">Translation service</string>
-    <string name="pref_translate_key_title">API key</string>
-    <string name="pref_translate_key_summary">For Google Cloud, DeepL and, if yours needs one, LibreTranslate</string>
-    <string name="pref_translate_url_title">Server address</string>
-    <string name="pref_translate_url_summary">https address of your LibreTranslate server</string>
-    <string name="pref_translate_note_title">Good to know</string>
-    <string name="pref_translate_note_text">\"Google\" uses the web service of Google Translate, which needs no key but is not an official API: it can change or limit use. Google Cloud, DeepL and LibreTranslate are official and use your key. The text you translate is sent to the service you choose, only when you translate; never in password fields.</string>
     <string name="pref_bottom_padding_title">Extra space at the bottom (dp)</string>
     <string name="pref_bottom_padding_summary">Raise the keyboard if a bar covers the bottom row</string>
     <string name="pref_key_preview_title">Big letter above the key</string>
     <string name="pref_key_preview_summary">Shows the key you are pressing, in colour</string>
     <string name="pref_quick_tool_title">Quick button</string>
-    <string name="tr_field">Field</string>
-    <string name="tr_clipboard">Clipboard</string>
-    <string name="tr_replace">Replace</string>
-    <string name="tr_insert">Insert</string>
-    <string name="tr_copy">Copy</string>
-    <string name="tr_empty_field">Nothing to translate: write or select some text first</string>
-    <string name="tr_empty_clipboard">Nothing copied yet</string>
-    <string name="tr_needs_key">Add an API key in Settings → Translation. Tap here.</string>
-    <string name="tr_needs_url">Add the server address in Settings → Translation. Tap here.</string>
-    <string name="tr_working">Translating…</string>
-    <string name="tr_error">Could not translate. Check the connection and the service in Settings → Translation.</string>
-    <string name="tr_private_field">Translation is off in password fields</string>
-    <string name="tr_copied">Copied</string>
-    <string-array name="translate_provider_names"><item>Google (no key)</item><item>Google Cloud (your key)</item><item>DeepL (your key)</item><item>LibreTranslate (your server)</item><item>MyMemory</item></string-array>
-    <string-array name="translate_provider_values"><item>google</item><item>google_cloud</item><item>deepl</item><item>libre</item><item>mymemory</item></string-array>
-    <string-array name="quick_tool_names"><item>Clipboard</item><item>Translate</item><item>GIF</item><item>Emoji</item><item>Voice</item><item>Help</item><item>Settings</item></string-array>
-    <string-array name="quick_tool_values"><item>clipboard</item><item>translate</item><item>gif</item><item>emoji</item><item>mic</item><item>help</item><item>settings</item></string-array>
+    <string-array name="quick_tool_names"><item>Clipboard</item><item>Emoji</item><item>Voice</item><item>Help</item><item>Settings</item></string-array>
+    <string-array name="quick_tool_values"><item>clipboard</item><item>emoji</item><item>mic</item><item>help</item><item>settings</item></string-array>
     <string name="pref_language_key_title">Show the globe key</string>
     <string name="pref_language_key_summary">Hide it to widen the space bar. With several languages, hold the space bar to change language.</string>
-    <string name="pref_translate_usage_title">Characters left in your plan</string>
-    <string name="pref_translate_usage_summary">Add your key to see it. Only DeepL tells this.</string>
-    <string name="usage_checking">Checking…</string>
-    <string name="usage_result">%1$s used of %2$s · %3$s left</string>
-    <string name="usage_unlimited">%1$s used (no limit on this plan)</string>
-    <string name="usage_bad_key">DeepL does not accept this key</string>
-    <string name="usage_error">Could not check. Tap to try again.</string>
     <string name="pref_try_title">Try the keyboard</string>
     <string name="pref_try_summary">Opens a text box with the keyboard, to see the changes for real</string>
-    <string name="pref_gif_get_key_title">Get a key from the service\'s site</string>
-    <string name="pref_gif_rating_title">Content level</string>
-    <string-array name="gif_source_names"><item>GIPHY</item><item>Tenor</item><item>Klipy</item><item>Imgur</item><item>A folder on this phone</item><item>Your own service</item></string-array>
-    <string-array name="gif_source_values"><item>giphy</item><item>tenor</item><item>klipy</item><item>imgur</item><item>folder</item><item>custom</item></string-array>
-    <string-array name="gif_rating_names"><item>Everyone (G)</item><item>Parental guidance (PG)</item><item>Teens (PG-13)</item><item>Mature (R): all the service allows</item></string-array>
-    <string-array name="gif_rating_values"><item>g</item><item>pg</item><item>pg-13</item><item>r</item></string-array>
     <string name="screen_projects">Other projects</string>
     <string name="screen_projects_summary">More apps by the same author</string>
     <string name="cat_foss">Open source</string>
     <string name="cat_nonfoss">Not open source</string>
     <string name="project_keyboard_title">MetroWin Keyboard</string>
-    <string name="project_keyboard_desc">The Windows Phone keyboard for Android: flat Metro keys, swipe typing, a calibration that learns where your fingers land, smart correction, translation, GIFs and a clipboard history. What you type stays on your phone.</string>
+    <string name="project_keyboard_desc">The Windows Phone keyboard for Android: flat Metro keys, swipe typing, a calibration that learns where your fingers land, smart correction and a clipboard history. What you type stays on your phone.</string>
     <string name="project_launcher_title">MetroWin Launcher</string>
     <string name="project_launcher_desc">The Windows Phone Start screen for Android: live tiles that flip with real content, an alphabetical app list, an Action Center and a Metro lock screen. Free, with no ads and no analytics. It sets the look this keyboard follows.</string>
     <string name="project_spesatracker_title">SpesaTracker</string>
@@ -457,7 +379,7 @@
     <string name="backup_restore_title">Restore a backup</string>
     <string name="backup_restore_summary">Replaces what is in the app with the file you choose</string>
     <string name="backup_info_title">Keep the file private</string>
-    <string name="backup_info_text">It holds what you typed and learned, your clipboard and the keys of the services you use (GIF, translation). Store it somewhere only you can reach. Use it to move to another phone, or to an app signed with another key, which has to be installed again.</string>
+    <string name="backup_info_text">It holds what you typed and learned, and your clipboard. Store it somewhere only you can reach. Use it to move to another phone, or to an app signed with another key, which has to be installed again.</string>
     <string name="backup_done">Backup saved</string>
     <string name="backup_failed">The backup could not be saved</string>
     <string name="backup_restore_confirm">Your settings and learned data are replaced by the ones in the file. The app then closes and opens again.</string>

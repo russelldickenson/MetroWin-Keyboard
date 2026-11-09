@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- **Key font:** *Settings → Appearance* chooses the font of the key letters (system, Open Sans, Roboto, Atkinson Hyperlegible) and its weight (200 to 500; only the weights that look different for the font are listed).
+- **Removed:** the GIF and translation features, with their settings, panels and the services they called. The `INTERNET` permission stays for the update check only. A quick button that was set to Translate or GIF goes back to the clipboard.
+
 ## 26.1.2S
 
 - **Landscape:** with the three-button navigation the bottom row of keys is no longer covered by the strip where the system draws its keyboard buttons. The calibration is usable on its side: the title makes room, so the sentence stays above the keyboard.

@@ -19,7 +19,7 @@ class BackupTest {
 
     @Test fun settingsAndFilesComeBackAfterTheyAreLost() {
         val prefs = KeyboardApp.of(c).prefs
-        prefs.putInt(K.KEY_HEIGHT, 120); prefs.putString(K.GIF_API_KEY, "secret"); prefs.putBoolean(K.VIBRATION, false)
+        prefs.putInt(K.KEY_HEIGHT, 120); prefs.putInt(K.KEY_GAP, 7); prefs.putBoolean(K.VIBRATION, false)
         File(c.filesDir, "user").apply { mkdirs() }.resolve("it.txt").writeText("U\tciao\t3\n")
         File(c.filesDir, "background.jpg").writeBytes(byteArrayOf(1, 2, 3))
         val out = ByteArrayOutputStream(); Backup.write(c, out)
@@ -29,7 +29,7 @@ class BackupTest {
         assertEquals(100, prefs.keyHeight)
 
         assertTrue(Backup.restore(c, ByteArrayInputStream(out.toByteArray())) >= 3)
-        assertEquals(120, prefs.keyHeight); assertEquals("secret", prefs.gifApiKey); assertFalse(prefs.vibration)
+        assertEquals(120, prefs.keyHeight); assertEquals(7, prefs.keyGap); assertFalse(prefs.vibration)
         assertEquals("U\tciao\t3\n", File(c.filesDir, "user/it.txt").readText())
         assertArrayEquals(byteArrayOf(1, 2, 3), File(c.filesDir, "background.jpg").readBytes())
     }
