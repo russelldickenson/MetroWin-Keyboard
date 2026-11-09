@@ -41,20 +41,20 @@ Compared with the original MetroWin Keyboard (version 26.1.2S):
 - **The settings app is Material 3**, not Windows Phone style: a top app bar, a scrolling home with cards and lists, Material 3 type, buttons and switches, and the wallpaper colours (Material You) on Android 12+. The keyboard's own looks, including the Metro ones (Classic and Glass), are untouched.
 - **Accent colour**: the 20 Windows Phone colours are gone; you get Material You (Modern Droid follows the wallpaper) and one custom colour. Classic keeps its cyan by default.
 - The globe key is **hidden by default** (*Settings → Size and layout → Show the globe key* brings it back).
-- The update check points at placeholder repository values (`Repo.OWNER` and `Repo.NAME` in [`UpdateChecker.kt`](app/src/main/java/com/metrowin/keyboard/update/UpdateChecker.kt)) until this fork publishes its own releases, so it finds nothing for now.
 - Release signing is read from `keystore.properties`; [`keystore.properties.example`](keystore.properties.example) shows the values to fill in.
 
 **Removed**
 - **GIF**: the GIF panel, its search, the sources (GIPHY, Tenor, Klipy, Imgur, a folder, your own service) and their settings.
-- **Translation**: the translate panel, its services (Google, Google Cloud, DeepL, LibreTranslate, MyMemory) and their settings. As a result the `INTERNET` permission is used only by the update check.
+- **Translation**: the translate panel, its services (Google, Google Cloud, DeepL, LibreTranslate, MyMemory) and their settings. Together with the removal of updates, the app now asks for no `INTERNET` permission at all.
 - **MetroWin Launcher integration**: the theme sync receiver, the launcher theme file import, the *MetroWin Launcher* settings screen, its tutorial page, and the special handling of the launcher's search box.
-- **Other projects**: the entries for MetroWin Launcher and for the original author's other apps in *About → Other projects*.
+- **Updates**: the update check, its settings screen, the 12-hour background job, the tutorial page and the permissions it needed (`INTERNET`, `REQUEST_INSTALL_PACKAGES`, `RECEIVE_BOOT_COMPLETED`). Install new versions yourself.
+- **Other projects**: the *About → Other projects* screen, which only listed the original author's apps.
 
 Everything else is as in the original: the typing engine, smart correction, calibration, clipboard, emoji, voice typing, backup, the 17 layouts and the original three looks.
 
 ## Install
 
-There are no releases of this fork yet. Build it from source (below), then open the APK on your phone (allow your browser or file manager to install unknown apps).
+There are no releases of this fork yet, and the app has no built-in updater. Build it from source (below), then open the APK on your phone (allow your browser or file manager to install unknown apps).
 
 1. Open **Phayz Keyboard**. A guided set-up turns the keyboard on and selects it, noticing by itself when each step is done.
 2. A tutorial is in the app and inside the keyboard (the three dots, then **?**).
@@ -95,9 +95,6 @@ No analytics, ads or trackers. The full list is in [PRIVACY.md](PRIVACY.md).
 | Permission | Why |
 | --- | --- |
 | `RECORD_AUDIO` | Voice typing only; asked when you tap the microphone |
-| `INTERNET` | Only for the update check, which asks the repository set in `UpdateChecker.kt` every 12 hours (can be switched off) |
-| `REQUEST_INSTALL_PACKAGES` | Only to open the installer on a new version you chose to download in *Settings → Updates* |
-| `RECEIVE_BOOT_COMPLETED` | Keeps the 12-hour update check after a restart |
 | `VIBRATE` | Key vibration |
 
 Backups and device transfer are disabled for the app's data. The colour service is off until you turn it on in the accessibility settings, reads no text and sends nothing.
@@ -111,6 +108,7 @@ git clone <the address of this repository>
 cd <the cloned folder>
 ./gradlew assembleDebug          # app/build/outputs/apk/debug/app-debug.apk
 ./gradlew testDebugUnitTest      # engine, keyboard and tutorial tests on the JVM
+./build.sh                       # a signed release APK in the top-level folder (placeholder credentials; override with KEYSTORE_FILE, KEYSTORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD)
 ./gradlew assembleRelease        # needs keystore.properties (copy keystore.properties.example); -PsignWithDebugKey=true for a test build
 ```
 

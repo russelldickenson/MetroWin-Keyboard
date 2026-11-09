@@ -67,7 +67,7 @@ class TutorialTest {
         // The settings index points to fragments by name; a typo would crash only when the screen is opened.
         val app = ApplicationProvider.getApplicationContext<KeyboardApp>()
         val names = com.metrowin.keyboard.settings.Home.all
-        assertTrue(names.size >= 11)
+        assertTrue(names.size >= 10)
         for (n in names) Class.forName(n)
         assertNotNull(app)
     }

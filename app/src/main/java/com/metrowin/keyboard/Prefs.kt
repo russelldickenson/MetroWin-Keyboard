@@ -30,9 +30,6 @@ object K {
     const val CALIB_BIAS_LAND = "calibration_bias_land"
     const val CALIB_SIGMA = "calibration_sigma"         // spread of the taps in percent of a key, from the calibration
     const val SMART_CORRECT = "smart_correction"
-    const val UPDATE_AUTO = "update_auto"
-    const val UPDATE_LAST = "update_last_check"          // time of the last look for an update, ms
-    const val UPDATE_RELEASE = "update_release"          // the newer release the last look found, as JSON, "" = none
     const val NUMBER_ROW = "number_row"
     const val KEY_HINTS = "key_hints"
     const val KEY_FONT = "key_font"
@@ -116,13 +113,6 @@ class Prefs(context: Context) {
     fun calibBias(land: Boolean) = if (b(K.CALIB_ON, true)) Bias.decode(s(if (land) K.CALIB_BIAS_LAND else K.CALIB_BIAS, "")) else null
     val calibSigma get() = i(K.CALIB_SIGMA, 40).coerceIn(15, 90) / 100f
     val smartCorrect get() = b(K.SMART_CORRECT, true)
-    val updateAuto get() = b(K.UPDATE_AUTO, true)
-    var updateLast: Long
-        get() = sp.getLong(K.UPDATE_LAST, 0L)
-        set(v) { sp.edit().putLong(K.UPDATE_LAST, v).apply() }
-    var updateRelease: String
-        get() = s(K.UPDATE_RELEASE, "")
-        set(v) { putString(K.UPDATE_RELEASE, v) }
     val numberRow get() = b(K.NUMBER_ROW, false)
     val quickTool get() = s(K.QUICK_TOOL, "clipboard")
     val languageKey get() = b(K.LANGUAGE_KEY, false)

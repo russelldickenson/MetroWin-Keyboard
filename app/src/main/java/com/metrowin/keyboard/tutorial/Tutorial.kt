@@ -42,7 +42,6 @@ object Tutorial {
         TutorialPage("smart", R.string.tut_smart_title, R.string.tut_smart_body, since = 4),
         TutorialPage("backup", R.string.tut_backup_title, R.string.tut_backup_body, since = 4),
         TutorialPage("calibration", R.string.tut_calibration_title, R.string.tut_calibration_body, since = 4),
-        TutorialPage("update", R.string.tut_update_title, R.string.tut_update_body, since = 4),
         TutorialPage("languages", R.string.tut_languages_title, R.string.tut_languages_body, Icon.GLOBE),
         TutorialPage("privacy", R.string.tut_privacy_title, R.string.tut_privacy_body),
     )

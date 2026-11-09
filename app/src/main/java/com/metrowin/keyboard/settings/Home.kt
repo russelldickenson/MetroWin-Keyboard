@@ -35,30 +35,25 @@ object Home {
         screen("Clipboard", R.string.screen_clipboard, R.string.screen_clipboard_summary),
         screen("Voice", R.string.screen_voice, R.string.screen_voice_summary),
         screen("Backup", R.string.screen_backup, R.string.screen_backup_summary),
-        screen("Update", R.string.screen_update, R.string.screen_update_summary),
     )
     val about = listOf(
         screen("About", R.string.screen_about, R.string.screen_about_summary),
-        screen("Projects", R.string.screen_projects, R.string.screen_projects_summary),
     )
     val all get() = (settings + about).map { it.fragment }
 }
 
 /**
- * The home page: one scrolling list. At the top the things worth doing first (a new version, the calibration, turning the keyboard on),
+ * The home page: one scrolling list. At the top the things worth doing first (the calibration, turning the keyboard on),
  * then the settings screens and the about screens, each group under a small heading.
  */
 class HomeFragment : Fragment() {
     private var enable: Row? = null
     private var select: Row? = null
     private var tutorial: Row? = null
-    private var updateCard: View? = null
-    private var updateBody: TextView? = null
 
     override fun onCreateView(inflater: android.view.LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val c = requireContext()
         val list = LinearLayout(c).apply { orientation = LinearLayout.VERTICAL; setPadding(0, c.dp(8f).toInt(), 0, c.dp(24f).toInt()) }
-        list.addView(updateCard(c))
         list.addView(calibrationCard(c))
         list.addView(heading(c, R.string.pivot_start))
         enable = row(c, R.string.setup_enable_title, R.string.setup_enable_summary) { startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)) }.also { list.addView(it.view) }
@@ -79,9 +74,6 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         requireActivity().title = getString(R.string.app_name)
-        val found = com.metrowin.keyboard.update.Updates.pending(requireContext())
-        updateCard?.visibility = if (found != null) View.VISIBLE else View.GONE
-        if (found != null) updateBody?.text = getString(R.string.update_tile_body, found.version)
         val pkg = requireContext().packageName
         val imm = requireContext().getSystemService(InputMethodManager::class.java)
         val enabled = imm.enabledInputMethodList.any { it.packageName == pkg }
@@ -109,14 +101,6 @@ class HomeFragment : Fragment() {
             layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { setMargins(c.dp(16f).toInt(), c.dp(4f).toInt(), c.dp(16f).toInt(), c.dp(8f).toInt()) }
         }
         return card to bodyView
-    }
-
-    /** A new version was found: a card at the top that opens the updates (hidden when there is nothing new). */
-    private fun updateCard(c: Context): View {
-        val (card, body) = card(c, getString(R.string.update_tile_title), "") { open(Home.all.first { it.endsWith("UpdateFragment") }) }
-        updateBody = body
-        card.visibility = View.GONE
-        return card.also { updateCard = it }
     }
 
     /** The calibration: the thing most worth doing right after turning the keyboard on. */

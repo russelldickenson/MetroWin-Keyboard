@@ -19,7 +19,6 @@ class KeyboardApp : Application() {
         super.onCreate()
         // Material You: on Android 12+ the settings take their colours from the wallpaper.
         com.google.android.material.color.DynamicColors.applyToActivitiesIfAvailable(this)
-        runCatching { com.metrowin.keyboard.update.UpdateScheduler.sync(this) }
     }
 
     /** The engine of [id], loading its dictionary on first use. Call from a background thread: a big dictionary takes a moment. */

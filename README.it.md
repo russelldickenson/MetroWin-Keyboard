@@ -41,20 +41,20 @@ Rispetto a MetroWin Keyboard originale (versione 26.1.2S):
 - **L'app delle impostazioni è Material 3**, non più in stile Windows Phone: barra superiore, home a scorrimento con schede ed elenchi, tipografia, pulsanti e interruttori Material 3 e i colori dello sfondo (Material You) da Android 12. Gli aspetti della tastiera, compresi quelli Metro (Classic e Glass), restano com'erano.
 - **Colore principale**: i 20 colori di Windows Phone non ci sono più; restano Material You (Modern Droid segue lo sfondo) e un solo colore a scelta. Classic mantiene il ciano di default.
 - Il tasto mondo è **nascosto di default** (*Impostazioni → Dimensioni e disposizione → Mostra il tasto mondo* lo riporta).
-- Il controllo degli aggiornamenti punta a valori segnaposto del repository (`Repo.OWNER` e `Repo.NAME` in [`UpdateChecker.kt`](app/src/main/java/com/metrowin/keyboard/update/UpdateChecker.kt)) finché il fork non pubblica release proprie: per ora non trova nulla.
 - La firma delle release si legge da `keystore.properties`; [`keystore.properties.example`](keystore.properties.example) mostra i valori da compilare.
 
 **Tolto**
 - **GIF**: il pannello GIF, la ricerca, le fonti (GIPHY, Tenor, Klipy, Imgur, una cartella, un servizio tuo) e le relative impostazioni.
-- **Traduzione**: il pannello di traduzione, i servizi (Google, Google Cloud, DeepL, LibreTranslate, MyMemory) e le relative impostazioni. Di conseguenza il permesso `INTERNET` serve solo al controllo degli aggiornamenti.
+- **Traduzione**: il pannello di traduzione, i servizi (Google, Google Cloud, DeepL, LibreTranslate, MyMemory) e le relative impostazioni. Insieme alla rimozione degli aggiornamenti, l'app non chiede più alcun permesso `INTERNET`.
 - **Integrazione con MetroWin Launcher**: il ricevitore di sincronizzazione del tema, l'importazione del file tema del launcher, la schermata *MetroWin Launcher* nelle impostazioni, la sua pagina del tutorial e il trattamento speciale della casella di ricerca del launcher.
-- **Altri progetti**: le voci per MetroWin Launcher e per le altre app dell'autore originale in *Informazioni → Altri progetti*.
+- **Aggiornamenti**: il controllo degli aggiornamenti, la sua schermata nelle impostazioni, il lavoro periodico ogni 12 ore, la pagina del tutorial e i permessi che richiedeva (`INTERNET`, `REQUEST_INSTALL_PACKAGES`, `RECEIVE_BOOT_COMPLETED`). Le nuove versioni si installano da sé.
+- **Altri progetti**: la schermata *Informazioni → Altri progetti*, che elencava solo le app dell'autore originale.
 
 Tutto il resto è come nell'originale: il motore di scrittura, la correzione intelligente, la calibrazione, gli appunti, le emoji, la digitazione vocale, il backup, i 17 layout e i tre aspetti originali.
 
 ## Installazione
 
-Per ora questo fork non ha release. Compilalo dai sorgenti (sotto) e apri l'APK sul telefono (consenti al browser o al gestore file di installare app sconosciute).
+Per ora questo fork non ha release e l'app non ha un aggiornamento integrato. Compilalo dai sorgenti (sotto) e apri l'APK sul telefono (consenti al browser o al gestore file di installare app sconosciute).
 
 1. Apri **Phayz Keyboard**. Una guida all'attivazione accende la tastiera e la seleziona, accorgendosi da sola di quando ogni passaggio è fatto.
 2. Il tutorial è nell'app e dentro la tastiera (i tre puntini, poi **?**).
@@ -95,9 +95,6 @@ Nessuna analisi, pubblicità o tracker. L'elenco completo è in [PRIVACY.md](PRI
 | Permesso | Perché |
 | --- | --- |
 | `RECORD_AUDIO` | Solo per la digitazione vocale; richiesto quando tocchi il microfono |
-| `INTERNET` | Solo per il controllo degli aggiornamenti, che interroga il repository indicato in `UpdateChecker.kt` ogni 12 ore (si può disattivare) |
-| `REQUEST_INSTALL_PACKAGES` | Solo per aprire l'installazione di una nuova versione che hai scelto di scaricare in *Impostazioni → Aggiornamenti* |
-| `RECEIVE_BOOT_COMPLETED` | Mantiene il controllo ogni 12 ore dopo un riavvio |
 | `VIBRATE` | Vibrazione dei tasti |
 
 Backup e trasferimento tra dispositivi sono disattivati per i dati dell'app. Il servizio dei colori è spento finché non lo accendi nelle impostazioni di accessibilità, non legge testo e non invia nulla.
@@ -111,6 +108,7 @@ git clone <l'indirizzo di questo repository>
 cd <la cartella clonata>
 ./gradlew assembleDebug          # app/build/outputs/apk/debug/app-debug.apk
 ./gradlew testDebugUnitTest      # test di motore, tastiera e tutorial sulla JVM
+./build.sh                       # un APK firmato nella cartella principale (credenziali segnaposto; si cambiano con KEYSTORE_FILE, KEYSTORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD)
 ./gradlew assembleRelease        # serve keystore.properties (copia keystore.properties.example); -PsignWithDebugKey=true per una build di prova
 ```
 

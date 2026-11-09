@@ -11,3 +11,5 @@ captures/
 .cxx/
 app/build/shots/
 .kotlin/
+*.apk
+signing/

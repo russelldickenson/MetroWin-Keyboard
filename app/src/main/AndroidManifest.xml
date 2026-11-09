@@ -6,11 +6,6 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <!-- Key vibration. -->
     <uses-permission android:name="android.permission.VIBRATE" />
-    <!-- The update check, which asks only this keyboard's own repository on GitHub. -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- The update check: to install a new version of the keyboard that the user chose to download, and to keep the 12-hour check after a restart. -->
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <queries>
         <intent><action android:name="android.speech.RecognitionService" /></intent>
@@ -74,11 +69,6 @@
         </service>
 
         <!-- Clipboard pictures handed to the app being typed in. -->
-        <service
-            android:name=".update.UpdateJob"
-            android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.files"
