@@ -35,6 +35,7 @@ Compared with the original MetroWin Keyboard (version 26.1.2S):
 - **Key font and weight** (*Settings → Appearance*): the key letters can use the system font, Open Sans, Roboto or Atkinson Hyperlegible, at weights 200, 300, 400 or 500. Only the weights that look different for the chosen font are listed. The fonts are bundled variable fonts under the SIL OFL.
 - **iPhone look**: pale grey (or dark) keyboard, white rounded keys with a thin shadow, darker special keys, "space" and "return" labels, dividers between the suggestions and a white balloon over the pressed key.
 - **Modern Slate look**: dark grey keys with light grey symbols on a light grey surround (a dark one in dark mode), soft shadows and a light blue action key.
+- **Spaced versions of Modern Droid and Modern Slate**: the same looks with the keys spaced as on the iPhone look (about 6 dp across, 10 dp between rows, at the same keyboard height). The originals are unchanged.
 - **A new identity**: application id `com.phayz.keyboard`, so it coexists with the original.
 
 **Changed**
@@ -82,7 +83,7 @@ Android 8.0 (API 26) or newer.
 
 **Languages**: 17 layouts included (English, Italiano, Español, Français, Deutsch, Português, Nederlands, Polski, Türkçe, Русский, Українська, Ελληνικά, Čeština, Svenska, Română, العربية, עברית). Any other layout is a small text file ([docs/LAYOUTS.md](docs/LAYOUTS.md)); any dictionary can be imported (word lists, frequency lists, Hunspell `.dic`). Only small starter word lists are bundled (en, it, es, fr, de, pt), so import a full dictionary for the best predictions.
 
-**Looks**: *Classic* (flat Windows Phone), *Modern Glass*, *Modern Droid* (Material You colours on Android 12+), *iPhone* and *Modern Slate*; dark / light / system, one colour of your own (Modern Droid follows the wallpaper), pure black, a photo behind the keys (its colour becomes the accent), and, optionally, a keyboard that follows the colour of the app under it. Key letters in the font and weight you choose.
+**Looks**: *Classic* (flat Windows Phone), *Modern Glass*, *Modern Droid* (Material You colours on Android 12+), *iPhone*, *Modern Slate*, and spaced versions of Modern Droid and Modern Slate; dark / light / system, one colour of your own (Modern Droid follows the wallpaper), pure black, a photo behind the keys (its colour becomes the accent), and, optionally, a keyboard that follows the colour of the app under it. Key letters in the font and weight you choose.
 
 **Size**: a live preview, key height (portrait and landscape), keyboard width with left / centre / right position, key spacing, number row on or off, and an automatic calibration that learns from a few typed sentences where your fingers land.
 

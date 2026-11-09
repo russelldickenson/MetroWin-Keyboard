@@ -110,7 +110,7 @@ class KeyboardView(context: Context) : View(context) {
     // --- configuration ----------------------------------------------------------------------------------------------
 
     fun setPage(p: KeyboardPage) { page = p; layoutKeys(); requestLayout(); invalidate() }
-    fun setColors(c: KeyboardColors) { colors = c; invalidate() }
+    fun setColors(c: KeyboardColors) { val restyle = colors?.spacedKeys != c.spacedKeys; colors = c; if (restyle) layoutKeys(); invalidate() }
     fun setShift(state: Int) { if (shift != state) { shift = state; invalidate() } }
     fun setLanguageName(name: String) { languageName = name; invalidate() }
     fun setEnterAction(icon: Icon, label: String?) { enterIcon = icon; enterLabel = label; invalidate() }
@@ -174,18 +174,22 @@ class KeyboardView(context: Context) : View(context) {
         val p = page ?: return
         val w = width.toFloat(); val h = height.toFloat()
         if (w <= 0f || h <= 0f) return
-        val gap = dp(gapDp)
+        // The iPhone look and the spaced looks keep their keys further apart than the setting says (about 6 dp across and 10 dp between
+        // rows), as on iOS; the keyboard is not made taller for it: the rows give up the room.
+        val spaced = colors?.spacedKeys == true
+        val gapX = dp(if (spaced) maxOf(gapDp, 6f) else gapDp)
+        val gapY = dp(if (spaced) maxOf(gapDp, 10f) else gapDp)
         val contentW = w * widthPct / 100f
         val offset = when (align) { "left" -> 0f; "right" -> w - contentW; else -> (w - contentW) / 2f }
-        val rowH = (h - gap * (p.rows.size + 1) - dp(2f)) / p.rows.size
+        val rowH = (h - gapY * (p.rows.size + 1) - dp(2f)) / p.rows.size
         p.rows.forEachIndexed { r, row ->
             val total = row.sumOf { it.weight.toDouble() }.toFloat()
-            val unit = (contentW - gap * (row.size + 1)) / total
-            var x = offset + gap
-            val top = gap + r * (rowH + gap)
+            val unit = (contentW - gapX * (row.size + 1)) / total
+            var x = offset + gapX
+            val top = gapY + r * (rowH + gapY)
             for (k in row) {
                 k.left = x; k.right = x + unit * k.weight; k.top = top; k.bottom = top + rowH
-                x = k.right + gap
+                x = k.right + gapX
             }
         }
     }

@@ -35,6 +35,7 @@ Rispetto a MetroWin Keyboard originale (versione 26.1.2S):
 - **Carattere e spessore dei tasti** (*Impostazioni → Aspetto*): le lettere dei tasti possono usare il carattere di sistema, Open Sans, Roboto o Atkinson Hyperlegible, con spessore 200, 300, 400 o 500. Sono elencati solo gli spessori che si vedono diversi nel carattere scelto. I caratteri sono font variabili inclusi, con licenza SIL OFL.
 - **Aspetto iPhone**: tastiera grigio chiaro (o scura), tasti bianchi arrotondati con una sottile ombra, tasti speciali più scuri, etichette "spazio" e "invio", separatori tra i suggerimenti e un fumetto bianco sopra il tasto premuto.
 - **Aspetto Modern Slate**: tasti grigio scuro con simboli grigio chiaro su uno sfondo grigio chiaro (scuro nella modalità scura), ombre morbide e un tasto azione azzurro.
+- **Versioni spaziate di Modern Droid e Modern Slate**: gli stessi aspetti con i tasti distanziati come nell'aspetto iPhone (circa 6 dp in orizzontale, 10 dp tra le file, alla stessa altezza della tastiera). Gli originali restano invariati.
 - **Una nuova identità**: identificativo `com.phayz.keyboard`, per convivere con l'originale.
 
 **Modificato**
@@ -82,7 +83,7 @@ Android 8.0 (API 26) o successivo.
 
 **Lingue**: 17 layout inclusi (English, Italiano, Español, Français, Deutsch, Português, Nederlands, Polski, Türkçe, Русский, Українська, Ελληνικά, Čeština, Svenska, Română, العربية, עברית). Qualsiasi altro layout è un piccolo file di testo ([docs/LAYOUTS.md](docs/LAYOUTS.md)); si può importare qualsiasi dizionario (liste di parole, di frequenza, Hunspell `.dic`). Sono incluse solo piccole liste di partenza (en, it, es, fr, de, pt): importa un dizionario completo per le previsioni migliori.
 
-**Aspetto**: *Classic* (Windows Phone piatto), *Modern Glass*, *Modern Droid* (colori Material You da Android 12), *iPhone* e *Modern Slate*; scuro / chiaro / sistema, un colore tuo (Modern Droid segue lo sfondo), nero puro, una foto dietro i tasti (il suo colore diventa l'accento) e, volendo, una tastiera che segue il colore dell'app sotto. Lettere dei tasti nel carattere e nello spessore che scegli.
+**Aspetto**: *Classic* (Windows Phone piatto), *Modern Glass*, *Modern Droid* (colori Material You da Android 12), *iPhone*, *Modern Slate* e le versioni spaziate di Modern Droid e Modern Slate; scuro / chiaro / sistema, un colore tuo (Modern Droid segue lo sfondo), nero puro, una foto dietro i tasti (il suo colore diventa l'accento) e, volendo, una tastiera che segue il colore dell'app sotto. Lettere dei tasti nel carattere e nello spessore che scegli.
 
 **Dimensioni**: anteprima dal vivo, altezza dei tasti (verticale e orizzontale), larghezza della tastiera con posizione sinistra / centro / destra, spazio tra i tasti, riga dei numeri e una calibrazione automatica che impara da qualche frase scritta dove cadono le tue dita.
 

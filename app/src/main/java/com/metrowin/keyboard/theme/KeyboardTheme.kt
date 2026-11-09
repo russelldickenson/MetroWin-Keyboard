@@ -5,7 +5,7 @@ import android.content.res.Configuration
 import android.os.Build
 import com.metrowin.keyboard.Prefs
 
-enum class ThemeStyle(val code: String) {
+enum class ThemeStyle(val code: String, private val of: ThemeStyle? = null) {
     /** Flat Windows Phone: square tiles, the accent on what is pressed. */
     CLASSIC("classic"),
 
@@ -15,11 +15,21 @@ enum class ThemeStyle(val code: String) {
     /** Material You: tonal surfaces (the wallpaper's colours on Android 12+), rounded keys, a filled action key. */
     DROID("droid"),
 
+    /** Modern Droid with the keys spaced as on the iPhone look. */
+    DROID_SPACED("droid_spaced", DROID),
+
     /** The iOS keyboard: pale grey, white rounded keys with a thin shadow under them, darker grey for the special keys. */
     IPHONE("iphone"),
 
     /** Dark grey keys with light grey symbols, on a light grey surround (a dark one in dark mode). */
-    SLATE("slate");
+    SLATE("slate"),
+
+    /** Modern Slate with the keys spaced as on the iPhone look. */
+    SLATE_SPACED("slate_spaced", SLATE);
+
+    /** The look this one draws like: the spaced versions draw as the look they are made from. */
+    val base: ThemeStyle get() = of ?: this
+    val spaced: Boolean get() = of != null
 
     companion object { fun from(code: String?) = entries.firstOrNull { it.code == code } ?: CLASSIC }
 }
@@ -48,6 +58,8 @@ data class KeyboardColors(
     val keyTextColor: Int = 0,
     /** The accent as seen on the bar above the keys, when the surround is so light that [accent] would not read there; 0 for [accent]. */
     val barAccentColor: Int = 0,
+    /** The keys are further apart than the setting says (about 6 dp across and 10 dp between rows), as on iOS. */
+    val spacedKeys: Boolean = false,
 ) {
     val barAccent get() = if (barAccentColor != 0) barAccentColor else accent
     val keyText get() = if (keyTextColor != 0) keyTextColor else text
@@ -60,7 +72,8 @@ object KeyboardTheme {
      * @param pictureAccent the accent taken from the user's picture, or 0
      */
     fun resolve(context: Context, p: Prefs, systemDark: Boolean, adaptive: Int?, pictureAccent: Int = 0): KeyboardColors {
-        val style = ThemeStyle.from(p.themeStyle)
+        val chosen = ThemeStyle.from(p.themeStyle)
+        val style = chosen.base
         var dark = when (p.themeMode) { "dark" -> true; "light" -> false; else -> systemDark }
         val system = if (style == ThemeStyle.DROID && p.dynamicColor && p.customAccent == 0 && pictureAccent == 0) SystemTones.read(context) else null
 
@@ -92,7 +105,7 @@ object KeyboardTheme {
         val text = ColorMath.onColor(bg)
         val subtle = ColorMath.withAlpha(text, 0xB0)
         val onAccent = ColorMath.onColor(accent)
-        return when (style) {
+        val colors = when (style) {
             ThemeStyle.CLASSIC -> KeyboardColors(
                 style, dark, bg, ColorMath.mix(bg, text, 0.04f),
                 key = ColorMath.mix(bg, text, if (dark) 0.14f else 0.0f).let { if (dark) it else 0xFFF2F2F2.toInt() },
@@ -116,7 +129,7 @@ object KeyboardTheme {
                 popup = if (dark) 0xFF6B6B6E.toInt() else 0xFFFFFFFF.toInt(), cornerDp = 5f, strokeDp = 0f, translucent = false,
                 shadowDp = 1f,
             )
-            ThemeStyle.SLATE -> KeyboardColors(
+            ThemeStyle.SLATE, ThemeStyle.SLATE_SPACED -> KeyboardColors(
                 style, dark, bg, bg,
                 key = if (dark) 0xFF444B50.toInt() else 0xFF41474C.toInt(),
                 keyPressed = 0xFF68717A.toInt(),
@@ -126,7 +139,7 @@ object KeyboardTheme {
                 shadowDp = 1.5f, keyTextColor = 0xFFE3E5E8.toInt(),
                 barAccentColor = if (!dark && p.customAccent == 0 && pictureAccent == 0) 0xFF1A66D6.toInt() else 0,
             )
-            ThemeStyle.DROID -> {
+            ThemeStyle.DROID, ThemeStyle.DROID_SPACED -> {
                 val keyColor = system?.let { if (dark) it.neutral800 else it.neutral0 } ?: ColorMath.mix(bg, text, if (dark) 0.10f else 0.0f).let { if (dark) it else ColorMath.lighten(bg, 0.6f) }
                 val specialColor = system?.let { if (dark) it.accent2_700 else it.accent2_100 } ?: ColorMath.mix(bg, accent, if (dark) 0.28f else 0.22f)
                 KeyboardColors(
@@ -135,6 +148,7 @@ object KeyboardTheme {
                 )
             }
         }
+        return if (chosen.spaced || style == ThemeStyle.IPHONE) colors.copy(spacedKeys = true) else colors
     }
 
     fun isSystemDark(context: Context) =

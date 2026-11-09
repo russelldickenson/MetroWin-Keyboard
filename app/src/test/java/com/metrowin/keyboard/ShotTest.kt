@@ -28,7 +28,7 @@ class ShotTest {
     @Test fun drawsEveryLook() {
         val app = ApplicationProvider.getApplicationContext<KeyboardApp>()
         val out = File("build/shots").apply { mkdirs() }
-        for (style in listOf("classic", "glass", "droid", "iphone", "slate")) for (mode in listOf("dark", "light")) {
+        for (style in listOf("classic", "glass", "droid", "droid_spaced", "iphone", "slate", "slate_spaced")) for (mode in listOf("dark", "light")) {
             app.prefs.sp.edit().clear().putString(K.THEME_STYLE, style).putString(K.THEME_MODE, mode).commit()
             val kb = KeyboardView(app)
             kb.setColors(KeyboardTheme.resolve(app, app.prefs, false, null))

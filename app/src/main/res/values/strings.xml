@@ -199,15 +199,19 @@
         <item>Classic (flat Windows Phone)</item>
         <item>Modern Glass</item>
         <item>Modern Droid</item>
+        <item>Modern Droid Spaced</item>
         <item>iPhone</item>
         <item>Modern Slate (dark keys)</item>
+        <item>Modern Slate Spaced</item>
     </string-array>
     <string-array name="theme_style_values">
         <item>classic</item>
         <item>glass</item>
         <item>droid</item>
+        <item>droid_spaced</item>
         <item>iphone</item>
         <item>slate</item>
+        <item>slate_spaced</item>
     </string-array>
     <string-array name="theme_mode_names">
         <item>Follow the system</item>
