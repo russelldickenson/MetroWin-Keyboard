@@ -21,7 +21,6 @@ object K {
     const val IMAGE_DIM = "image_dim"
     const val ADAPTIVE_COLOR = "adaptive_color"
     const val OLED_BLACK = "oled_black"
-    const val LAUNCHER_SYNC = "launcher_sync"
 
     const val KEY_HEIGHT = "key_height"
     const val KEY_HEIGHT_LAND = "key_height_land"
@@ -111,7 +110,6 @@ class Prefs(context: Context) {
     val oledBlack get() = b(K.OLED_BLACK, false)
     val usePictureAccent get() = b(K.USE_PICTURE_ACCENT, true)
     val pictureAccent get() = i(K.PICTURE_ACCENT, 0)
-    val launcherSync get() = b(K.LAUNCHER_SYNC, true)
 
     val keyHeight get() = i(K.KEY_HEIGHT, 100)
     val keyHeightLand get() = i(K.KEY_HEIGHT_LAND, 100)

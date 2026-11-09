@@ -11,7 +11,7 @@ android {
     buildToolsVersion = "35.0.0"
 
     defaultConfig {
-        applicationId = "com.metrowin.keyboard"
+        applicationId = "com.phayz.keyboard"
         minSdk = 26
         targetSdk = 35
         versionCode = 7
@@ -19,7 +19,7 @@ android {
     }
 
     // The key of the official release comes from keystore.properties in the root of the project (never committed): storeFile,
-    // storePassword, keyAlias and keyPassword. Without it the release build is unsigned, which is what F-Droid wants; for a test
+    // storePassword, keyAlias and keyPassword (see keystore.properties.example). Without it the release build is unsigned, which is what F-Droid wants; for a test
     // build that installs over the debug build, pass -PsignWithDebugKey=true.
     val keystoreFile = rootProject.file("keystore.properties")
     val official = keystoreFile.takeIf { it.exists() }?.let { file ->

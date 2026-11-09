@@ -18,7 +18,7 @@ import com.metrowin.keyboard.ui.Fonts
 import com.metrowin.keyboard.ui.dp
 
 /**
- * The same author's apps: the open source ones with their source, the others with their store page. Each has its icon, a few lines about
+ * The projects of this keyboard's author. Each has its icon, a few lines about
  * it and a strip of screenshots, so a glance says what it is.
  */
 class ProjectsFragment : Fragment() {
@@ -28,18 +28,7 @@ class ProjectsFragment : Fragment() {
         Project(
             R.mipmap.ic_launcher, R.string.project_keyboard_title, R.string.project_keyboard_desc,
             listOf(R.drawable.proj_keyboard_1, R.drawable.proj_keyboard_2, R.drawable.proj_keyboard_3), 260f,
-            R.string.project_open_github, "https://github.com/developerkenshi-coder/MetroWin-Keyboard",
-        ),
-        Project(
-            R.drawable.proj_launcher_icon, R.string.project_launcher_title, R.string.project_launcher_desc,
-            listOf(R.drawable.proj_launcher_1, R.drawable.proj_launcher_2, R.drawable.proj_launcher_3, R.drawable.proj_launcher_4), 260f,
-            R.string.project_open_github, "https://github.com/developerkenshi-coder/MetroWinLauncher",
-        ),
-    )
-    private val closed = listOf(
-        Project(
-            R.drawable.proj_spesatracker_icon, R.string.project_spesatracker_title, R.string.project_spesatracker_desc, emptyList(), 0f,
-            R.string.project_open_play, "https://play.google.com/store/apps/details?id=com.spesatracker.app",
+            R.string.project_open_github, com.metrowin.keyboard.update.Repo.PAGE,
         ),
     )
 
@@ -47,7 +36,6 @@ class ProjectsFragment : Fragment() {
         val c = requireContext()
         val list = LinearLayout(c).apply { orientation = LinearLayout.VERTICAL; setPadding(0, c.dp(8f).toInt(), 0, c.dp(32f).toInt()) }
         section(c, list, R.string.cat_foss, open)
-        section(c, list, R.string.cat_nonfoss, closed)
         return ScrollView(c).apply { addView(list) }
     }
 

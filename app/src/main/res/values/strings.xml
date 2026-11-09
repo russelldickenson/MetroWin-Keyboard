@@ -31,8 +31,6 @@
     <string name="screen_clipboard_summary">History of text and pictures</string>
     <string name="screen_voice">Voice typing</string>
     <string name="screen_voice_summary">Dictation and transcription</string>
-    <string name="screen_launcher">MetroWin Launcher</string>
-    <string name="screen_launcher_summary">Follow the launcher\'s look</string>
     <string name="screen_about">Privacy and about</string>
     <string name="screen_about_summary">What stays on your phone</string>
     <string name="pref_languages_title">Active languages</string>
@@ -167,16 +165,6 @@
     <string name="voice_permission">Allow the microphone to use voice typing</string>
     <string name="voice_unavailable">No speech recogniser on this phone</string>
     <string name="voice_error">Voice error %1$d</string>
-    <string name="pref_launcher_status_title">MetroWin Launcher</string>
-    <string name="launcher_found">Found on this phone</string>
-    <string name="launcher_missing">Not installed</string>
-    <string name="pref_launcher_sync_title">Follow the launcher\'s look</string>
-    <string name="pref_launcher_sync_summary">Takes the style, dark/light and accent the launcher sends</string>
-    <string name="pref_launcher_import_title">Import a launcher theme file…</string>
-    <string name="pref_launcher_import_summary">The \"theme\" the launcher exports from its settings</string>
-    <string name="pref_launcher_open_title">Open MetroWin Launcher</string>
-    <string name="theme_imported">Theme applied</string>
-    <string name="theme_invalid">That is not a MetroWin theme file</string>
     <string name="about_privacy_title">Privacy</string>
     <string name="about_privacy_text">No analytics, no ads, no trackers. What you type, what the keyboard learns and your clipboard stay on this phone and are excluded from backups. The internet is used only to look for a new version of the keyboard on its own GitHub page; the microphone only for voice typing.</string>
     <string name="about_version_title">Version</string>
@@ -260,7 +248,7 @@
     <string name="tutorial_done">Done</string>
     <string name="tutorial_counter">%1$d / %2$d</string>
     <string name="tut_welcome_title">Welcome</string>
-    <string name="tut_welcome_body">MetroWin Keyboard brings the Windows Phone keyboard to Android: flat keys, big light type, and the same colours as MetroWin Launcher. This short tour shows what it can do. You can open it again from the three dots in the keyboard (the ? button) or from the settings.</string>
+    <string name="tut_welcome_body">MetroWin Keyboard brings the Windows Phone keyboard to Android: flat keys and big light type. This short tour shows what it can do. You can open it again from the three dots in the keyboard (the ? button) or from the settings.</string>
     <string name="tut_basics_title">Typing</string>
     <string name="tut_basics_body">Tap the arrow for a capital; tap it twice (or hold it) to lock capitals. \"?123\" switches to numbers and symbols, and \"=\&lt;\" to more of them. The smiley opens emoji and the globe changes language (hide the globe in the settings to widen the space bar; then hold the space bar to change language). Press Enter for the action of the field (search, send, next…).</string>
     <string name="tut_hold_title">Hold for more</string>
@@ -289,8 +277,6 @@
     <string name="tut_languages_body">Turn on the languages you write in (Settings → Languages) and switch with the globe key. Seventeen layouts are included; you can import any other layout, and a full dictionary for any language, to get better corrections and predictions.</string>
     <string name="tut_privacy_title">Your privacy</string>
     <string name="tut_privacy_body">No trackers, no analytics. What you type, what the keyboard learns and your clipboard stay on this phone and are left out of backups. Nothing is learned in password fields. The internet is used only to look for a new version of the keyboard, and the microphone only for voice typing. You can export or erase what was learned in Settings → Suggestions.</string>
-    <string name="tut_launcher_title">With MetroWin Launcher</string>
-    <string name="tut_launcher_body">The keyboard shares the launcher\'s three looks and 20 colours, can import its theme file (Settings → MetroWin Launcher), and keeps out of the way in the launcher\'s search box: no correction and nothing learned there.</string>
     <string name="setup_tutorial_title">Tutorial</string>
     <string name="setup_tutorial_summary">What the keyboard can do</string>
     <string name="setup_tutorial_new">New sections since you last looked</string>
@@ -332,15 +318,9 @@
     <string name="screen_projects">Other projects</string>
     <string name="screen_projects_summary">More apps by the same author</string>
     <string name="cat_foss">Open source</string>
-    <string name="cat_nonfoss">Not open source</string>
     <string name="project_keyboard_title">MetroWin Keyboard</string>
     <string name="project_keyboard_desc">The Windows Phone keyboard for Android: flat Metro keys, swipe typing, a calibration that learns where your fingers land, smart correction and a clipboard history. What you type stays on your phone.</string>
-    <string name="project_launcher_title">MetroWin Launcher</string>
-    <string name="project_launcher_desc">The Windows Phone Start screen for Android: live tiles that flip with real content, an alphabetical app list, an Action Center and a Metro lock screen. Free, with no ads and no analytics. It sets the look this keyboard follows.</string>
-    <string name="project_spesatracker_title">SpesaTracker</string>
-    <string name="project_spesatracker_desc">Keeps track of your shopping and what you spend. The data is encrypted and can follow you between your devices through your own Google Drive. Free to download on Google Play.</string>
     <string name="project_open_github">Open on GitHub</string>
-    <string name="project_open_play">Open on Google Play</string>
     <string name="no_browser">No browser found to open the link</string>
     <string name="pivot_start">start</string>
     <string name="pivot_settings">settings</string>

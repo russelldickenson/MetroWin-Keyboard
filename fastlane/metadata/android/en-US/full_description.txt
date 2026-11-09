@@ -1,4 +1,4 @@
-The Windows Phone keyboard, on Android, made to work together with MetroWin Launcher.
+The Windows Phone keyboard, on Android.
 
 • Flat Metro keys with big light type, in three looks: Classic, Modern Glass and Modern Droid, with the 20 Windows Phone colours or your own, or a photo behind the keys
 • Swipe typing, hold a key for accents and symbols, double space for a full stop, slide on the space bar to move the cursor

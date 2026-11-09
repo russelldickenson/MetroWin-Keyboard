@@ -196,13 +196,6 @@ class ImeTest {
         assertEquals(0, ime.shiftState)
     }
 
-    @Test fun launcherSearchBoxGetsNoCorrectionAndNoLearning() {
-        start(pkg = "com.metrowin.launcher")
-        type("ciaoo ")
-        assertEquals("ciaoo ", text)
-        assertEquals(0, app.engine("it").user.count("ciaoo"))
-    }
-
     @Test fun apostropheBreaksWordsInItalianButNotInEnglish() {
         type("l'")
         assertEquals("l'", text)

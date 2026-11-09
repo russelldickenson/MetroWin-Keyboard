@@ -7,8 +7,8 @@ import org.json.JSONObject
  * built from these constants or checked against them (see [UpdateNet]); a release that points anywhere else is ignored.
  */
 object Repo {
-    const val OWNER = "developerkenshi-coder"
-    const val NAME = "MetroWin-Keyboard"
+    const val OWNER = "your-github-user"
+    const val NAME = "your-repo-name"
     const val LATEST = "https://api.github.com/repos/$OWNER/$NAME/releases/latest"
     const val DOWNLOADS = "https://github.com/$OWNER/$NAME/releases/download/"
     const val RAW = "https://raw.githubusercontent.com/$OWNER/$NAME/"

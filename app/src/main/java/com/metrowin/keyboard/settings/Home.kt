@@ -42,7 +42,6 @@ object Home {
         screen("Feedback", R.string.screen_feedback, R.string.screen_feedback_summary),
         screen("Clipboard", R.string.screen_clipboard, R.string.screen_clipboard_summary),
         screen("Voice", R.string.screen_voice, R.string.screen_voice_summary),
-        screen("Launcher", R.string.screen_launcher, R.string.screen_launcher_summary),
         screen("Backup", R.string.screen_backup, R.string.screen_backup_summary),
         screen("Update", R.string.screen_update, R.string.screen_update_summary),
     )
@@ -54,7 +53,7 @@ object Home {
 }
 
 /**
- * The home page, as the settings of Windows Phone and MetroWin Launcher: the name of the app in small capitals over large light titles
+ * The home page, as the settings of Windows Phone: the name of the app in small capitals over large light titles
  * side by side, the next one peeking in at the edge, and a page for each that slides with the finger. The titles follow the pages and
  * can be touched to swing to one.
  */

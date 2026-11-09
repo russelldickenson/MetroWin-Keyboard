@@ -45,7 +45,6 @@ object Tutorial {
         TutorialPage("update", R.string.tut_update_title, R.string.tut_update_body, since = 4),
         TutorialPage("languages", R.string.tut_languages_title, R.string.tut_languages_body, Icon.GLOBE),
         TutorialPage("privacy", R.string.tut_privacy_title, R.string.tut_privacy_body),
-        TutorialPage("launcher", R.string.tut_launcher_title, R.string.tut_launcher_body),
     )
 
     /** Where to start for someone who has seen the tutorial up to version [seen]: the first page added after it, or the start. */

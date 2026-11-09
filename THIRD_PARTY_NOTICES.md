@@ -4,7 +4,7 @@
 
 `app/src/main/res/font/opensans_*.ttf` are Open Sans Light, Regular and SemiBold (Latin subset), copyright 2020 The Open Sans Project Authors,
 used under the SIL Open Font License 1.1 (see [`licenses/OFL-1.1.txt`](licenses/OFL-1.1.txt)). They stand in for Segoe WP, the Windows Phone typeface,
-which is proprietary and cannot be bundled. The files are the ones MetroWin Launcher ships.
+which is proprietary and cannot be bundled.
 
 The key-letter choices in Appearance use the variable fonts in `app/src/main/assets/fonts/`, all under the same SIL OFL 1.1: Open Sans (copyright 2020 The Open Sans Project Authors), Roboto (copyright 2011 The Roboto Project Authors) and Atkinson Hyperlegible Next (copyright 2025 Braille Institute of America, Inc.). They come from [google/fonts](https://github.com/google/fonts).
 

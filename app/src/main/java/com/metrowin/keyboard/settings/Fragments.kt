@@ -33,7 +33,6 @@ import com.metrowin.keyboard.K
 import com.metrowin.keyboard.KeyboardApp
 import com.metrowin.keyboard.R
 import com.metrowin.keyboard.engine.LanguageEngine
-import com.metrowin.keyboard.integration.LauncherLink
 import com.metrowin.keyboard.service.ScreenColorService
 import com.metrowin.keyboard.theme.Accents
 import java.util.concurrent.Executors
@@ -361,27 +360,6 @@ class VoiceFragment : BaseFragment(R.xml.prefs_voice, R.string.screen_voice) {
     private fun refresh() {
         val ok = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
         findPreference<Preference>("voice_permission")?.summary = if (ok) getString(R.string.setup_enabled) else getString(R.string.pref_voice_permission_summary)
-    }
-}
-
-class LauncherFragment : BaseFragment(R.xml.prefs_launcher, R.string.screen_launcher) {
-    private val importTheme = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        if (uri == null) return@registerForActivityResult
-        val text = runCatching { requireContext().contentResolver.openInputStream(uri)!!.use { it.readBytes().take(256 * 1024).toByteArray().toString(Charsets.UTF_8) } }.getOrNull()
-        val look = text?.let { LauncherLink.parseThemeFile(it) }
-        if (look != null) { LauncherLink.apply(app.prefs, look); toast(R.string.theme_imported) } else toast(R.string.theme_invalid)
-    }
-
-    override fun setup() {
-        click("launcher_import_theme") { importTheme.launch(arrayOf("*/*")) }
-        click("launcher_open") { LauncherLink.launchIntent(requireContext())?.let { startActivity(it) } }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val installed = LauncherLink.isInstalled(requireContext())
-        findPreference<Preference>("launcher_status")?.summary = getString(if (installed) R.string.launcher_found else R.string.launcher_missing)
-        findPreference<Preference>("launcher_open")?.isEnabled = installed
     }
 }
 

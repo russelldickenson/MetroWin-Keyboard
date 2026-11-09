@@ -36,7 +36,6 @@ import com.metrowin.keyboard.engine.SwipePoint
 import com.metrowin.keyboard.engine.Text
 import com.metrowin.keyboard.engine.WordSuggestions
 import com.metrowin.keyboard.feedback.Feedback
-import com.metrowin.keyboard.integration.LauncherLink
 import com.metrowin.keyboard.layout.Key
 import com.metrowin.keyboard.layout.KeyType
 import com.metrowin.keyboard.layout.KeyboardBuilder
@@ -110,7 +109,6 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
     private var field = Field.NONE
     private var predictionOn = false
     private var learningOn = false
-    private var inLauncher = false
     private var emojiSearching = false
     private val emojiQuery = StringBuilder()
     private val composing = StringBuilder()
@@ -192,7 +190,7 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
         root.addView(bar, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
         root.addView(strip, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (resources.displayMetrics.density * 100).toInt()))
         root.addView(frame, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
-        // Android 15 draws the keyboard window edge to edge, behind the navigation bar (or behind the launcher's own bar drawn there).
+        // Android 15 draws the keyboard window edge to edge, behind the navigation bar.
         ViewCompat.setOnApplyWindowInsetsListener(root) { _, insets ->
             // Also the caption bar: with the three buttons in landscape the system reports the strip where it draws its keyboard buttons
             // (the hide arrow and the language globe) there, not as a navigation bar, and it would cover the bottom row of keys.
@@ -291,12 +289,10 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
             }
             else -> Field.NONE
         }
-        inLauncher = LauncherLink.isLauncher(info?.packageName)
         val noSuggestions = t and InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS != 0
-        // In the launcher's search box a word is not a sentence: no completion, correction or learning there.
-        predictionOn = prefs.suggestions && field == Field.TEXT && !noSuggestions && !inLauncher
+        predictionOn = prefs.suggestions && field == Field.TEXT && !noSuggestions
         val noLearning = (info?.imeOptions ?: 0) and EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING != 0
-        learningOn = prefs.learn && field == Field.TEXT && !noLearning && !inLauncher
+        learningOn = prefs.learn && field == Field.TEXT && !noLearning
     }
 
     private fun scheduleRefresh() {
@@ -414,7 +410,7 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
     }
 
     private fun updateShiftFromCursor() {
-        if (!prefs.autoCaps || field != Field.TEXT || inLauncher || page != Page.LETTERS || shift == 2) return
+        if (!prefs.autoCaps || field != Field.TEXT || page != Page.LETTERS || shift == 2) return
         val info = currentInputEditorInfo ?: return
         val caps = currentInputConnection?.getCursorCapsMode(info.inputType) ?: 0
         setShift(if (caps != 0) 1 else 0)
