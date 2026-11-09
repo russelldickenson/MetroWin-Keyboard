@@ -1,6 +1,6 @@
 # Privacy
 
-MetroWin Keyboard has no analytics, no ads and no trackers, and no account.
+Phayz Keyboard has no analytics, no ads and no trackers, and no account.
 
 | What | Where it goes |
 | --- | --- |

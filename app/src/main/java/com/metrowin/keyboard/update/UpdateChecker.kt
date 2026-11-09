@@ -108,7 +108,7 @@ class UpdateChecker(private val get: (String) -> String) {
             val a = assets.getJSONObject(i)
             val name = a.optString("name"); val url = a.optString("browser_download_url")
             if (!url.startsWith(Repo.DOWNLOADS + tag + "/")) continue      // only files of this very release of this repository
-            if (name.endsWith(".apk") && name.startsWith("MetroWinKeyboard") && apk == null) apk = a
+            if (name.endsWith(".apk") && name.startsWith("PhayzKeyboard") && apk == null) apk = a
             if (name == "SHA256SUMS") sums = url
         }
         val file = apk ?: return null

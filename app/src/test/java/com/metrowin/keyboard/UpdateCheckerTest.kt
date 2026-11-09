@@ -11,9 +11,9 @@ import org.junit.Test
 class UpdateCheckerTest {
     private val base = "${Repo.DOWNLOADS}v26.2S/"
 
-    private fun release(tag: String = "v26.2S", apkUrl: String = "${Repo.DOWNLOADS}$tag/MetroWinKeyboard-26.2S.apk", extra: String = "", draft: Boolean = false) = """
+    private fun release(tag: String = "v26.2S", apkUrl: String = "${Repo.DOWNLOADS}$tag/PhayzKeyboard-26.2S.apk", extra: String = "", draft: Boolean = false) = """
         {"tag_name":"$tag","draft":$draft,"prerelease":false,"published_at":"2026-12-01T10:00:00Z","body":"Auto notes",
-         "assets":[{"name":"MetroWinKeyboard-26.2S.apk","browser_download_url":"$apkUrl","size":3500000},
+         "assets":[{"name":"PhayzKeyboard-26.2S.apk","browser_download_url":"$apkUrl","size":3500000},
                    {"name":"SHA256SUMS","browser_download_url":"${Repo.DOWNLOADS}$tag/SHA256SUMS","size":100}$extra]}
     """.trimIndent()
 
@@ -31,14 +31,14 @@ class UpdateCheckerTest {
     @Test fun theLatestReleaseIsReadFromItsFiles() {
         val r = UpdateChecker { release() }.latest()!!
         assertEquals("26.2S", r.version); assertEquals("2026-12-01", r.date); assertEquals(3_500_000L, r.apkSize)
-        assertEquals("MetroWinKeyboard-26.2S.apk", r.apkName); assertEquals("${base}SHA256SUMS", r.sumsUrl)
+        assertEquals("PhayzKeyboard-26.2S.apk", r.apkName); assertEquals("${base}SHA256SUMS", r.sumsUrl)
         assertEquals(r, Release.fromJson(r.toJson()))
     }
 
     @Test fun aReleaseThatPointsAnywhereElseIsIgnored() {
-        assertNull(UpdateChecker { release(apkUrl = "https://evil.example/MetroWinKeyboard-26.2S.apk") }.latest())
-        assertNull(UpdateChecker { release(apkUrl = "https://github.com/someone-else/MetroWin-Keyboard/releases/download/v26.2S/MetroWinKeyboard-26.2S.apk") }.latest())
-        assertNull("a file of another release", UpdateChecker { release(apkUrl = "${Repo.DOWNLOADS}v1.0S/MetroWinKeyboard-26.2S.apk") }.latest())
+        assertNull(UpdateChecker { release(apkUrl = "https://evil.example/PhayzKeyboard-26.2S.apk") }.latest())
+        assertNull(UpdateChecker { release(apkUrl = "https://github.com/someone-else/MetroWin-Keyboard/releases/download/v26.2S/PhayzKeyboard-26.2S.apk") }.latest())
+        assertNull("a file of another release", UpdateChecker { release(apkUrl = "${Repo.DOWNLOADS}v1.0S/PhayzKeyboard-26.2S.apk") }.latest())
         assertNull(UpdateChecker { release(tag = "v26.2S/../../x") }.latest())
         assertNull(UpdateChecker { release(draft = true) }.latest())
         assertNull(Release.fromJson(Release("v1", "1", "", "", "https://evil.example/a.apk", "a.apk", 1, null).toJson()))
@@ -93,9 +93,9 @@ class UpdateCheckerTest {
     }
 
     @Test fun theChecksumIsFoundByFileName() {
-        val sums = "ABCDEF0123  MetroWinKeyboard-26.2S.apk\n9999  other.apk\n"
-        assertEquals("abcdef0123", UpdateChecker.checksumOf(sums, "MetroWinKeyboard-26.2S.apk"))
-        assertNull(UpdateChecker.checksumOf(sums, "MetroWinKeyboard-26.3S.apk"))
+        val sums = "ABCDEF0123  PhayzKeyboard-26.2S.apk\n9999  other.apk\n"
+        assertEquals("abcdef0123", UpdateChecker.checksumOf(sums, "PhayzKeyboard-26.2S.apk"))
+        assertNull(UpdateChecker.checksumOf(sums, "PhayzKeyboard-26.3S.apk"))
         assertEquals("aa", UpdateChecker.checksumOf("aa *file.apk", "file.apk"))
     }
 }

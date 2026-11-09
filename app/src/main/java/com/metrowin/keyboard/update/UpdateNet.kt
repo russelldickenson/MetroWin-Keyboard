@@ -25,7 +25,7 @@ object UpdateNet {
             val c = URL(url).openConnection() as HttpURLConnection
             c.instanceFollowRedirects = false
             c.connectTimeout = 8000; c.readTimeout = 20000
-            c.setRequestProperty("User-Agent", "MetroWinKeyboard")
+            c.setRequestProperty("User-Agent", "PhayzKeyboard")
             c.setRequestProperty("Accept", "application/vnd.github+json, */*")
             when (val code = c.responseCode) {
                 in 200..299 -> return c

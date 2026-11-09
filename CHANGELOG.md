@@ -5,7 +5,9 @@
 - **Key font:** *Settings → Appearance* chooses the font of the key letters (system, Open Sans, Roboto, Atkinson Hyperlegible) and its weight (200 to 500; only the weights that look different for the font are listed).
 - **iPhone look:** a fourth look in *Settings → Appearance → Look*: pale grey (or dark) keyboard, white rounded keys with a thin shadow, darker special keys, "space" and "return" labels, dividers between the suggestions, and a white balloon over the pressed key.
 - **Slate look:** dark grey keys with light grey symbols on a light grey surround (dark in dark mode), rounded keys with a soft shadow and a light blue action key. *Settings → Appearance → Look*.
+- **New name:** the app is now called *Phayz Keyboard* (release files are named `PhayzKeyboard-<version>.apk`, which the update check looks for).
 - **New identity:** the app id is now `com.phayz.keyboard`, so it installs next to the original instead of replacing it. The update check points at placeholder repository values (`Repo.OWNER` and `Repo.NAME` in `UpdateChecker.kt`) until the project has its own releases, and `keystore.properties.example` shows the signing values to fill in.
+- **New icon:** the launcher icon is `keyboard.svg` (a blue tile with six dark keys and a space bar), as an adaptive icon: the blue is the background and the keys are a picture in `drawable-nodpi`, scaled to stay inside the circle some launchers cut.
 - **Removed:** every link with MetroWin Launcher: the theme sync receiver, the theme file import, the launcher settings screen, the tutorial page, the special treatment of the launcher's search box, and the launcher in *Other projects*.
 - **Removed:** the GIF and translation features, with their settings, panels and the services they called. The `INTERNET` permission stays for the update check only. A quick button that was set to Translate or GIF goes back to the clipboard.
 

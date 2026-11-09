@@ -1,4 +1,4 @@
-<h1 align="center">MetroWin Keyboard (Phayz fork)</h1>
+<h1 align="center">Phayz Keyboard</h1>
 
 <p align="center">
   <b>The Windows Phone keyboard, on Android, with a few more looks and fonts.</b><br>
@@ -14,7 +14,7 @@
 
 <p align="center"><b>English</b> · <a href="README.it.md">Italiano</a></p>
 
-> **This is a fork.** It is based on [MetroWin Keyboard](https://github.com/developerkenshi-coder/MetroWin-Keyboard) by developerkenshi-coder, whose work this project builds on and whose design it keeps. It has its own application id (`com.phayz.keyboard`), so it installs next to the original and never replaces it. It is not affiliated with or endorsed by the original project. See [What is different](#what-is-different) for exactly what was removed and added.
+> **Phayz Keyboard is a fork.** It is based on [MetroWin Keyboard](https://github.com/developerkenshi-coder/MetroWin-Keyboard) by developerkenshi-coder, whose work this project builds on and whose design it keeps. It has its own application id (`com.phayz.keyboard`), so it installs next to the original and never replaces it. It is not affiliated with or endorsed by the original project. See [What is different](#what-is-different) for exactly what was removed and added.
 
 <p align="center"><img src="docs/screenshots/looks.png" width="92%" alt="The three original looks: Classic, Modern Glass and Modern Droid"></p>
 
@@ -54,7 +54,7 @@ Everything else is as in the original: the typing engine, smart correction, cali
 
 There are no releases of this fork yet. Build it from source (below), then open the APK on your phone (allow your browser or file manager to install unknown apps).
 
-1. Open **MetroWin Keyboard**. A guided set-up turns the keyboard on and selects it, noticing by itself when each step is done.
+1. Open **Phayz Keyboard**. A guided set-up turns the keyboard on and selects it, noticing by itself when each step is done.
 2. A tutorial is in the app and inside the keyboard (the three dots, then **?**).
 
 Android 8.0 (API 26) or newer.

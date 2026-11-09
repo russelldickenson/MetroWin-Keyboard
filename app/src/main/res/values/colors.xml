@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="metro_cyan">#1BA1E2</color>
-    <color name="ic_background">#1BA1E2</color>
+    <color name="ic_background">#2196F3</color>
     <color name="metro_bg">#FFFFFF</color>
     <color name="metro_fg">#000000</color>
     <color name="metro_subtle">#666666</color>

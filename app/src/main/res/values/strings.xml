@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MetroWin Keyboard</string>
-    <string name="subtype_label">MetroWin Keyboard</string>
+    <string name="app_name">Phayz Keyboard</string>
+    <string name="subtype_label">Phayz Keyboard</string>
     <string name="a11y_description">Lets the keyboard take its colour from the app under it. It reads no text and no window content; it only looks at a strip of the screen above the keys and keeps one average colour. Nothing is stored or sent anywhere.</string>
     <string name="cat_setup">Set up</string>
     <string name="cat_settings">Settings</string>
@@ -77,7 +77,7 @@
     <string name="pref_adaptive_title">Keyboard colour follows the app below</string>
     <string name="pref_adaptive_summary">Samples a strip of the screen above the keys (chat, website…). Needs an accessibility service, Android 11 or newer. It reads no text.</string>
     <string name="adaptive_dialog_title">Turn on the colour service</string>
-    <string name="adaptive_dialog_text">Android needs you to turn on \"MetroWin Keyboard\" in the accessibility settings. The service only takes screenshots of the strip above the keyboard to pick one colour; it reads no text and sends nothing.</string>
+    <string name="adaptive_dialog_text">Android needs you to turn on \"Phayz Keyboard\" in the accessibility settings. The service only takes screenshots of the strip above the keyboard to pick one colour; it reads no text and sends nothing.</string>
     <string name="adaptive_open">Open settings</string>
     <string name="adaptive_old_android">This needs Android 11 or newer</string>
     <string name="accent_dialog_title">Accent colour</string>
@@ -248,7 +248,7 @@
     <string name="tutorial_done">Done</string>
     <string name="tutorial_counter">%1$d / %2$d</string>
     <string name="tut_welcome_title">Welcome</string>
-    <string name="tut_welcome_body">MetroWin Keyboard brings the Windows Phone keyboard to Android: flat keys and big light type. This short tour shows what it can do. You can open it again from the three dots in the keyboard (the ? button) or from the settings.</string>
+    <string name="tut_welcome_body">Phayz Keyboard brings the Windows Phone keyboard to Android: flat keys and big light type. This short tour shows what it can do. You can open it again from the three dots in the keyboard (the ? button) or from the settings.</string>
     <string name="tut_basics_title">Typing</string>
     <string name="tut_basics_body">Tap the arrow for a capital; tap it twice (or hold it) to lock capitals. \"?123\" switches to numbers and symbols, and \"=\&lt;\" to more of them. The smiley opens emoji and the globe changes language (hide the globe in the settings to widen the space bar; then hold the space bar to change language). Press Enter for the action of the field (search, send, next…).</string>
     <string name="tut_hold_title">Hold for more</string>
@@ -285,9 +285,9 @@
     <string name="onb_welcome_title">Welcome</string>
     <string name="onb_welcome_text">Let\'s turn your new keyboard on. It takes a minute, and each step notices by itself when it is done.</string>
     <string name="onb_enable_title">Turn it on</string>
-    <string name="onb_enable_text">Open the list of keyboards and switch on MetroWin Keyboard. Android shows a standard warning about all keyboards; this one keeps everything on your phone and sends nothing anywhere.</string>
+    <string name="onb_enable_text">Open the list of keyboards and switch on Phayz Keyboard. Android shows a standard warning about all keyboards; this one keeps everything on your phone and sends nothing anywhere.</string>
     <string name="onb_select_title">Choose it</string>
-    <string name="onb_select_text">Now pick MetroWin Keyboard as the keyboard you type with.</string>
+    <string name="onb_select_text">Now pick Phayz Keyboard as the keyboard you type with.</string>
     <string name="onb_mic_title">Voice typing</string>
     <string name="onb_mic_text">To dictate, the keyboard needs the microphone. You can skip this and allow it later.</string>
     <string name="onb_try_title">Try it</string>
@@ -318,7 +318,7 @@
     <string name="screen_projects">Other projects</string>
     <string name="screen_projects_summary">More apps by the same author</string>
     <string name="cat_foss">Open source</string>
-    <string name="project_keyboard_title">MetroWin Keyboard</string>
+    <string name="project_keyboard_title">Phayz Keyboard</string>
     <string name="project_keyboard_desc">The Windows Phone keyboard for Android: flat Metro keys, swipe typing, a calibration that learns where your fingers land, smart correction and a clipboard history. What you type stays on your phone.</string>
     <string name="project_open_github">Open on GitHub</string>
     <string name="no_browser">No browser found to open the link</string>
@@ -370,7 +370,7 @@
     <string name="backup_failed">The backup could not be saved</string>
     <string name="backup_restore_confirm">Your settings and learned data are replaced by the ones in the file. The app then closes and opens again.</string>
     <string name="backup_restore_go">Restore</string>
-    <string name="backup_invalid">That is not a backup of MetroWin Keyboard</string>
+    <string name="backup_invalid">That is not a backup of Phayz Keyboard</string>
     <string name="backup_restored">Restored. The app restarts.</string>
     <string name="tut_calibration_title">Calibration</string>
     <string name="tut_calibration_body">Settings → Size and layout → Automatic calibration. Type a few sentences and the keyboard measures where your fingers land. It corrects your touches without moving the keys, learns the curve of your thumb, and grows the keys if you still miss. The fixes are put to work between one sentence and the next, so you see the keyboard improve. Nothing is kept until you tap Apply, and nothing leaves your phone.</string>

@@ -1,4 +1,4 @@
-<h1 align="center">MetroWin Keyboard (fork Phayz)</h1>
+<h1 align="center">Phayz Keyboard</h1>
 
 <p align="center">
   <b>La tastiera di Windows Phone su Android, con qualche aspetto e carattere in più.</b><br>
@@ -14,7 +14,7 @@
 
 <p align="center"><a href="README.md">English</a> · <b>Italiano</b></p>
 
-> **Questo è un fork.** Si basa su [MetroWin Keyboard](https://github.com/developerkenshi-coder/MetroWin-Keyboard) di developerkenshi-coder, del cui lavoro si serve e di cui mantiene il progetto grafico. Ha un proprio identificativo (`com.phayz.keyboard`), quindi si installa accanto all'originale senza sostituirlo. Non è affiliato né approvato dal progetto originale. Vedi [Cosa cambia](#cosa-cambia) per sapere esattamente cosa è stato tolto e aggiunto.
+> **Phayz Keyboard è un fork.** Si basa su [MetroWin Keyboard](https://github.com/developerkenshi-coder/MetroWin-Keyboard) di developerkenshi-coder, del cui lavoro si serve e di cui mantiene il progetto grafico. Ha un proprio identificativo (`com.phayz.keyboard`), quindi si installa accanto all'originale senza sostituirlo. Non è affiliato né approvato dal progetto originale. Vedi [Cosa cambia](#cosa-cambia) per sapere esattamente cosa è stato tolto e aggiunto.
 
 <p align="center"><img src="docs/screenshots/looks.png" width="92%" alt="I tre aspetti originali: Classic, Modern Glass e Modern Droid"></p>
 
@@ -54,7 +54,7 @@ Tutto il resto è come nell'originale: il motore di scrittura, la correzione int
 
 Per ora questo fork non ha release. Compilalo dai sorgenti (sotto) e apri l'APK sul telefono (consenti al browser o al gestore file di installare app sconosciute).
 
-1. Apri **MetroWin Keyboard**. Una guida all'attivazione accende la tastiera e la seleziona, accorgendosi da sola di quando ogni passaggio è fatto.
+1. Apri **Phayz Keyboard**. Una guida all'attivazione accende la tastiera e la seleziona, accorgendosi da sola di quando ogni passaggio è fatto.
 2. Il tutorial è nell'app e dentro la tastiera (i tre puntini, poi **?**).
 
 Android 8.0 (API 26) o successivo.

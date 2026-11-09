@@ -25,4 +25,4 @@ CLDR (Unicode License v3), built by [`tools/build_emoji_index.py`](tools/build_e
 
 AndroidX (core, appcompat, preference, recyclerview), Apache License 2.0. Tests only: JUnit (EPL 1.0), Robolectric (MIT), org.json (JSON License).
 
-Windows Phone is a trademark of Microsoft Corporation. MetroWin Keyboard is an independent project, not affiliated with or endorsed by Microsoft or Google.
+Windows Phone is a trademark of Microsoft Corporation. Phayz Keyboard is an independent project, not affiliated with or endorsed by Microsoft or Google.
