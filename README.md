@@ -45,6 +45,7 @@ Compared with the original MetroWin Keyboard (version 26.1.2S):
 - Release signing is read from `keystore.properties`; [`keystore.properties.example`](keystore.properties.example) shows the values to fill in.
 
 **Removed**
+- **Follow the app**: the option that tinted the keyboard with the colour of the app under it, its accessibility service and the settings that went with it.
 - **Your picture**: the photo behind the keys, its dimming and the accent taken from it, with their settings in *Appearance*.
 - **GIF**: the GIF panel, its search, the sources (GIPHY, Tenor, Klipy, Imgur, a folder, your own service) and their settings.
 - **Translation**: the translate panel, its services (Google, Google Cloud, DeepL, LibreTranslate, MyMemory) and their settings. Together with the removal of updates, the app now asks for no `INTERNET` permission at all.
@@ -84,7 +85,7 @@ Android 8.0 (API 26) or newer.
 
 **Languages**: 17 layouts included (English, Italiano, Español, Français, Deutsch, Português, Nederlands, Polski, Türkçe, Русский, Українська, Ελληνικά, Čeština, Svenska, Română, العربية, עברית). Any other layout is a small text file ([docs/LAYOUTS.md](docs/LAYOUTS.md)); any dictionary can be imported (word lists, frequency lists, Hunspell `.dic`). Only small starter word lists are bundled (en, it, es, fr, de, pt), so import a full dictionary for the best predictions.
 
-**Looks**: *Classic* (flat Windows Phone), *Modern Glass*, *Modern Droid* (Material You colours on Android 12+), *iPhone*, *Modern Slate*, and spaced versions of Modern Droid and Modern Slate; dark / light / system, one colour of your own (Modern Droid follows the wallpaper), pure black, and, optionally, a keyboard that follows the colour of the app under it. Key letters in the font and weight you choose.
+**Looks**: *Classic* (flat Windows Phone), *Modern Glass*, *Modern Droid* (Material You colours on Android 12+), *iPhone*, *Modern Slate*, and spaced versions of Modern Droid and Modern Slate; dark / light / system, one colour of your own (Modern Droid follows the wallpaper), and pure black. Key letters in the font and weight you choose.
 
 **Size**: a live preview, key height (portrait and landscape), keyboard width with left / centre / right position, key spacing, number row on or off, and an automatic calibration that learns from a few typed sentences where your fingers land.
 
@@ -99,7 +100,7 @@ No analytics, ads or trackers. The full list is in [PRIVACY.md](PRIVACY.md).
 | `RECORD_AUDIO` | Voice typing only; asked when you tap the microphone |
 | `VIBRATE` | Key vibration |
 
-Backups and device transfer are disabled for the app's data. The colour service is off until you turn it on in the accessibility settings, reads no text and sends nothing.
+Backups and device transfer are disabled for the app's data.
 
 ## Build from source
 

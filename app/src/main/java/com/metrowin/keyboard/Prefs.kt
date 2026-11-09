@@ -15,7 +15,6 @@ object K {
     const val THEME_MODE = "theme_mode"
     const val CUSTOM_ACCENT = "custom_accent"          // ARGB int, 0 = off
     const val DYNAMIC_COLOR = "dynamic_color"
-    const val ADAPTIVE_COLOR = "adaptive_color"
     const val OLED_BLACK = "oled_black"
 
     const val KEY_HEIGHT = "key_height"
@@ -93,7 +92,6 @@ class Prefs(context: Context) {
     val themeMode get() = s(K.THEME_MODE, "system")
     val customAccent get() = i(K.CUSTOM_ACCENT, 0)
     val dynamicColor get() = b(K.DYNAMIC_COLOR, true)
-    val adaptiveColor get() = b(K.ADAPTIVE_COLOR, false)
     val oledBlack get() = b(K.OLED_BLACK, false)
 
     val keyHeight get() = i(K.KEY_HEIGHT, 100)

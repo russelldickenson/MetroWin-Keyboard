@@ -67,13 +67,12 @@ data class KeyboardColors(
 
 object KeyboardTheme {
     /**
-     * @param adaptive the colour sampled from the app under the keyboard (see ScreenColorService), or null
      * @param systemDark whether Android is in dark mode
      */
-    fun resolve(context: Context, p: Prefs, systemDark: Boolean, adaptive: Int?): KeyboardColors {
+    fun resolve(context: Context, p: Prefs, systemDark: Boolean): KeyboardColors {
         val chosen = ThemeStyle.from(p.themeStyle)
         val style = chosen.base
-        var dark = when (p.themeMode) { "dark" -> true; "light" -> false; else -> systemDark }
+        val dark = when (p.themeMode) { "dark" -> true; "light" -> false; else -> systemDark }
         val system = if (style == ThemeStyle.DROID && p.dynamicColor && p.customAccent == 0) SystemTones.read(context) else null
 
         val accent = when {
@@ -93,12 +92,6 @@ object KeyboardTheme {
             else -> if (dark) (if (p.oledBlack) 0xFF000000.toInt() else 0xFF1B1B1B.toInt()) else 0xFFD6D6D6.toInt()
         }
         if (p.oledBlack && dark && style != ThemeStyle.CLASSIC) bg = ColorMath.darken(bg, 0.85f)
-        if (adaptive != null) {
-            // Follow the app under the keyboard: its colour, eased towards the theme so the keys keep their contrast.
-            val tinted = ColorMath.mix(adaptive, if (ColorMath.isDark(adaptive)) 0xFF000000.toInt() else 0xFFFFFFFF.toInt(), 0.12f)
-            bg = tinted
-            dark = ColorMath.isDark(tinted)
-        }
 
         val text = ColorMath.onColor(bg)
         val subtle = ColorMath.withAlpha(text, 0xB0)

@@ -41,7 +41,6 @@ import com.metrowin.keyboard.layout.KeyType
 import com.metrowin.keyboard.layout.KeyboardBuilder
 import com.metrowin.keyboard.layout.LanguageLayout
 import com.metrowin.keyboard.layout.Page
-import com.metrowin.keyboard.service.AdaptiveColor
 import com.metrowin.keyboard.settings.HelperActivity
 import com.metrowin.keyboard.settings.SettingsActivity
 import com.metrowin.keyboard.theme.KeyboardColors
@@ -133,7 +132,6 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
         if (key == K.CUSTOM_BLOCKED) app.reloadEngines()
         scheduleRefresh()
     }
-    private val adaptiveListener: () -> Unit = { if (prefs.adaptiveColor) scheduleRefresh() }
     private val clipListener = ClipboardManager.OnPrimaryClipChangedListener { captureClip(copied = true) }
 
     private fun screenHeight(): Int =
@@ -153,13 +151,11 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
         images = ImageLoader(this)
         voice = VoiceInput(this, prefs, voiceCallbacks)
         prefs.sp.registerOnSharedPreferenceChangeListener(prefsListener)
-        AdaptiveColor.add(adaptiveListener)
         (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).addPrimaryClipChangedListener(clipListener)
     }
 
     override fun onDestroy() {
         prefs.sp.unregisterOnSharedPreferenceChangeListener(prefsListener)
-        AdaptiveColor.remove(adaptiveListener)
         (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).removePrimaryClipChangedListener(clipListener)
         voice.stop()
         app.saveAll()
@@ -196,7 +192,7 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
             insets
         }
         root.viewTreeObserver.addOnGlobalLayoutListener {
-            val loc = IntArray(2); root.getLocationOnScreen(loc); AdaptiveColor.keyboardTop = loc[1]
+            val loc = IntArray(2); root.getLocationOnScreen(loc)
             // Pad only when the window really reaches the bottom edge of the screen, so a phone that already puts it above the bar is not padded twice.
             val reachesBottom = loc[1] + root.height >= screenHeight() - 2
             val wanted = (if (reachesBottom) navInset else 0) + (resources.displayMetrics.density * prefs.bottomPadding).toInt()
@@ -217,7 +213,6 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
         super.onStartInputView(info, restarting)
         classify(info)
-        AdaptiveColor.keyboardShown = true
         showPanel(Panel.NONE)
         page = if (field == Field.NUMBER || field == Field.PHONE) Page.NUMBERS else Page.LETTERS
         applyAll()
@@ -230,7 +225,6 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
 
     override fun onFinishInputView(finishingInput: Boolean) {
         super.onFinishInputView(finishingInput)
-        AdaptiveColor.keyboardShown = false
         finishComposingQuietly()
         voice.stop()
         emoji?.dismissPopup()
@@ -333,7 +327,7 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
     /** Applies every setting to the views. Cheap enough to run on any change. */
     private fun applyAll() {
         val kb = keyboard ?: return
-        val c = KeyboardTheme.resolve(this, prefs, KeyboardTheme.isSystemDark(this), if (prefs.adaptiveColor) AdaptiveColor.color else null)
+        val c = KeyboardTheme.resolve(this, prefs, KeyboardTheme.isSystemDark(this))
         colors = c
         kb.setColors(c); bar?.setColors(c); emoji?.setColors(c); emojiResults?.setColors(c); clipboardPanel?.setColors(c); tutorialPanel?.setColors(c)
         root?.setBackgroundColor(c.background)

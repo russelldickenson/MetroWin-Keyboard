@@ -23,7 +23,6 @@ import com.metrowin.keyboard.K
 import com.metrowin.keyboard.KeyboardApp
 import com.metrowin.keyboard.R
 import com.metrowin.keyboard.engine.LanguageEngine
-import com.metrowin.keyboard.service.ScreenColorService
 import java.util.concurrent.Executors
 
 /** Shared plumbing of the settings screens: a preference file, a title, and quick access to the app. */
@@ -188,22 +187,6 @@ class AppearanceFragment : BaseFragment(R.xml.prefs_appearance, R.string.screen_
             f.setOnPreferenceChangeListener { _, v -> showWeights(v as String); true }
         }
         click("accent_pick") { showAccentDialog() }
-        findPreference<Preference>("adaptive_color")?.setOnPreferenceChangeListener { _, value ->
-            if (value == true) {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) { toast(R.string.adaptive_old_android); return@setOnPreferenceChangeListener false }
-                if (!serviceEnabled()) {
-                    MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.adaptive_dialog_title).setMessage(R.string.adaptive_dialog_text)
-                        .setPositiveButton(R.string.adaptive_open) { _, _ -> startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)) }
-                        .setNegativeButton(R.string.cancel, null).show()
-                }
-            }
-            true
-        }
-    }
-
-    private fun serviceEnabled(): Boolean {
-        val me = ComponentName(requireContext(), ScreenColorService::class.java).flattenToString()
-        return Settings.Secure.getString(requireContext().contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)?.split(':')?.any { it.equals(me, true) } == true
     }
 
     /** One colour of your own for the keyboard's accent; without it the look decides (Modern Droid follows the wallpaper). */

@@ -31,7 +31,7 @@ class ShotTest {
         for (style in listOf("classic", "glass", "droid", "droid_spaced", "iphone", "slate", "slate_spaced")) for (mode in listOf("dark", "light")) {
             app.prefs.sp.edit().clear().putString(K.THEME_STYLE, style).putString(K.THEME_MODE, mode).commit()
             val kb = KeyboardView(app)
-            kb.setColors(KeyboardTheme.resolve(app, app.prefs, false, null))
+            kb.setColors(KeyboardTheme.resolve(app, app.prefs, false))
             kb.setPage(KeyboardBuilder.letters(app.layouts.get("it")!!, true, true, true))
             kb.setLanguageName("Italiano")
             kb.setMetrics(100, 3, 100, "center")
@@ -57,7 +57,7 @@ class ShotTest {
         val out = File("build/shots").apply { mkdirs() }
         for (style in listOf("classic", "glass", "droid", "iphone", "slate")) {
             app.prefs.sp.edit().clear().putString(K.THEME_STYLE, style).putString(K.THEME_MODE, "dark").commit()
-            val c = KeyboardTheme.resolve(app, app.prefs, true, null)
+            val c = KeyboardTheme.resolve(app, app.prefs, true)
             val kb = KeyboardView(app)
             kb.setColors(c)
             kb.setPage(KeyboardBuilder.letters(app.layouts.get("it")!!, false, true, true))
@@ -77,7 +77,7 @@ class ShotTest {
             File(out, "full-$style.png").outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
         }
         app.prefs.sp.edit().clear().putString(K.THEME_STYLE, "classic").commit()
-        val c = KeyboardTheme.resolve(app, app.prefs, true, null)
+        val c = KeyboardTheme.resolve(app, app.prefs, true)
         val tut = TutorialPanel(app).also { it.setColors(c); it.open(Tutorial.startIndex(1)) }
         render(tut, 1080, 760, File(out, "panel-tutorial.png"))
     }

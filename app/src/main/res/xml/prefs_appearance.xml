@@ -8,7 +8,4 @@
     <Preference android:key="accent_pick" android:title="@string/pref_accent_title" android:summary="@string/pref_accent_summary" />
     <SwitchPreferenceCompat android:key="dynamic_color" android:title="@string/pref_dynamic_title" android:summary="@string/pref_dynamic_summary" android:defaultValue="true" />
     <SwitchPreferenceCompat android:key="oled_black" android:title="@string/pref_oled_title" android:summary="@string/pref_oled_summary" android:defaultValue="false" />
-    <PreferenceCategory android:title="@string/cat_adaptive">
-        <SwitchPreferenceCompat android:key="adaptive_color" android:title="@string/pref_adaptive_title" android:summary="@string/pref_adaptive_summary" android:defaultValue="false" />
-    </PreferenceCategory>
 </PreferenceScreen>

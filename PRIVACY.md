@@ -11,6 +11,5 @@ Phayz Keyboard has no analytics, no ads and no trackers, and no account.
 | Smart correction | Runs on the phone. It uses where you tapped only while the word is being typed and keeps nothing of it; what it keeps, in the same private file as the learned words, are the corrections you undid. Erased with the learned words in *Settings → Suggestions*. |
 | Calibration | The taps of the calibration sentences are used on the phone to compute a touch correction (a few numbers) and are then discarded. Only those numbers are stored, in the private storage; *Settings → Size and layout* removes them. |
 | Backup | A file you make yourself and store where you choose; it holds your settings, learned words and clipboard. The app never sends it anywhere. |
-| Colour follows the app (optional) | An accessibility service looks at a strip of the screen above the keyboard and keeps one average colour in memory. It reads no text or content and sends nothing. Off until you turn it on. |
 
 Backups and device transfer are switched off for all of the app's data.
