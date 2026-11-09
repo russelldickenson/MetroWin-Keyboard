@@ -130,7 +130,7 @@ class Prefs(context: Context) {
         set(v) { putString(K.UPDATE_RELEASE, v) }
     val numberRow get() = b(K.NUMBER_ROW, false)
     val quickTool get() = s(K.QUICK_TOOL, "clipboard")
-    val languageKey get() = b(K.LANGUAGE_KEY, true)
+    val languageKey get() = b(K.LANGUAGE_KEY, false)
     val keyPreview get() = b(K.KEY_PREVIEW, true)
     val bottomPadding get() = i(K.BOTTOM_PADDING, 0)
     val onboardingDone get() = b(K.ONBOARDING_DONE, false)
