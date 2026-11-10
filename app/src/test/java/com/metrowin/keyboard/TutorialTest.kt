@@ -7,7 +7,6 @@ import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
 /** The tutorial must stay complete: a page without its text in a language is a bug caught here, not by the user. */
 @RunWith(RobolectricTestRunner::class)
@@ -20,13 +19,6 @@ class TutorialTest {
     }
 
     @Test fun everyPageHasItsTextInEnglish() = check(ApplicationProvider.getApplicationContext())
-    @Config(qualifiers = "it") @Test fun everyPageHasItsTextInItalian() {
-        val app = ApplicationProvider.getApplicationContext<KeyboardApp>()
-        check(app)
-        // And it is really Italian, not the English fallback.
-        assertNotEquals("Welcome", app.getString(Tutorial.pages[0].title))
-    }
-
     @Test fun versionMatchesTheNewestPage() {
         assertEquals(Tutorial.pages.maxOf { it.since }, Tutorial.VERSION)
         assertEquals(Tutorial.pages.size, Tutorial.pages.map { it.id }.toSet().size)

@@ -12,8 +12,6 @@
   <img alt="Layouts: 17" src="https://img.shields.io/badge/layouts-17-1ba1e2">
 </p>
 
-<p align="center"><b>English</b> · <a href="README.it.md">Italiano</a></p>
-
 > **Phayz Keyboard is a fork.** It is based on [MetroWin Keyboard](https://github.com/developerkenshi-coder/MetroWin-Keyboard) by developerkenshi-coder, whose work this project builds on and whose design it keeps. It has its own application id (`com.phayz.keyboard`), so it installs next to the original and never replaces it. It is not affiliated with or endorsed by the original project. See [What is different](#what-is-different) for exactly what was removed and added.
 
 <p align="center"><img src="docs/screenshots/looks.png" width="92%" alt="The three original looks: Classic, Modern Glass and Modern Droid"></p>
@@ -45,6 +43,7 @@ Compared with the original MetroWin Keyboard (version 26.1.2S):
 - Release signing is read from `keystore.properties`; [`keystore.properties.example`](keystore.properties.example) shows the values to fill in.
 
 **Removed**
+- **Italian translation**: the Italian version of the app's texts, of the README and of the store description. The app is in English only. The Italian *keyboard layout and dictionary* are still included, so you can still type in Italian.
 - **Follow the app**: the option that tinted the keyboard with the colour of the app under it, its accessibility service and the settings that went with it.
 - **Your picture**: the photo behind the keys, its dimming and the accent taken from it, with their settings in *Appearance*.
 - **GIF**: the GIF panel, its search, the sources (GIPHY, Tenor, Klipy, Imgur, a folder, your own service) and their settings.
