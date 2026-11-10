@@ -5,10 +5,27 @@ import java.util.Locale
 
 /** Small text helpers shared by the dictionary, the suggester and the input logic. Pure, so they are tested. */
 object Text {
-    private val marks = Regex("\\p{M}+")
-
-    /** [s] without accents and lower-cased: "Perché" -> "perche". Letters that are not decomposable (ß, ø) stay as they are. */
-    fun fold(s: String): String = Normalizer.normalize(s.lowercase(Locale.ROOT), Normalizer.Form.NFD).replace(marks, "")
+    /**
+     * [s] without accents and lower-cased: "Perché" -> "perche". Letters that are not decomposable (ß, ø) stay as they are.
+     * Plain ASCII, nearly every word of English, skips the Unicode normalisation; the marks are dropped by a loop, not a regex.
+     */
+    fun fold(s: String): String {
+        var ascii = true
+        var upper = false
+        for (c in s) {
+            if (c.code >= 128) { ascii = false; break }
+            if (c in 'A'..'Z') upper = true
+        }
+        if (ascii) return if (upper) s.lowercase(Locale.ROOT) else s
+        val n = Normalizer.normalize(s.lowercase(Locale.ROOT), Normalizer.Form.NFD)
+        val out = StringBuilder(n.length)
+        for (c in n) {
+            val t = Character.getType(c)
+            // The marks of the Unicode category M (what the old "\\p{M}+" removed).
+            if (t != Character.NON_SPACING_MARK.toInt() && t != Character.COMBINING_SPACING_MARK.toInt() && t != Character.ENCLOSING_MARK.toInt()) out.append(c)
+        }
+        return out.toString()
+    }
 
     /** True for the characters that make up a word. The apostrophe is handled by the caller (it depends on the language). */
     fun isWordChar(c: Char): Boolean = Character.isLetter(c) || Character.getType(c) == Character.NON_SPACING_MARK.toInt() ||

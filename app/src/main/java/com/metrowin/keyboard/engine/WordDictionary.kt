@@ -22,10 +22,12 @@ class WordDictionary(words: List<String>, freqs: List<Int>) {
 
     init {
         // Sort by folded form once; keep the arrays aligned with that order.
-        val idx = (0 until size).sortedWith(compareBy({ Text.fold(words[it]) }, { words[it] }))
+        // The folded form of each word is made once and the sort compares those, instead of folding inside every comparison.
+        val fold0 = Array(size) { Text.fold(words[it]) }
+        val idx = (0 until size).sortedWith(compareBy<Int>({ fold0[it] }, { words[it] }))
         word = Array(size) { words[idx[it]] }
         freq = IntArray(size) { freqs[idx[it]] }
-        folded = Array(size) { Text.fold(word[it]) }
+        folded = Array(size) { fold0[idx[it]] }
         order = IntArray(size) { it }
         for (i in 0 until size) exact[word[i]] = i
         val lists = HashMap<Char, ArrayList<Int>>()
@@ -68,8 +70,21 @@ class WordDictionary(words: List<String>, freqs: List<Int>) {
     fun withApostrophe(typed: String): List<Candidate> =
         apostrophed[Text.fold(typed)]?.map { Candidate(word[it], Math.log1p(freq[it].toDouble())) }.orEmpty()
 
+    /** The most frequent words, best first, found once: asking for them is then a short walk, not a pass over the whole list. */
+    private val topWords: List<Candidate> by lazy {
+        val top = ArrayList<Candidate>()
+        for (i in 0 until size) insertTop(top, Candidate(word[i], Math.log1p(freq[i].toDouble())), TOP_CACHE)
+        top
+    }
+
     /** The [limit] most frequent words. */
     fun top(limit: Int, skip: (String) -> Boolean = { false }): List<Candidate> {
+        if (limit <= TOP_CACHE) {
+            // The first [limit] of the cached best words that are not skipped are the best [limit] there are.
+            val out = ArrayList<Candidate>(limit)
+            for (c in topWords) { if (!skip(c.word)) { out += c; if (out.size == limit) return out } }
+            if (topWords.size < TOP_CACHE) return out        // the whole list was walked
+        }
         val top = ArrayList<Candidate>()
         for (i in 0 until size) if (!skip(word[i])) insertTop(top, Candidate(word[i], Math.log1p(freq[i].toDouble())), limit)
         return top
@@ -128,6 +143,7 @@ class WordDictionary(words: List<String>, freqs: List<Int>) {
 
     companion object {
         val EMPTY = WordDictionary(emptyList(), emptyList())
+        private const val TOP_CACHE = 64
 
         /**
          * Reads a word list in any of the usual shapes: one word per line; "word<TAB>count" or "word count" (frequency lists);

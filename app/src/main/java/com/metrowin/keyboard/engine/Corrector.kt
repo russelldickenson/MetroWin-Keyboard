@@ -68,7 +68,7 @@ class Corrector(private val grid: KeyGrid) {
         return d[n][m]
     }
 
-    private fun fold(c: Char): Char = Text.fold(c.toString()).firstOrNull() ?: c
+    private fun fold(c: Char): Char = if (c.code < 128) c.lowercaseChar() else Text.fold(c.toString()).firstOrNull() ?: c
 
     private fun dropCost(a: String, i: Int) = if (i > 0 && a[i] == a[i - 1]) DROP_DOUBLE else DROP
 

@@ -48,14 +48,22 @@ class SuggestionBar(context: Context) : View(context) {
     private var downX = 0f
     private var dragging = false
     private val slop = android.view.ViewConfiguration.get(context).scaledTouchSlop
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply { textAlign = Paint.Align.CENTER }
+    private val paint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply { textAlign = Paint.Align.CENTER }
+    private val metrics = Paint.FontMetrics()
+    // What is worked out once and kept until a slot, the font or the look changes: the three typefaces and the widths of the cells.
+    private val faces = arrayOfNulls<android.graphics.Typeface>(3)
+    private var cachedEdges: FloatArray? = null
+    private var cachedEdgesW = -1f
+    private var cachedEdgesH = -1
     private val fill = Paint(Paint.ANTI_ALIAS_FLAG)
     private val icon = Paint(Paint.ANTI_ALIAS_FLAG)
     // The tool the quick button already offers is not repeated in the toolbox.
     private val tools get() = Tool.entries.filter { it != quick }
 
-    fun setColors(c: KeyboardColors) { colors = c; invalidate() }
-    fun setSlots(s: List<Slot?>) { if (s != slots) scroll = 0f; slots = s; if (!toolsOpen) invalidate() }
+    fun setColors(c: KeyboardColors) { if (colors?.style != c.style) forget(); colors = c; invalidate() }
+
+    private fun forget() { faces.fill(null); cachedEdges = null }
+    fun setSlots(s: List<Slot?>) { if (s != slots) { scroll = 0f; cachedEdges = null }; slots = s; if (!toolsOpen) invalidate() }
     internal fun slotsForTest() = slots
     fun setStatus(text: String?) { status = text; invalidate() }
     fun setVoiceActive(on: Boolean) { voiceActive = on; invalidate() }
@@ -129,12 +137,12 @@ class SuggestionBar(context: Context) : View(context) {
         paint.typeface = face(bold = false)
         paint.textSkewX = 0f
         paint.textSize = height * 0.52f
-        val m = paint.fontMetrics
+        paint.getFontMetrics(metrics)
         slots.forEachIndexed { i, s ->
             val left = x0 + i * cell - scroll
             if (s == null || left + cell < x0 || left > x0 + w) return@forEachIndexed
             if (pressedIndex == i) highlight(canvas, c, left, left + cell)
-            canvas.drawText(s.text, left + cell / 2f, height / 2f - (m.ascent + m.descent) / 2f, paint)
+            canvas.drawText(s.text, left + cell / 2f, height / 2f - (metrics.ascent + metrics.descent) / 2f, paint)
         }
         canvas.restore()
     }
@@ -145,16 +153,19 @@ class SuggestionBar(context: Context) : View(context) {
     private var keyWeight = 300
 
     /** The font of the key letters, which every look but Classic also uses for the suggestions. */
-    fun setKeyFont(family: String, weight: Int) { if (keyFamily != family || keyWeight != weight) { keyFamily = family; keyWeight = weight; invalidate() } }
+    fun setKeyFont(family: String, weight: Int) { if (keyFamily != family || keyWeight != weight) { keyFamily = family; keyWeight = weight; forget(); invalidate() } }
 
     /**
      * The typeface of a suggestion. Classic keeps Open Sans (regular, semibold for the best one, light for a phrase); the other looks use
      * the font and weight chosen for the keys, a heavier weight for the best suggestion and a lighter one for a phrase.
      */
     private fun face(bold: Boolean, light: Boolean = false): android.graphics.Typeface {
-        if (colors?.style == com.metrowin.keyboard.theme.ThemeStyle.CLASSIC) return if (bold) Fonts.semibold(context) else if (light) Fonts.light(context) else Fonts.regular(context)
-        val w = when { bold -> keyWeight + 300; light -> keyWeight - 100; else -> keyWeight }
-        return KeyFonts.get(context, keyFamily, w)
+        val i = if (bold) 1 else if (light) 2 else 0
+        faces[i]?.let { return it }
+        val made = if (colors?.style == com.metrowin.keyboard.theme.ThemeStyle.CLASSIC) { if (bold) Fonts.semibold(context) else if (light) Fonts.light(context) else Fonts.regular(context) }
+            else KeyFonts.get(context, keyFamily, when { bold -> keyWeight + 300; light -> keyWeight - 100; else -> keyWeight })
+        faces[i] = made
+        return made
     }
 
     private fun style(bold: Boolean, italic: Boolean) {
@@ -168,6 +179,13 @@ class SuggestionBar(context: Context) : View(context) {
      * room is shared in proportion to the texts, so that a long word is not cut.
      */
     private fun edges(w: Float): FloatArray {
+        cachedEdges?.let { if (cachedEdgesW == w && cachedEdgesH == height) return it }
+        val e = computeEdges(w)
+        cachedEdges = e; cachedEdgesW = w; cachedEdgesH = height
+        return e
+    }
+
+    private fun computeEdges(w: Float): FloatArray {
         val want = FloatArray(3) { i ->
             slots.getOrNull(i)?.let { style(it.best, it.phrase); paint.measureText(shown(it)) + PAD } ?: 0f
         }
@@ -190,9 +208,9 @@ class SuggestionBar(context: Context) : View(context) {
         // A text that is too wide is made smaller; only below a size that still reads is it cut.
         val full = paint.measureText(text)
         if (full > maxW) paint.textSize = maxOf(paint.textSize * maxW / full, height * 0.38f * MIN_SCALE)
-        val shown = TextUtils.ellipsize(text, TextPaint(paint), maxW, TextUtils.TruncateAt.END).toString()
-        val m = paint.fontMetrics
-        canvas.drawText(shown, cx, cy - (m.ascent + m.descent) / 2f, paint)
+        val shown = TextUtils.ellipsize(text, paint, maxW, TextUtils.TruncateAt.END).toString()
+        paint.getFontMetrics(metrics)
+        canvas.drawText(shown, cx, cy - (metrics.ascent + metrics.descent) / 2f, paint)
         paint.textSkewX = 0f
     }
 
