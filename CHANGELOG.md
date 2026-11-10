@@ -3,6 +3,7 @@
 ## Unreleased
 
 - **Key font:** *Settings → Appearance* chooses the font of the key letters (system, Open Sans, Roboto, Atkinson Hyperlegible) and its weight (200 to 500; only the weights that look different for the font are listed).
+- **Suggestion font:** in every look except Classic the suggestions use the key font and weight (the best suggestion heavier, a phrase lighter); Classic keeps Open Sans.
 - **iPhone look:** a fourth look in *Settings → Appearance → Look*: pale grey (or dark) keyboard, white rounded keys with a thin shadow, darker special keys, "space" and "return" labels, wider gaps between the keys (about 6 dp across and 10 dp between rows, at the same overall height), dividers between the suggestions, and a white balloon over the pressed key.
 - **Spaced looks:** *Modern Droid Spaced* and *Modern Slate Spaced* in *Settings → Appearance → Look*: the same as Modern Droid and Modern Slate, with the keys spaced as on the iPhone look (about 6 dp across and 10 dp between rows, at the same overall height). The original looks are unchanged.
 - **Slate look:** dark grey keys with light grey symbols on a light grey surround (dark in dark mode), rounded keys with a soft shadow and a light blue action key. *Settings → Appearance → Look*.

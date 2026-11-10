@@ -126,7 +126,7 @@ class SuggestionBar(context: Context) : View(context) {
         canvas.save()
         canvas.clipRect(x0, 0f, x0 + w, height.toFloat())
         paint.color = c.text
-        paint.typeface = Fonts.regular(context)
+        paint.typeface = face(bold = false)
         paint.textSkewX = 0f
         paint.textSize = height * 0.52f
         val m = paint.fontMetrics
@@ -141,9 +141,25 @@ class SuggestionBar(context: Context) : View(context) {
 
     private fun shown(s: Slot) = when { s.literal -> "“${s.text}”"; s.phrase -> s.text + " …"; else -> s.text }
 
+    private var keyFamily = "opensans"
+    private var keyWeight = 300
+
+    /** The font of the key letters, which every look but Classic also uses for the suggestions. */
+    fun setKeyFont(family: String, weight: Int) { if (keyFamily != family || keyWeight != weight) { keyFamily = family; keyWeight = weight; invalidate() } }
+
+    /**
+     * The typeface of a suggestion. Classic keeps Open Sans (regular, semibold for the best one, light for a phrase); the other looks use
+     * the font and weight chosen for the keys, a heavier weight for the best suggestion and a lighter one for a phrase.
+     */
+    private fun face(bold: Boolean, light: Boolean = false): android.graphics.Typeface {
+        if (colors?.style == com.metrowin.keyboard.theme.ThemeStyle.CLASSIC) return if (bold) Fonts.semibold(context) else if (light) Fonts.light(context) else Fonts.regular(context)
+        val w = when { bold -> keyWeight + 300; light -> keyWeight - 100; else -> keyWeight }
+        return KeyFonts.get(context, keyFamily, w)
+    }
+
     private fun style(bold: Boolean, italic: Boolean) {
         paint.textSize = height * 0.38f
-        paint.typeface = if (bold) Fonts.semibold(context) else if (italic) Fonts.light(context) else Fonts.regular(context)
+        paint.typeface = if (!bold && italic) face(bold = false, light = true) else face(bold)
         paint.textSkewX = if (italic) -0.18f else 0f
     }
 

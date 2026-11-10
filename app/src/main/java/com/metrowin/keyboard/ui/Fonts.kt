@@ -39,10 +39,10 @@ object KeyFonts {
     private val cache = HashMap<String, Typeface>()
 
     /**
-     * The variable fonts clamp to their own range: Open Sans starts at 300, so its list leaves out 200. The system font follows the phone's own weights.
+     * Weights up to 700 are for the bold of the suggestion bar; the settings offer 200 to 500. The variable fonts clamp to their own range: Open Sans starts at 300, so its list leaves out 200. The system font follows the phone's own weights.
      */
     @Synchronized fun get(c: Context, family: String, weight: Int): Typeface {
-        val w = weight.coerceIn(200, 500)
+        val w = weight.coerceIn(200, 700)
         return cache.getOrPut("$family/$w") {
             val file = files[family]
             if (file == null) system(w)
@@ -54,5 +54,6 @@ object KeyFonts {
 
     private fun system(w: Int): Typeface =
         if (android.os.Build.VERSION.SDK_INT >= 28) Typeface.create(Typeface.SANS_SERIF, w, false)
+        else if (w >= 600) Typeface.create("sans-serif", Typeface.BOLD)
         else Typeface.create(when { w <= 200 -> "sans-serif-thin"; w <= 300 -> "sans-serif-light"; w <= 400 -> "sans-serif"; else -> "sans-serif-medium" }, Typeface.NORMAL)
 }
