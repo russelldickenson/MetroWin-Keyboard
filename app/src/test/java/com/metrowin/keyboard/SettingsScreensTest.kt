@@ -36,6 +36,23 @@ class SettingsScreensTest {
         }
     }
 
+    /** The switch of a row is the one the preferences library updates (it looks for its id): a switch that is on must be drawn on. */
+    @Test fun aSwitchThatIsOnIsDrawnOn() {
+        val activity = Robolectric.buildActivity(SettingsActivity::class.java).setup().get()
+        app().prefs.sp.edit().clear().commit()
+        val fragment = activity.supportFragmentManager.fragmentFactory.instantiate(activity.classLoader, "com.metrowin.keyboard.settings.TypingFragment") as PreferenceFragmentCompat
+        activity.supportFragmentManager.beginTransaction().replace(R.id.settings_container, fragment).commitNow()
+        val root = activity.findViewById<View>(R.id.settings_root)
+        root.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(2000, View.MeasureSpec.EXACTLY))
+        root.layout(0, 0, 1080, 2000)
+        val list = fragment.listView
+        val switches = (0 until list.childCount).mapNotNull { list.getChildAt(it).findViewById<View>(androidx.preference.R.id.switchWidget) as? android.widget.Checkable }
+        assertTrue("the Typing screen has switches", switches.isNotEmpty())
+        assertTrue("the first switch (double space, on by default) is drawn on", switches.first().isChecked)
+    }
+
+    private fun app() = androidx.test.core.app.ApplicationProvider.getApplicationContext<KeyboardApp>()
+
     @Test fun everyScreenOpens() {
         val activity = Robolectric.buildActivity(SettingsActivity::class.java).setup().get()
         val out = File("build/shots").apply { mkdirs() }
