@@ -70,7 +70,7 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
     private enum class Field { TEXT, PASSWORD, EMAIL, URI, NUMBER, PHONE, NONE }
     private enum class Panel { NONE, EMOJI, CLIPBOARD, TUTORIAL }
 
-    private class Correction(val typed: String, val corrected: String, val delimiter: String)
+    private class Correction(val typed: String, val corrected: String, val delimiter: String, val snippet: Boolean = false)
     private class SwipeResult(val word: String, val inserted: String)
 
     private lateinit var app: KeyboardApp
@@ -122,6 +122,8 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
     private var latest: WordSuggestions? = null
     private var suggestSeq = 0
     private var lastCorrection: Correction? = null
+    private var snippetLookup: Map<String, String> = emptyMap()   // shortcut (lower case) -> text
+    private var snippetSkip: String? = null                       // a shortcut the user just took back: typed as it is, once
     private var autoSpace = false
     private var lastSwipe: SwipeResult? = null
     private var lastSpaceTime = 0L
@@ -334,6 +336,7 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
         val land = resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
         kb.setMetrics(if (land) prefs.keyHeightLand else prefs.keyHeight, prefs.keyGap, prefs.keyboardWidth, prefs.keyboardAlign)
         kb.setKeyFont(prefs.keyFont, prefs.keyWeight); bar?.setKeyFont(prefs.keyFont, prefs.keyWeight)
+        snippetLookup = if (prefs.snippetsOn) com.metrowin.keyboard.engine.Snippets.lookup(prefs.snippets) else emptyMap()
         kb.setBias(prefs.calibBias(land)); kb.setTouchSigma(prefs.calibSigma)
         kb.setBehavior(prefs.longPressSymbols, prefs.longPressMs, prefs.swipe && field == Field.TEXT, prefs.spaceCursor, prefs.keyHints, prefs.keyPreview)
         bar?.setQuickTool(Tool.from(prefs.quickTool)); bar?.setBadge(clipBadge && Tool.from(prefs.quickTool) == Tool.CLIPBOARD)
@@ -552,7 +555,8 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
                 ic.setComposingText(composing, 1)
                 ic.endBatchEdit()
                 lastCorrection = null
-                if (learningOn) engine?.user?.let { it.learn(null, lc.typed.lowercase()); it.reject(lc.typed.lowercase(), lc.corrected.lowercase()) }
+                if (lc.snippet) snippetSkip = lc.typed.lowercase()
+                else if (learningOn) engine?.user?.let { it.learn(null, lc.typed.lowercase()); it.reject(lc.typed.lowercase(), lc.corrected.lowercase()) }
                 updateSuggestions()
                 return
             }
@@ -573,11 +577,18 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
         val typed = composing.toString()
         var final = typed
         val s = latest
-        if (autocorrect && prefs.autocorrect && predictionOn && s != null && s.typed == typed && s.autocorrect != null) final = s.autocorrect
+        // A snippet: the shortcut typed turns into its text, unless the user has just taken that back.
+        val snippet = snippetLookup[typed.lowercase()]?.takeIf { snippetSkip != typed.lowercase() }
+        snippetSkip = null
+        if (snippet != null) final = snippet
+        else if (autocorrect && prefs.autocorrect && predictionOn && s != null && s.typed == typed && s.autocorrect != null) final = s.autocorrect
         composing.setLength(0)
         ic?.commitText(final, 1)
-        lastCorrection = if (final != typed) Correction(typed, final, delimiter) else null
-        learn(final)
+        lastCorrection = if (final != typed) Correction(typed, final, delimiter, snippet = snippet != null) else null
+        if (snippet != null) {
+            // The text is not one word to learn; the last word of it is what the next word follows.
+            prevWord2 = prevWord; prevWord = snippet.split(' ', '\n').lastOrNull { it.isNotBlank() }?.filter { Text.isWordChar(it) }?.lowercase()?.takeIf { it.isNotEmpty() }
+        } else learn(final)
         latest = null
     }
 
@@ -633,7 +644,11 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
 
     private fun showWordSlots(r: WordSuggestions) {
         val others = r.candidates.filter { it != r.autocorrect && !it.equals(r.typed, true) }
-        val slots: List<Slot?> = if (r.autocorrect != null) {
+        val snippet = snippetLookup[r.typed.lowercase()]?.takeIf { snippetSkip != r.typed.lowercase() }
+        val slots: List<Slot?> = if (snippet != null) {
+            // A shortcut: what it turns into is offered in the middle, as what the space bar will do.
+            listOf(Slot(r.typed, literal = true), Slot(snippet, best = true, snippet = true), others.getOrNull(0)?.let { Slot(it) })
+        } else if (r.autocorrect != null) {
             listOf(Slot(r.typed, literal = true), Slot(r.autocorrect, best = true), others.getOrNull(0)?.let { Slot(it) })
         } else {
             listOf(others.getOrNull(0)?.let { Slot(it) }, Slot(r.typed, literal = !r.typedIsKnown, best = r.typedIsKnown), others.getOrNull(1)?.let { Slot(it) })
@@ -648,6 +663,7 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
 
     override fun onSlot(slot: Slot) {
         endVoiceText()
+        if (slot.snippet) { space(); return }        // the same as the space bar: the shortcut becomes its text
         val ic = currentInputConnection ?: return
         if (slot.emoji) {
             // The colon and the word typed after it become the emoji.

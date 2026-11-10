@@ -19,7 +19,7 @@ import java.io.File
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 class SettingsScreensTest {
     private val screens = listOf(
-        "Languages", "Appearance", "Size", "Typing", "Suggestions", "Feedback", "Clipboard", "Voice", "Backup", "About",
+        "Languages", "Appearance", "Size", "Typing", "Suggestions", "Feedback", "Clipboard", "Snippets", "Voice", "Backup", "About",
     ).map { "com.metrowin.keyboard.settings.${it}Fragment" }
 
     @Test fun calibrationScreenOpens() {

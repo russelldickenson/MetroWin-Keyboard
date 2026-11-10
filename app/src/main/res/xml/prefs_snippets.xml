@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <SwitchPreferenceCompat android:key="snippets_on" android:title="@string/pref_snippets_on_title" android:summary="@string/pref_snippets_on_summary" android:defaultValue="true" />
+    <Preference android:key="snippet_add" android:title="@string/pref_snippet_add_title" android:summary="@string/pref_snippet_add_summary" />
+    <PreferenceCategory android:key="snippet_list" android:title="@string/cat_snippets" />
+</PreferenceScreen>

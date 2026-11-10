@@ -243,4 +243,68 @@ class ImeTest {
         ime.onFunction(Key(KeyType.ENTER), false); idle()
         assertEquals(EditorInfo.IME_ACTION_SEARCH, action)
     }
+
+    // --- snippets ---------------------------------------------------------------------------------------------------
+
+    private fun snippets(on: Boolean = true) {
+        app.prefs.sp.edit().putString(K.SNIPPETS, com.metrowin.keyboard.engine.Snippets.encode(listOf(
+            com.metrowin.keyboard.engine.Snippet("wyd", "What do you need from me?"), com.metrowin.keyboard.engine.Snippet("brb", "Be right back"),
+        ))).putBoolean(K.SNIPPETS_ON, on).commit()
+        start()
+    }
+
+    @Test fun aShortcutTurnsIntoItsTextWhenTheWordEnds() {
+        snippets()
+        type("wyd ")
+        assertEquals("What do you need from me? ", text)
+    }
+
+    @Test fun theShortcutIsFoundWhateverItsCapitalsAndKeepsThePunctuation() {
+        snippets()
+        type("Wyd")
+        ime.onText(Key(KeyType.CHAR, "?"), "?"); idle()
+        assertEquals("What do you need from me??", text)
+    }
+
+    @Test fun backspaceRightAfterGivesTheShortcutBackAndASecondSpaceKeepsIt() {
+        snippets()
+        type("wyd ")
+        backspace()
+        assertEquals("wyd", text)
+        type(" ")
+        assertEquals("wyd ", text)
+        type("wyd ")
+        assertEquals("wyd What do you need from me? ", text)
+    }
+
+    @Test fun aShortcutInsideAnotherWordIsLeftAlone() {
+        snippets()
+        type("wydx ")
+        assertFalse(text.contains("What do you need"))
+        type("awyd ")
+        assertFalse(text.contains("What do you need"))
+    }
+
+    @Test fun theBarOffersTheTextAndTappingItIsTheSameAsTheSpaceBar() {
+        snippets()
+        type("brb")
+        val slots = ime.suggestionBar!!.slotsForTest()
+        val offer = slots.filterNotNull().first { it.snippet }
+        assertEquals("Be right back", offer.text)
+        ime.onSlot(offer); idle()
+        assertEquals("Be right back ", text)
+    }
+
+    @Test fun switchedOffNothingIsReplaced() {
+        snippets(on = false)
+        type("wyd ")
+        assertEquals("wyd ", text)
+    }
+
+    @Test fun nothingIsReplacedWhereTheKeyboardDoesNotPredict() {
+        snippets()
+        start(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD)
+        type("wyd ")
+        assertEquals("wyd ", text)
+    }
 }

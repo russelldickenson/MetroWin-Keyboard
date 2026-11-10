@@ -20,7 +20,7 @@ enum class Tool(val code: String, val icon: Icon) {
 }
 
 /** One of the three places of the bar. [best] is the word that space will insert; [literal] is exactly what was typed. */
-data class Slot(val text: String, val best: Boolean = false, val literal: Boolean = false, val phrase: Boolean = false, val emoji: Boolean = false)
+data class Slot(val text: String, val best: Boolean = false, val literal: Boolean = false, val phrase: Boolean = false, val emoji: Boolean = false, val snippet: Boolean = false)
 
 /**
  * The strip above the keys, laid out like an app bar: the three dots on the left open the toolbox, the middle holds three

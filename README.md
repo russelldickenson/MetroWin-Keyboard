@@ -50,6 +50,7 @@ Compared with the original MetroWin Keyboard (version 26.1.2S):
 - **Key font and weight** (*Settings → Appearance*): the key letters can use the system font, Open Sans, Roboto or Atkinson Hyperlegible, at weights 200, 300, 400 or 500. Only the weights that look different for the chosen font are listed. The fonts are bundled variable fonts under the SIL OFL.
 - **iPhone look**: pale grey (or dark) keyboard, white rounded keys with a thin shadow, darker special keys, "space" and "return" labels, dividers between the suggestions and a white balloon over the pressed key.
 - **Modern Slate look**: dark grey keys with light grey symbols on a light grey surround (a dark one in dark mode), soft shadows and a light blue action key.
+- **Snippets** (*Settings → Snippets*): short words that turn into a phrase you write often. Type `wyd` and a space and it becomes "What do you need from me?". The text is also offered in the middle of the suggestion bar while you type the shortcut, and Backspace right after gives the shortcut back. They stay on the phone and are in the backup.
 - **Spaced versions of Modern Droid and Modern Slate**: the same looks with the keys spaced as on the iPhone look (about 6 dp across, 10 dp between rows, at the same keyboard height). The originals are unchanged.
 - **A new identity**: application id `com.phayz.keyboard`, so it coexists with the original.
 
@@ -90,6 +91,7 @@ Android 8.0 (API 26) or newer.
 
 **Tools**, one tap from the bar: the three dots open the toolbox, and a **quick button** goes straight to the clipboard (or any tool you choose), with a dot when something new was copied.
 - **Clipboard** history with a limit you choose, pinned items and **pictures**.
+- **Snippets**: shortcuts that become phrases as you type (`wyd` → "What do you need from me?"), made in *Settings → Snippets*.
 - **Emoji** and **classic emoticons** (`:-)`, kaomoji), with skin tones.
 - **Voice typing**, also continuous transcription, optionally on-device only.
 

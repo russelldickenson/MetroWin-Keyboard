@@ -30,6 +30,8 @@ object K {
     const val NUMBER_ROW = "number_row"
     const val KEY_HINTS = "key_hints"
     const val KEY_FONT = "key_font"
+    const val SNIPPETS = "snippets"                      // JSON, see engine/Snippets.kt
+    const val SNIPPETS_ON = "snippets_on"
     const val KEY_WEIGHT = "key_weight"
 
     const val DOUBLE_SPACE = "double_space_period"
@@ -113,6 +115,10 @@ class Prefs(context: Context) {
         set(v) { sp.edit().putInt(K.TUTORIAL_SEEN, v).apply() }
     val keyHints get() = b(K.KEY_HINTS, true)
     val keyFont get() = s(K.KEY_FONT, "opensans")
+    val snippetsOn get() = b(K.SNIPPETS_ON, true)
+    var snippets: List<com.metrowin.keyboard.engine.Snippet>
+        get() = com.metrowin.keyboard.engine.Snippets.parse(s(K.SNIPPETS, ""))
+        set(v) { putString(K.SNIPPETS, com.metrowin.keyboard.engine.Snippets.encode(v)) }
     val keyWeight get() = com.metrowin.keyboard.ui.KeyFonts.snap(keyFont, s(K.KEY_WEIGHT, "300").toIntOrNull() ?: 300)
 
     val doubleSpace get() = b(K.DOUBLE_SPACE, true)

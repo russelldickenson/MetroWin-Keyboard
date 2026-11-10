@@ -280,6 +280,66 @@ class ClipboardFragment : BaseFragment(R.xml.prefs_clipboard, R.string.screen_cl
     }
 }
 
+/** The snippets: a shortcut and the text it turns into, one row each, with a dialog to make, change or delete them. */
+class SnippetsFragment : BaseFragment(R.xml.prefs_snippets, R.string.screen_snippets) {
+    override fun setup() {
+        click("snippet_add") { edit(null) }
+        rebuild()
+    }
+
+    private fun rebuild() {
+        val ctx = requireContext()
+        val category = findPreference<androidx.preference.PreferenceCategory>("snippet_list") ?: return
+        category.removeAll()
+        val list = app.prefs.snippets
+        if (list.isEmpty()) category.addPreference(Preference(ctx).apply { title = getString(R.string.snippet_none); isEnabled = false; isIconSpaceReserved = false })
+        for (s in list) category.addPreference(Preference(ctx).apply {
+            title = s.key; summary = s.text; isIconSpaceReserved = false
+            setOnPreferenceClickListener { edit(s); true }
+        })
+    }
+
+    private fun save(list: List<com.metrowin.keyboard.engine.Snippet>) { app.prefs.snippets = list; rebuild() }
+
+    /** [old] null: a new snippet. The dialog stays open until what is written is valid. */
+    private fun edit(old: com.metrowin.keyboard.engine.Snippet?) {
+        val ctx = requireContext()
+        val pad = ctx.dp(24f).toInt()
+        val key = EditText(ctx).apply {
+            hint = getString(R.string.snippet_key_hint); setSingleLine(); setText(old?.key.orEmpty())
+            filters = arrayOf(android.text.InputFilter.LengthFilter(com.metrowin.keyboard.engine.Snippets.MAX_KEY))
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+        }
+        val text = EditText(ctx).apply {
+            hint = getString(R.string.snippet_text_hint); minLines = 3; gravity = android.view.Gravity.TOP; setText(old?.text.orEmpty())
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE or android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+        }
+        val box = android.widget.LinearLayout(ctx).apply { orientation = android.widget.LinearLayout.VERTICAL; setPadding(pad, ctx.dp(8f).toInt(), pad, 0); addView(key); addView(text) }
+        val builder = MaterialAlertDialogBuilder(ctx).setTitle(if (old == null) R.string.snippet_dialog_new else R.string.snippet_dialog_edit).setView(box)
+            .setPositiveButton(R.string.ok, null).setNegativeButton(R.string.cancel, null)
+        if (old != null) builder.setNeutralButton(R.string.snippet_delete) { _, _ -> save(app.prefs.snippets.filter { it.key != old.key }) }
+        val dialog = builder.create()
+        dialog.setOnShowListener {
+            dialog.getButton(android.content.DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+                val k = key.text.toString().trim(); val t = text.text.toString().trim()
+                val others = app.prefs.snippets.filter { it.key != old?.key }
+                when {
+                    !com.metrowin.keyboard.engine.Snippets.validKey(k) -> toast(R.string.snippet_bad_key)
+                    !com.metrowin.keyboard.engine.Snippets.validText(t) -> toast(R.string.snippet_bad_text)
+                    others.any { it.key.equals(k, ignoreCase = true) } -> toast(R.string.snippet_duplicate)
+                    old == null && others.size >= com.metrowin.keyboard.engine.Snippets.MAX_SNIPPETS -> toast(R.string.snippet_too_many)
+                    else -> {
+                        val now = com.metrowin.keyboard.engine.Snippet(k, t)
+                        save(if (old == null) others + now else app.prefs.snippets.map { if (it.key == old.key) now else it })
+                        dialog.dismiss()
+                    }
+                }
+            }
+        }
+        dialog.show()
+    }
+}
+
 class VoiceFragment : BaseFragment(R.xml.prefs_voice, R.string.screen_voice) {
     private val ask = registerForActivityResult(ActivityResultContracts.RequestPermission()) { refresh() }
     override fun setup() { click("voice_permission") { ask.launch(Manifest.permission.RECORD_AUDIO) } }

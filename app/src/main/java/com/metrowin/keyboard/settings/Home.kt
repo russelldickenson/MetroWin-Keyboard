@@ -33,6 +33,7 @@ object Home {
         screen("Suggestions", R.string.screen_suggestions, R.string.screen_suggestions_summary),
         screen("Feedback", R.string.screen_feedback, R.string.screen_feedback_summary),
         screen("Clipboard", R.string.screen_clipboard, R.string.screen_clipboard_summary),
+        screen("Snippets", R.string.screen_snippets, R.string.screen_snippets_summary),
         screen("Voice", R.string.screen_voice, R.string.screen_voice_summary),
         screen("Backup", R.string.screen_backup, R.string.screen_backup_summary),
     )
