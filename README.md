@@ -14,16 +14,33 @@
 
 > **Phayz Keyboard is a fork.** It is based on [MetroWin Keyboard](https://github.com/developerkenshi-coder/MetroWin-Keyboard) by developerkenshi-coder, whose work this project builds on and whose design it keeps. It has its own application id (`com.phayz.keyboard`), so it installs next to the original and never replaces it. It is not affiliated with or endorsed by the original project. See [What is different](#what-is-different) for exactly what was removed and added.
 
-<p align="center"><img src="docs/screenshots/looks.png" width="92%" alt="The three original looks: Classic, Modern Glass and Modern Droid"></p>
-
 <p align="center">
-  <img src="docs/screenshots/home.png" width="22%" alt="The home page with the calibration tile">
-  <img src="docs/screenshots/typing.png" width="22%" alt="The keyboard">
-  <img src="docs/screenshots/calibration.png" width="22%" alt="Calibration result">
-  <img src="docs/screenshots/settings.png" width="22%" alt="Settings">
+  <img src="docs/screenshots/home.png" width="22%" alt="The home page with the calibration card">
+  <img src="docs/screenshots/typing.png" width="22%" alt="The keyboard, in the Classic look">
+  <img src="docs/screenshots/calibration.png" width="22%" alt="The calibration">
+  <img src="docs/screenshots/appearance.png" width="22%" alt="Appearance: look, font, weight and colour">
 </p>
 
-<p align="center"><sub>The screenshots are those of the original project; they do not yet show this fork's additions.</sub></p>
+### The looks
+
+<table align="center">
+  <tr>
+    <td align="center"><img src="docs/screenshots/looks/classic.png" width="100%" alt="Classic"><br><sub><b>Classic</b> (Windows Phone)</sub></td>
+    <td align="center"><img src="docs/screenshots/looks/glass.png" width="100%" alt="Modern Glass"><br><sub><b>Modern Glass</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/looks/droid.png" width="100%" alt="Modern Droid"><br><sub><b>Modern Droid</b></sub></td>
+    <td align="center"><img src="docs/screenshots/looks/droid-spaced.png" width="100%" alt="Modern Droid Spaced"><br><sub><b>Modern Droid Spaced</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/looks/iphone.png" width="100%" alt="iPhone"><br><sub><b>iPhone</b> (system font)</sub></td>
+    <td align="center"><img src="docs/screenshots/looks/slate.png" width="100%" alt="Modern Slate"><br><sub><b>Modern Slate</b> (Roboto)</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/looks/slate-spaced.png" width="100%" alt="Modern Slate Spaced"><br><sub><b>Modern Slate Spaced</b> (Roboto)</sub></td>
+    <td></td>
+  </tr>
+</table>
 
 ## What is different
 
