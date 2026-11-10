@@ -1,5 +1,6 @@
 package com.metrowin.keyboard
 
+import com.metrowin.keyboard.engine.EditDistance
 import com.metrowin.keyboard.engine.Text
 import com.metrowin.keyboard.engine.WordDictionary
 import org.junit.Assert.assertEquals
@@ -38,6 +39,23 @@ class FastPathsTest {
         val many: (String) -> Boolean = { it.length != 3 }      // skips so many that the cached best words run out
         for (skip in listOf(none, some, many)) for (limit in listOf(1, 6, 12, 64, 100)) {
             assertEquals("limit $limit", brute(limit, skip), dict.top(limit, skip).map { it.word })
+        }
+    }
+
+    @Test fun editDistanceWithOneScratchForManyComparisonsMatchesFreshTables() {
+        val dict = File("src/main/assets/dictionaries/en.txt").bufferedReader().use { WordDictionary.parse(it, Locale.ENGLISH) }
+        val words = (0 until dict.size step 97).map { dict.wordAt(it) }
+        val scratch = EditDistance.Scratch(4)          // too small on purpose: it has to grow
+        for (a in words.take(60)) for (b in words) for (limit in 1..2) {
+            assertEquals("$a $b $limit", EditDistance.within(a, b, limit), EditDistance.within(a, b, limit, scratch))
+        }
+    }
+
+    @Test fun wordsWithEndsAreTheOnesAPassOverTheListFinds() {
+        val dict = File("src/main/assets/dictionaries/en.txt").bufferedReader().use { WordDictionary.parse(it, Locale.ENGLISH) }
+        for ((a, b) in listOf('h' to 'o', 'H' to 'P', 't' to 'e', 'q' to 'z', 'a' to 'a', 's' to 'y')) {
+            val expected = (0 until dict.size).filter { dict.wordAt(it).let { w -> w[0].lowercaseChar() == a.lowercaseChar() && w.last().lowercaseChar() == b.lowercaseChar() } }
+            assertEquals("$a..$b", expected, dict.withEnds(a, b).toList())
         }
     }
 }

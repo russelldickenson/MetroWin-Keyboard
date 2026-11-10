@@ -16,6 +16,8 @@ class WordDictionary(words: List<String>, freqs: List<Int>) {
     private val freq: IntArray
     private val folded: Array<String>
     private val order: IntArray            // indices sorted by folded form
+    private val logFreq: DoubleArray       // log(1 + frequency), the score of a word, made once
+    private val foldedLen: IntArray
     private val exact = HashMap<String, Int>(size * 2)
     private val byFirst = HashMap<Char, IntArray>()
     private val apostrophed = HashMap<String, ArrayList<Int>>()   // "cose" -> the words "cos'è" and the like
@@ -29,6 +31,8 @@ class WordDictionary(words: List<String>, freqs: List<Int>) {
         freq = IntArray(size) { freqs[idx[it]] }
         folded = Array(size) { fold0[idx[it]] }
         order = IntArray(size) { it }
+        logFreq = DoubleArray(size) { Math.log1p(freq[it].toDouble()) }
+        foldedLen = IntArray(size) { folded[it].length }
         for (i in 0 until size) exact[word[i]] = i
         val lists = HashMap<Char, ArrayList<Int>>()
         for (i in 0 until size) if (word[i].isNotEmpty()) lists.getOrPut(word[i][0].lowercaseChar()) { ArrayList() }.add(i)
@@ -58,7 +62,7 @@ class WordDictionary(words: List<String>, freqs: List<Int>) {
             if (!skip(w)) {
                 // A tiny bonus for matching the accents the user typed, a small penalty for long completions.
                 val exactPrefix = if (w.startsWith(lower)) 0.5 else 0.0
-                val score = Math.log1p(freq[i].toDouble()) + exactPrefix - 0.05 * (w.length - prefix.length)
+                val score = logFreq[i] + exactPrefix - 0.05 * (w.length - prefix.length)
                 insertTop(top, Candidate(w, score), limit)
             }
             i++
@@ -68,12 +72,12 @@ class WordDictionary(words: List<String>, freqs: List<Int>) {
 
     /** Words that are [typed] with an apostrophe (and maybe accents) added: "cose" gives "cos'è", "cest" gives "c'est". */
     fun withApostrophe(typed: String): List<Candidate> =
-        apostrophed[Text.fold(typed)]?.map { Candidate(word[it], Math.log1p(freq[it].toDouble())) }.orEmpty()
+        apostrophed[Text.fold(typed)]?.map { Candidate(word[it], logFreq[it]) }.orEmpty()
 
     /** The most frequent words, best first, found once: asking for them is then a short walk, not a pass over the whole list. */
     private val topWords: List<Candidate> by lazy {
         val top = ArrayList<Candidate>()
-        for (i in 0 until size) insertTop(top, Candidate(word[i], Math.log1p(freq[i].toDouble())), TOP_CACHE)
+        for (i in 0 until size) insertTop(top, Candidate(word[i], logFreq[i]), TOP_CACHE)
         top
     }
 
@@ -86,7 +90,7 @@ class WordDictionary(words: List<String>, freqs: List<Int>) {
             if (topWords.size < TOP_CACHE) return out        // the whole list was walked
         }
         val top = ArrayList<Candidate>()
-        for (i in 0 until size) if (!skip(word[i])) insertTop(top, Candidate(word[i], Math.log1p(freq[i].toDouble())), limit)
+        for (i in 0 until size) if (!skip(word[i])) insertTop(top, Candidate(word[i], logFreq[i]), limit)
         return top
     }
 
@@ -97,24 +101,24 @@ class WordDictionary(words: List<String>, freqs: List<Int>) {
         val top = ArrayList<Candidate>()
         val first = t[0]
         // Most typos keep the first letter; for the rest a second pass on the second letter is cheap enough.
-        val pool = byFirst[first] ?: IntArray(0)
-        scan(pool, t, typed, maxDistance, limit, top, skip)
+        val scratch = EditDistance.Scratch(t.length + maxDistance + 2)
+        scan(byFirst[first] ?: NONE, t, typed, maxDistance, limit, top, skip, scratch)
         if (top.size < limit && t.length > 3) {
-            for (c in firstLetterNeighbours(t)) byFirst[c]?.let { scan(it, t, typed, maxDistance.coerceAtMost(1), limit, top, skip) }
+            for (c in firstLetterNeighbours(t)) byFirst[c]?.let { scan(it, t, typed, maxDistance.coerceAtMost(1), limit, top, skip, scratch) }
         }
         return top
     }
 
-    private fun scan(pool: IntArray, t: String, typed: String, maxDistance: Int, limit: Int, top: ArrayList<Candidate>, skip: (String) -> Boolean) {
+    private fun scan(pool: IntArray, t: String, typed: String, maxDistance: Int, limit: Int, top: ArrayList<Candidate>, skip: (String) -> Boolean, scratch: EditDistance.Scratch) {
         for (i in pool) {
             val f = folded[i]
-            if (kotlin.math.abs(f.length - t.length) > maxDistance) continue
-            val d = EditDistance.within(t, f, maxDistance)
+            if (kotlin.math.abs(foldedLen[i] - t.length) > maxDistance) continue
+            val d = EditDistance.within(t, f, maxDistance, scratch)
             if (d > maxDistance) continue
             val w = word[i]
             if (w == typed || skip(w)) continue
             val accentOnly = d == 0
-            val score = Math.log1p(freq[i].toDouble()) - 3.0 * d + (if (accentOnly) 6.0 else 0.0)
+            val score = logFreq[i] - 3.0 * d + (if (accentOnly) 6.0 else 0.0)
             insertTop(top, Candidate(w, score, d), limit)
         }
     }
@@ -123,10 +127,13 @@ class WordDictionary(words: List<String>, freqs: List<Int>) {
     private fun firstLetterNeighbours(t: String): List<Char> = if (t.length > 1) listOf(t[1]) else emptyList()
 
     /** All words that start with [first] and end with [last] (lower case), for the swipe decoder. */
-    fun withEnds(first: Char, last: Char): List<Int> {
-        val pool = byFirst[first.lowercaseChar()] ?: return emptyList()
-        val l = last.lowercaseChar()
-        return pool.filter { word[it].last().lowercaseChar() == l }
+    fun withEnds(first: Char, last: Char): IntArray = byEnds[(first.lowercaseChar().code shl 16) or last.lowercaseChar().code] ?: NONE
+
+    /** The same words by their first and last letter, built the first time a swipe asks (a typed word never needs them). */
+    private val byEnds: HashMap<Int, IntArray> by lazy {
+        val lists = HashMap<Int, ArrayList<Int>>()
+        for (i in 0 until size) if (word[i].isNotEmpty()) lists.getOrPut((word[i][0].lowercaseChar().code shl 16) or word[i].last().lowercaseChar().code) { ArrayList() }.add(i)
+        HashMap<Int, IntArray>().also { m -> for ((k, l) in lists) m[k] = l.toIntArray() }
     }
 
     fun wordAt(i: Int) = word[i]
@@ -144,6 +151,7 @@ class WordDictionary(words: List<String>, freqs: List<Int>) {
     companion object {
         val EMPTY = WordDictionary(emptyList(), emptyList())
         private const val TOP_CACHE = 64
+        private val NONE = IntArray(0)
 
         /**
          * Reads a word list in any of the usual shapes: one word per line; "word<TAB>count" or "word count" (frequency lists);

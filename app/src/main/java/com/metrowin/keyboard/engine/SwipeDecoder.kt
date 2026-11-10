@@ -1,6 +1,6 @@
 package com.metrowin.keyboard.engine
 
-import kotlin.math.hypot
+import kotlin.math.sqrt
 import kotlin.math.ln
 
 /** A point of a swipe in the coordinates of the keyboard view. */
@@ -27,11 +27,13 @@ class SwipeDecoder(private val dictionary: WordDictionary, private val user: Use
             for (i in dictionary.withEnds(a, b)) {
                 val word = dictionary.wordAt(i)
                 if (word.length < 2 || blocked(word)) continue
-                val ideal = idealPath(word, centers) ?: continue
-                val idealLen = length(ideal)
+                // The length of the ideal path is worked out without building it; the path itself only for the words that get through.
+                val idealLen = idealLength(word, centers)
+                if (idealLen < 0f) continue
                 if (idealLen < 1f && word.length > 1 && word.toSet().size > 1) continue
                 if (idealLen > pathLen * 1.6f + keyWidth || idealLen < pathLen * 0.35f - keyWidth) continue
                 if (!passesThrough(word, path, centers, tolerance)) continue
+                val ideal = idealPath(word, centers) ?: continue
                 // The ends matter more than the average: "hello" and "help" differ only in where the finger stopped.
                 val ends = (dist(path.first(), ideal.first()) + dist(path.last(), ideal.last())) / keyWidth * 0.5
                 val shape = shapeDistance(sampled, resample(ideal, SAMPLES)) / keyWidth + ends
@@ -47,6 +49,20 @@ class SwipeDecoder(private val dictionary: WordDictionary, private val user: Use
         val ranked = centers.entries.map { it.key to dist(p, it.value) }.sortedBy { it.second }
         val close = ranked.filter { it.second <= radius }.map { it.first }
         return if (close.isEmpty()) listOf(ranked.first().first) else close
+    }
+
+    /** The length of [idealPath] without making it: the same stops, the same sums. Negative when a letter is not on the keyboard. */
+    private fun idealLength(word: String, centers: Map<Char, SwipePoint>): Float {
+        var len = 0f
+        var prev: SwipePoint? = null
+        var last: Char? = null
+        for (ch in word) {
+            val c = ch.lowercaseChar()
+            val p = centers[c] ?: centers[Text.fold(c.toString()).firstOrNull() ?: c] ?: return -1f
+            if (c != last) { prev?.let { len += dist(it, p) }; prev = p }
+            last = c
+        }
+        return len
     }
 
     private fun idealPath(word: String, centers: Map<Char, SwipePoint>): List<SwipePoint>? {
@@ -89,7 +105,7 @@ class SwipeDecoder(private val dictionary: WordDictionary, private val user: Use
     companion object {
         const val SAMPLES = 24
 
-        fun dist(a: SwipePoint, b: SwipePoint) = hypot((a.x - b.x).toDouble(), (a.y - b.y).toDouble()).toFloat()
+        fun dist(a: SwipePoint, b: SwipePoint): Float { val dx = (a.x - b.x).toDouble(); val dy = (a.y - b.y).toDouble(); return sqrt(dx * dx + dy * dy).toFloat() }
 
         fun length(p: List<SwipePoint>): Float {
             var l = 0f

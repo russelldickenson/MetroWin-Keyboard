@@ -78,15 +78,27 @@ object Text {
 
 /** Damerau-Levenshtein distance (with adjacent transpositions) that gives up above [limit]. */
 object EditDistance {
-    fun within(a: String, b: String, limit: Int): Int {
+    /** Three rows of the table, made once and reused by many comparisons (a scan of a word list makes thousands of them). */
+    class Scratch(size: Int) {
+        var row0 = IntArray(size)
+        var row1 = IntArray(size)
+        var row2 = IntArray(size)
+        fun hold(size: Int) { if (row0.size < size) { row0 = IntArray(size); row1 = IntArray(size); row2 = IntArray(size) } }
+    }
+
+    fun within(a: String, b: String, limit: Int): Int = within(a, b, limit, Scratch(b.length + 1))
+
+    fun within(a: String, b: String, limit: Int, s: Scratch): Int {
         val n = a.length
         val m = b.length
         if (kotlin.math.abs(n - m) > limit) return limit + 1
         if (n == 0) return if (m <= limit) m else limit + 1
         if (m == 0) return if (n <= limit) n else limit + 1
-        var prev2 = IntArray(m + 1)
-        var prev = IntArray(m + 1) { it }
-        var cur = IntArray(m + 1)
+        s.hold(m + 1)
+        var prev2 = s.row0
+        var prev = s.row1
+        for (j in 0..m) prev[j] = j
+        var cur = s.row2
         for (i in 1..n) {
             cur[0] = i
             var rowMin = cur[0]
