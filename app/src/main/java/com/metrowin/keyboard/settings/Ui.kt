@@ -72,5 +72,19 @@ object Ui {
 
     fun toolbar(a: AppCompatActivity, title: CharSequence) = toolbar(a, title) { a.onBackPressedDispatcher.onBackPressed() }
 
+    /** True when this app's keyboard is the one Android types with. */
+    fun isActiveKeyboard(c: Context): Boolean =
+        android.provider.Settings.Secure.getString(c.contentResolver, android.provider.Settings.Secure.DEFAULT_INPUT_METHOD)?.startsWith("${c.packageName}/") == true
+
+    /** A note, with a button for the keyboard picker, for the screens that only make sense when this keyboard is the active one. */
+    fun notActiveNotice(c: Context): LinearLayout = LinearLayout(c).apply {
+        orientation = LinearLayout.VERTICAL
+        setPadding(0, 0, 0, c.dp(12f).toInt())
+        addView(text(c, c.getString(R.string.keyboard_not_active), Type.BODY_SMALL, onSurfaceVariant(c)))
+        addView(button(c, c.getString(R.string.onb_open_picker), filled = false) { c.getSystemService(android.view.inputmethod.InputMethodManager::class.java).showInputMethodPicker() },
+            LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { topMargin = c.dp(8f).toInt() })
+        visibility = if (isActiveKeyboard(c)) View.GONE else View.VISIBLE
+    }
+
     fun space(c: Context, dp: Int) = View(c).apply { layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, c.dp(dp.toFloat()).toInt()) }
 }

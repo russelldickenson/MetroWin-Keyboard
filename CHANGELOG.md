@@ -3,6 +3,8 @@
 ## Unreleased
 
 - **Key font:** *Settings → Appearance* chooses the font of the key letters (system, Open Sans, Roboto, Atkinson Hyperlegible) and its weight (200 to 500; only the weights that look different for the font are listed).
+- **Calibration and Try the keyboard** now say so, with a button for the keyboard picker, when this keyboard is not the one Android types with (before, no keyboard of this app showed and nothing said why).
+- **Faster:** the word list loads about four times faster (each word is folded once, not in every comparison of the sort), the most common words used when the bar has nothing to go on are found once instead of by a pass over the whole list, and the suggestion bar keeps its typefaces and cell widths instead of working them out on every draw.
 - **Suggestion font:** in every look except Classic the suggestions use the key font and weight (the best suggestion heavier, a phrase lighter); Classic keeps Open Sans.
 - **iPhone look:** a fourth look in *Settings → Appearance → Look*: pale grey (or dark) keyboard, white rounded keys with a thin shadow, darker special keys, "space" and "return" labels, wider gaps between the keys (about 6 dp across and 10 dp between rows, at the same overall height), dividers between the suggestions, and a white balloon over the pressed key.
 - **Spaced looks:** *Modern Droid Spaced* and *Modern Slate Spaced* in *Settings → Appearance → Look*: the same as Modern Droid and Modern Slate, with the keys spaced as on the iPhone look (about 6 dp across and 10 dp between rows, at the same overall height). The original looks are unchanged.

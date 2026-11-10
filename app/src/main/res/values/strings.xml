@@ -283,6 +283,7 @@
     <string name="onb_start">Start</string>
     <string name="onb_open_settings">Open the keyboard list</string>
     <string name="onb_waiting">Waiting…</string>
+    <string name="keyboard_not_active">Phayz Keyboard is not the keyboard Android types with, so no keyboard of this app will appear here. Choose it first.</string>
     <string name="onb_open_picker">Choose the keyboard</string>
     <string name="onb_allow_mic">Allow the microphone</string>
     <string name="onb_skip">Skip</string>

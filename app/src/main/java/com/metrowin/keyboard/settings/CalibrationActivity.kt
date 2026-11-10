@@ -43,6 +43,7 @@ class CalibrationActivity : AppCompatActivity() {
     private lateinit var finishButton: TextView
     private lateinit var original: Metrics
     private var running = true
+    private var notice: View? = null
     private var applied = false
     private var lastSentence = -1
     private var precisionMm: Double? = null
@@ -67,7 +68,11 @@ class CalibrationActivity : AppCompatActivity() {
     }
 
     // The keyboard reports its taps to the calibrator only while the sentences are on screen.
-    override fun onResume() { super.onResume(); Calibrator.current = if (running) cal else null }
+    override fun onResume() {
+        super.onResume()
+        Calibrator.current = if (running) cal else null
+        notice?.visibility = if (Ui.isActiveKeyboard(this)) View.GONE else View.VISIBLE
+    }
     override fun onPause() { Calibrator.current = null; super.onPause() }
     override fun onDestroy() { if (!applied) restore(); super.onDestroy() }
 
@@ -97,6 +102,7 @@ class CalibrationActivity : AppCompatActivity() {
         cal.onChange = ::refresh
         Calibrator.current = cal
         body.removeAllViews()
+        notice = Ui.notActiveNotice(this).also { body.addView(it) }
         progress = Ui.text(this, "", Ui.Type.LABEL, Ui.onSurfaceVariant(this))
         sentence = Ui.text(this, "", Ui.Type.HEADLINE).apply { setLineSpacing(0f, 1.2f) }
         hold = Ui.text(this, "", Ui.Type.LABEL, Ui.primary(this))

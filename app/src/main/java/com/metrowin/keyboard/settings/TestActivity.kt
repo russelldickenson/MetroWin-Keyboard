@@ -11,11 +11,20 @@ import com.metrowin.keyboard.R
 
 /** A plain text box to try the keyboard in, right after turning it on. */
 class TestActivity : AppCompatActivity() {
+    private var notice: android.view.View? = null
+
+    override fun onResume() {
+        super.onResume()
+        notice?.visibility = if (Ui.isActiveKeyboard(this)) android.view.View.GONE else android.view.View.VISIBLE
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val pad = (resources.displayMetrics.density * 16).toInt()
         val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         root.addView(Ui.toolbar(this, getString(R.string.test_title)))
+        notice = Ui.notActiveNotice(this).apply { setPadding(pad, pad, pad, 0) }
+        root.addView(notice)
         root.addView(EditText(this).apply {
             setHint(R.string.test_hint)
             gravity = Gravity.TOP or Gravity.START
