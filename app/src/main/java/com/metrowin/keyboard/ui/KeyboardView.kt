@@ -301,7 +301,8 @@ class KeyboardView(context: Context) : View(context) {
         var left = if (reversed) k.centerX + itemW / 2f - total else k.centerX - itemW / 2f
         left = left.coerceIn(0f, maxOf(0f, width - total))
         val h = k.height * 1.05f
-        val top = maxOf(0f, k.top - h - dp(2f))
+        // Clear of the fingertip: well above the key, and not clamped to the top of the view (the top row's popup would sit on the key).
+        val top = k.top - h - dp(if (items == 1) 12f else 2f)
         return floatArrayOf(left, top, itemW, h, if (reversed) 1f else 0f)
     }
 

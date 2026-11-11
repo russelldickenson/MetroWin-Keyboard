@@ -84,9 +84,10 @@ object KeyboardBuilder {
             letters.forEachIndexed { col, l ->
                 // With no number row, the first row carries the digits as hints and as the first long-press choice.
                 val digit = if (!showNumberRow && index == 0 && col < 10) digits[col] else null
-                // The first choice is the first accented form: holding a letter is how an accent is asked for. The plain letter and the digit follow.
+                // A key that carries a digit offers only that digit when held; releasing without sliding types it.
+                // Other letters keep their accented forms (first), then the plain letter.
                 val accents = layout.longPress[l].orEmpty().filter { it != l }
-                val popups = if (accents.isEmpty() && digit == null) emptyList() else accents + l + listOfNotNull(digit)
+                val popups = if (digit != null) listOf(digit) else if (accents.isEmpty()) emptyList() else accents + l
                 keys += Key(KeyType.CHAR, l, popups = popups, hint = if (showHints) digit else null)
             }
             if (isLast) keys += Key(KeyType.BACKSPACE, weight = 1.5f, special = true)

@@ -175,14 +175,14 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
         emojiResults = EmojiResults(ctx).also { it.onPick = { e -> emojiListener.onEmoji(e) } }
         val clip = ClipboardPanel(ctx, app.clipboard, images).also { it.listener = clipListener2 }
         val tutorial = TutorialPanel(ctx).also { it.onBack = { showPanel(Panel.NONE) }; it.onSeen = { prefs.tutorialSeen = Tutorial.VERSION } }
-        val frame = FrameLayout(ctx)
+        val frame = FrameLayout(ctx).apply { clipChildren = false }
         frame.addView(kb, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
         for (p in listOf(emoji, clip, tutorial)) {
             p.visibility = View.GONE
             frame.addView(p, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
         }
         val strip = FrameLayout(ctx).apply { visibility = View.GONE }
-        val root = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL }
+        val root = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL; clipChildren = false }
         root.addView(bar, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
         root.addView(strip, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (resources.displayMetrics.density * 100).toInt()))
         root.addView(frame, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
