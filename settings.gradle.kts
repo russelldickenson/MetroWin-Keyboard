@@ -15,5 +15,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Phayz-Keyboard"
+rootProject.name = "Lumina-Keyboard"
 include(":app")

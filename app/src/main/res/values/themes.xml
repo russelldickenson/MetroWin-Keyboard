@@ -4,7 +4,7 @@
         Material 3. On Android 12+ the colours come from the wallpaper (DynamicColors, see KeyboardApp); the colours below are the
         fallback for older phones, a blue scheme that matches the app icon.
     -->
-    <style name="Theme.PhayzKeyboard" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.LuminaKeyboard" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/m3_primary</item>
         <item name="colorOnPrimary">@color/m3_on_primary</item>
         <item name="colorPrimaryContainer">@color/m3_primary_container</item>
@@ -23,18 +23,18 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">@bool/m3_light</item>
-        <item name="preferenceTheme">@style/PhayzPreferenceTheme</item>
+        <item name="preferenceTheme">@style/LuminaPreferenceTheme</item>
     </style>
 
     <!-- The preference screens: the stock rows, with the Material 3 switch. -->
-    <style name="PhayzPreferenceTheme" parent="PreferenceThemeOverlay">
-        <item name="switchPreferenceCompatStyle">@style/PhayzSwitchPreference</item>
+    <style name="LuminaPreferenceTheme" parent="PreferenceThemeOverlay">
+        <item name="switchPreferenceCompatStyle">@style/LuminaSwitchPreference</item>
     </style>
-    <style name="PhayzSwitchPreference" parent="Preference.SwitchPreferenceCompat.Material">
+    <style name="LuminaSwitchPreference" parent="Preference.SwitchPreferenceCompat.Material">
         <item name="widgetLayout">@layout/pref_widget_material_switch</item>
     </style>
 
-    <style name="Theme.PhayzKeyboard.Transparent" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.LuminaKeyboard.Transparent" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>

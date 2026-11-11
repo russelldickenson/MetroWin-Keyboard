@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- **Renamed:** the app is now called *Lumina Keyboard* (was *Phayz Keyboard*), with application id `com.lumina.keyboard`. It installs as a separate app from the old one.
 - **Key font:** *Settings → Appearance* chooses the font of the key letters (system, Open Sans, Roboto, Atkinson Hyperlegible) and its weight (200 to 500; only the weights that look different for the font are listed).
 - **Calibration and Try the keyboard** now say so, with a button for the keyboard picker, when this keyboard is not the one Android types with (before, no keyboard of this app showed and nothing said why).
 - **Snippets:** *Settings → Snippets* makes short words that turn into a phrase as you type: `wyd` and a space become "What do you need from me?". The text is offered in the middle of the bar while you type the shortcut; tapping it is the same as the space bar. Backspace right after takes it back to the shortcut (and the next space leaves it as it is). A shortcut is one word of letters, up to 24 letters; a text is up to 1000 characters; up to 200 snippets. Matching ignores capitals. They work where suggestions work (not in password fields) and can be switched off. They are in the backup.

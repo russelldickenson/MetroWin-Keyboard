@@ -1,6 +1,6 @@
 # Privacy
 
-Phayz Keyboard has no analytics, no ads and no trackers, and no account.
+Lumina Keyboard has no analytics, no ads and no trackers, and no account.
 
 | What | Where it goes |
 | --- | --- |

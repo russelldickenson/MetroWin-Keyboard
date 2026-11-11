@@ -11,7 +11,7 @@ android {
     buildToolsVersion = "35.0.0"
 
     defaultConfig {
-        applicationId = "com.phayz.keyboard"
+        applicationId = "com.lumina.keyboard"
         minSdk = 26
         targetSdk = 35
         versionCode = 7
