@@ -128,9 +128,9 @@ object KeyboardBuilder {
         add(Key(toggleType, toggleLabel, 1.5f, special = true))
         add(Key(KeyType.EMOJI, "☺", 1f, special = true))
         if (multiLanguage) add(Key(KeyType.LANGUAGE, "", 1f, special = true))
-        add(Key(KeyType.CHAR, ",", 0.8f, popups = withBase(",", symbolPopups[","].orEmpty())))
-        add(Key(KeyType.SPACE, "", if (multiLanguage) 3.2f else 4.2f))
-        add(Key(KeyType.CHAR, ".", 0.8f, popups = withBase(".", symbolPopups["."].orEmpty())))
-        add(Key(KeyType.ENTER, "", 1.5f, special = true))
+        add(Key(KeyType.CHAR, ",", 1f, popups = withBase(",", symbolPopups[","].orEmpty())))
+        add(Key(KeyType.SPACE, "", if (multiLanguage) 3.25f else 4.25f))
+        add(Key(KeyType.CHAR, ".", 1f, popups = withBase(".", symbolPopups["."].orEmpty())))
+        add(Key(KeyType.ENTER, "", 1.25f, special = true))
     }
 }
