@@ -69,8 +69,8 @@ object KeyboardTheme {
     /**
      * @param systemDark whether Android is in dark mode
      */
-    fun resolve(context: Context, p: Prefs, systemDark: Boolean): KeyboardColors {
-        val chosen = ThemeStyle.from(p.themeStyle)
+    fun resolve(context: Context, p: Prefs, systemDark: Boolean, look: ThemeStyle? = null): KeyboardColors {
+        val chosen = look ?: ThemeStyle.from(p.themeStyle)
         val style = chosen.base
         val dark = when (p.themeMode) { "dark" -> true; "light" -> false; else -> systemDark }
         val system = if (style == ThemeStyle.DROID && p.dynamicColor && p.customAccent == 0) SystemTones.read(context) else null

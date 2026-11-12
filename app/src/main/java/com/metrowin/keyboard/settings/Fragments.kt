@@ -172,6 +172,11 @@ class LanguagesFragment : BaseFragment(R.xml.prefs_languages, R.string.screen_la
 }
 
 class AppearanceFragment : BaseFragment(R.xml.prefs_appearance, R.string.screen_appearance) {
+    // The preview at the top redraws as soon as a look, font, weight, colour or switch changes.
+    private val listener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ -> findPreference<KeyboardPreview>("appearance_preview")?.refresh(); findPreference<LookPicker>("theme_style")?.refresh() }
+    override fun onStart() { super.onStart(); app.prefs.sp.registerOnSharedPreferenceChangeListener(listener) }
+    override fun onStop() { app.prefs.sp.unregisterOnSharedPreferenceChangeListener(listener); super.onStop() }
+
     /** Lists only the weights that look different in [family], and moves the chosen weight to the nearest of them. */
     private fun showWeights(family: String) {
         val pref = findPreference<androidx.preference.ListPreference>(K.KEY_WEIGHT) ?: return

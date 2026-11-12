@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <ListPreference android:key="theme_style" android:title="@string/pref_theme_style_title" android:entries="@array/theme_style_names" android:entryValues="@array/theme_style_values" android:defaultValue="classic" app:useSimpleSummaryProvider="true" />
+    <com.metrowin.keyboard.settings.KeyboardPreview android:key="appearance_preview" />
+    <com.metrowin.keyboard.settings.LookPicker android:key="theme_style" />
     <ListPreference android:key="theme_mode" android:title="@string/pref_theme_mode_title" android:entries="@array/theme_mode_names" android:entryValues="@array/theme_mode_values" android:defaultValue="system" app:useSimpleSummaryProvider="true" />
     <ListPreference android:key="key_font" android:title="@string/pref_key_font_title" android:entries="@array/key_font_names" android:entryValues="@array/key_font_values" android:defaultValue="opensans" app:useSimpleSummaryProvider="true" />
     <ListPreference android:key="key_weight" android:title="@string/pref_key_weight_title" android:entries="@array/key_weight_values" android:entryValues="@array/key_weight_values" android:defaultValue="300" app:useSimpleSummaryProvider="true" />

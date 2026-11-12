@@ -25,18 +25,24 @@ object Home {
 
     private fun screen(name: String, title: Int, summary: Int) = Screen("com.metrowin.keyboard.settings.${name}Fragment", title, summary)
 
-    val settings = listOf(
+    /** The settings in three groups of no more than four, so no list asks for more than a glance. */
+    val typing = listOf(
         screen("Languages", R.string.screen_languages, R.string.screen_languages_summary),
-        screen("Appearance", R.string.screen_appearance, R.string.screen_appearance_summary),
-        screen("Size", R.string.screen_size, R.string.screen_size_summary),
         screen("Typing", R.string.screen_typing, R.string.screen_typing_summary),
         screen("Suggestions", R.string.screen_suggestions, R.string.screen_suggestions_summary),
-        screen("Feedback", R.string.screen_feedback, R.string.screen_feedback_summary),
-        screen("Clipboard", R.string.screen_clipboard, R.string.screen_clipboard_summary),
         screen("Snippets", R.string.screen_snippets, R.string.screen_snippets_summary),
+    )
+    val looks = listOf(
+        screen("Appearance", R.string.screen_appearance, R.string.screen_appearance_summary),
+        screen("Size", R.string.screen_size, R.string.screen_size_summary),
+        screen("Feedback", R.string.screen_feedback, R.string.screen_feedback_summary),
+    )
+    val tools = listOf(
+        screen("Clipboard", R.string.screen_clipboard, R.string.screen_clipboard_summary),
         screen("Voice", R.string.screen_voice, R.string.screen_voice_summary),
         screen("Backup", R.string.screen_backup, R.string.screen_backup_summary),
     )
+    val settings = typing + looks + tools
     val about = listOf(
         screen("About", R.string.screen_about, R.string.screen_about_summary),
     )
@@ -48,6 +54,7 @@ object Home {
  * then the settings screens and the about screens, each group under a small heading.
  */
 class HomeFragment : Fragment() {
+    private var setup: LinearLayout? = null
     private var enable: Row? = null
     private var select: Row? = null
     private var tutorial: Row? = null
@@ -55,16 +62,20 @@ class HomeFragment : Fragment() {
     override fun onCreateView(inflater: android.view.LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val c = requireContext()
         val list = LinearLayout(c).apply { orientation = LinearLayout.VERTICAL; setPadding(0, c.dp(8f).toInt(), 0, c.dp(24f).toInt()) }
+        // The two steps that make the keyboard work come first, and go away once both are done.
+        setup = LinearLayout(c).apply { orientation = LinearLayout.VERTICAL }
+        setup!!.addView(heading(c, R.string.pivot_start))
+        enable = row(c, R.string.setup_enable_title, R.string.setup_enable_summary) { startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)) }.also { setup!!.addView(it.view) }
+        select = row(c, R.string.setup_select_title, R.string.setup_select_summary) { c.getSystemService(InputMethodManager::class.java).showInputMethodPicker() }.also { setup!!.addView(it.view) }
+        list.addView(setup)
         list.addView(calibrationCard(c))
-        list.addView(heading(c, R.string.pivot_start))
-        enable = row(c, R.string.setup_enable_title, R.string.setup_enable_summary) { startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)) }.also { list.addView(it.view) }
-        select = row(c, R.string.setup_select_title, R.string.setup_select_summary) { c.getSystemService(InputMethodManager::class.java).showInputMethodPicker() }.also { list.addView(it.view) }
+        list.addView(heading(c, R.string.pivot_typing)); for (s in Home.typing) list.addView(row(c, s.title, s.summary) { open(s.fragment) }.view)
+        list.addView(heading(c, R.string.pivot_looks)); for (s in Home.looks) list.addView(row(c, s.title, s.summary) { open(s.fragment) }.view)
+        list.addView(heading(c, R.string.pivot_tools)); for (s in Home.tools) list.addView(row(c, s.title, s.summary) { open(s.fragment) }.view)
+        list.addView(heading(c, R.string.pivot_help))
         list.addView(row(c, R.string.setup_try_title, R.string.setup_try_summary) { startActivity(Intent(c, TestActivity::class.java)) }.view)
         tutorial = row(c, R.string.setup_tutorial_title, R.string.setup_tutorial_summary) { startActivity(Intent(c, TutorialActivity::class.java)) }.also { list.addView(it.view) }
         list.addView(row(c, R.string.setup_guide_title, R.string.setup_guide_summary) { startActivity(Intent(c, OnboardingActivity::class.java)) }.view)
-        list.addView(heading(c, R.string.pivot_settings))
-        for (screen in Home.settings) list.addView(row(c, screen.title, screen.summary) { open(screen.fragment) }.view)
-        list.addView(heading(c, R.string.pivot_about))
         for (screen in Home.about) list.addView(row(c, screen.title, screen.summary) { open(screen.fragment) }.view)
         return NestedScrollView(c).apply { clipToPadding = false; addView(list, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)) }
     }
@@ -79,6 +90,7 @@ class HomeFragment : Fragment() {
         val imm = requireContext().getSystemService(InputMethodManager::class.java)
         val enabled = imm.enabledInputMethodList.any { it.packageName == pkg }
         val active = Settings.Secure.getString(requireContext().contentResolver, Settings.Secure.DEFAULT_INPUT_METHOD)?.startsWith("$pkg/") == true
+        setup?.visibility = if (enabled && active) View.GONE else View.VISIBLE
         enable?.summary?.setText(if (enabled) R.string.setup_enabled else R.string.setup_disabled)
         select?.summary?.setText(if (active) R.string.setup_active else R.string.setup_inactive)
         val seen = KeyboardApp.of(requireContext()).prefs.tutorialSeen
