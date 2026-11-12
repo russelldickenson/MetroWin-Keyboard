@@ -99,7 +99,8 @@ object KeyboardTheme {
 
         val text = ColorMath.onColor(bg)
         val subtle = ColorMath.withAlpha(text, 0xB0)
-        val onAccent = ColorMath.bestOn(accent)
+        // Classic keeps the white arrow of Windows Phone on its cyan (2.9:1, a hair under 3); any other accent gets whichever of black and white reads better.
+        val onAccent = if (style == ThemeStyle.CLASSIC && accent == Accents.DEFAULT) ColorMath.onColor(accent) else ColorMath.bestOn(accent)
         val colors = when (style) {
             ThemeStyle.CLASSIC -> KeyboardColors(
                 style, dark, bg, ColorMath.mix(bg, text, 0.04f),
