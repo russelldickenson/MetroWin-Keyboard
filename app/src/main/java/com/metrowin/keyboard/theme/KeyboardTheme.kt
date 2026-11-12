@@ -65,6 +65,10 @@ data class KeyboardColors(
     val keyText get() = if (keyTextColor != 0) keyTextColor else text
 }
 
+/** How opaque the small writing on the keys is: the digit in the corner and the language on the space bar (both need 4.5:1 on their key). */
+const val HINT_ALPHA = 0xE0
+const val SPACE_LABEL_ALPHA = 0xD0
+
 object KeyboardTheme {
     /**
      * @param systemDark whether Android is in dark mode
@@ -95,7 +99,7 @@ object KeyboardTheme {
 
         val text = ColorMath.onColor(bg)
         val subtle = ColorMath.withAlpha(text, 0xB0)
-        val onAccent = ColorMath.onColor(accent)
+        val onAccent = ColorMath.bestOn(accent)
         val colors = when (style) {
             ThemeStyle.CLASSIC -> KeyboardColors(
                 style, dark, bg, ColorMath.mix(bg, text, 0.04f),
@@ -139,7 +143,11 @@ object KeyboardTheme {
                 )
             }
         }
-        return if (chosen.spaced || style == ThemeStyle.IPHONE) colors.copy(spacedKeys = true) else colors
+        val spaced = if (chosen.spaced || style == ThemeStyle.IPHONE) colors.copy(spacedKeys = true) else colors
+        // The accent on the bar (the dot for something new, the open toolbox, the microphone) is a graphic: 3:1 on the bar, so it is darkened or lightened until it is.
+        val barUnder = ColorMath.over(spaced.bar, ColorMath.over(spaced.background, if (dark) 0xFF000000.toInt() else 0xFFFFFFFF.toInt()))
+        val barAccent = if (spaced.barAccentColor != 0) spaced.barAccentColor else ColorMath.ensureContrast(accent, barUnder, 3.0)
+        return if (barAccent != accent) spaced.copy(barAccentColor = barAccent) else spaced
     }
 
     fun isSystemDark(context: Context) =

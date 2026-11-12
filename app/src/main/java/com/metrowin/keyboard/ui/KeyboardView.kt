@@ -18,7 +18,9 @@ import com.metrowin.keyboard.layout.Key
 import com.metrowin.keyboard.layout.KeyType
 import com.metrowin.keyboard.layout.KeyboardPage
 import com.metrowin.keyboard.theme.ColorMath
+import com.metrowin.keyboard.theme.HINT_ALPHA
 import com.metrowin.keyboard.theme.KeyboardColors
+import com.metrowin.keyboard.theme.SPACE_LABEL_ALPHA
 import com.metrowin.keyboard.R
 import com.metrowin.keyboard.theme.ThemeStyle
 import kotlin.math.abs
@@ -311,13 +313,13 @@ class KeyboardView(context: Context) : View(context) {
             KeyType.EMOJI -> Icons.draw(canvas, Icon.EMOJI, cx, cy, iconSize, iconPaint)
             KeyType.LANGUAGE -> Icons.draw(canvas, Icon.GLOBE, cx, cy, iconSize, iconPaint)
             KeyType.SPACE -> if (ios) drawLabel(canvas, context.getString(R.string.key_space), cx, cy, k.height * 0.28f, fg, false)
-                else if (languageName.isNotEmpty()) drawLabel(canvas, languageName, cx, cy, k.height * 0.26f, ColorMath.withAlpha(c.keyText, 0x90), false)
+                else if (languageName.isNotEmpty()) drawLabel(canvas, languageName, cx, cy, k.height * 0.26f, ColorMath.withAlpha(c.keyText, SPACE_LABEL_ALPHA), false)
             KeyType.SYMBOLS, KeyType.SYMBOLS_PAGE -> drawLabel(canvas, k.label, cx, cy, k.height * 0.30f, fg, false)
             KeyType.CHAR -> {
                 val label = if (shift != 0) k.label.uppercase() else k.label
                 drawLabel(canvas, label, cx, cy, k.height * (if (label.length > 1) 0.30f else 0.42f), fg, false)
                 if (showHints && k.hint != null) {
-                    hintPaint.color = ColorMath.withAlpha(c.keyText, 0xB0); hintPaint.textSize = k.height * 0.22f
+                    hintPaint.color = ColorMath.withAlpha(c.keyText, HINT_ALPHA); hintPaint.textSize = k.height * 0.22f
                     canvas.drawText(k.hint, k.right - dp(5f), k.top + k.height * 0.28f, hintPaint)
                 }
             }

@@ -30,6 +30,28 @@ object ColorMath {
     /** Black or white, whichever reads better on [background]. */
     fun onColor(background: Int) = if (luminance(background) > 0.45) 0xFF000000.toInt() else 0xFFFFFFFF.toInt()
 
+    /** WCAG contrast ratio of two opaque colours, 1 to 21. */
+    fun contrast(a: Int, b: Int): Double { val x = luminance(a); val y = luminance(b); return (maxOf(x, y) + 0.05) / (minOf(x, y) + 0.05) }
+
+    /** [fg] laid over [bg] (its alpha blended), as an opaque colour. */
+    fun over(fg: Int, bg: Int): Int {
+        val a = alpha(fg) / 255f
+        fun ch(f: Int, b: Int) = (f * a + b * (1 - a) + 0.5f).toInt()
+        return argb(255, ch(red(fg), red(bg)), ch(green(fg), green(bg)), ch(blue(fg), blue(bg)))
+    }
+
+    /** Black or white, whichever has the higher contrast on [background], to the letter: [onColor] leans to white on mid tones. */
+    fun bestOn(background: Int) = if (contrast(0xFF000000.toInt(), background) >= contrast(0xFFFFFFFF.toInt(), background)) 0xFF000000.toInt() else 0xFFFFFFFF.toInt()
+
+    /** [fg] moved towards black or white, whichever the [bg] allows, until it has at least [min] contrast on it; unchanged if it already has. */
+    fun ensureContrast(fg: Int, bg: Int, min: Double): Int {
+        if (contrast(over(fg, bg), bg) >= min) return fg
+        val toward = if (luminance(bg) > 0.4) 0xFF000000.toInt() else 0xFFFFFFFF.toInt()
+        var t = 0.05f
+        while (t < 1f) { val c = mix(fg, toward, t); if (contrast(over(c, bg), bg) >= min) return c; t += 0.05f }
+        return toward
+    }
+
     fun lighten(c: Int, t: Float) = mix(c, 0xFFFFFFFF.toInt(), t)
     fun darken(c: Int, t: Float) = mix(c, 0xFF000000.toInt(), t)
 
