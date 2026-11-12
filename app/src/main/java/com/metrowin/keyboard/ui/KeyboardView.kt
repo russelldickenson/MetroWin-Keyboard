@@ -89,6 +89,66 @@ class KeyboardView(context: Context) : View(context) {
     private val rect = RectF()
     private val trail = Path()
 
+    // --- accessibility ------------------------------------------------------------------------------------------------
+    // The keys are drawn, not views, so TalkBack gets each one as a virtual view: explore by touch reads it, a double tap types it.
+
+    private fun describe(k: Key): String = when (k.type) {
+        KeyType.CHAR -> if (shift != 0) k.label.uppercase() else k.label
+        KeyType.SHIFT -> context.getString(when (shift) { 0 -> R.string.a11y_shift_off; 1 -> R.string.a11y_shift_on; else -> R.string.a11y_shift_lock })
+        KeyType.BACKSPACE -> context.getString(R.string.a11y_backspace)
+        KeyType.ENTER -> enterLabel ?: context.getString(when (enterIcon) {
+            Icon.SEARCH -> R.string.a11y_search; Icon.SEND -> R.string.a11y_send; Icon.ARROW_RIGHT -> R.string.a11y_next; Icon.CHECK -> R.string.a11y_done; else -> R.string.a11y_enter
+        })
+        KeyType.SPACE -> context.getString(R.string.a11y_space) + if (languageName.isNotEmpty()) ", $languageName" else ""
+        KeyType.SYMBOLS -> context.getString(if (k.label == "ABC") R.string.a11y_letters else R.string.a11y_symbols)
+        KeyType.SYMBOLS_PAGE -> context.getString(if (k.label == "?123") R.string.a11y_symbols else R.string.a11y_more_symbols)
+        KeyType.EMOJI -> context.getString(R.string.a11y_emoji)
+        KeyType.LANGUAGE -> context.getString(R.string.a11y_language)
+    }
+
+    private val a11y = object : androidx.customview.widget.ExploreByTouchHelper(this) {
+        private val keys get() = page?.keys.orEmpty()
+        private val POPUP = 0x100
+
+        override fun getVirtualViewAt(x: Float, y: Float): Int {
+            val i = keys.indexOfFirst { it.contains(x, y) }
+            return if (i >= 0) i else INVALID_ID
+        }
+
+        override fun getVisibleVirtualViews(ids: MutableList<Int>) { for (i in keys.indices) ids += i }
+
+        override fun onPopulateNodeForVirtualView(id: Int, node: androidx.core.view.accessibility.AccessibilityNodeInfoCompat) {
+            val k = keys.getOrNull(id) ?: run { node.contentDescription = ""; node.setBoundsInParent(android.graphics.Rect(0, 0, 1, 1)); return }
+            node.contentDescription = describe(k)
+            node.setBoundsInParent(android.graphics.Rect(k.left.toInt(), k.top.toInt(), k.right.toInt(), k.bottom.toInt()))
+            node.addAction(androidx.core.view.accessibility.AccessibilityNodeInfoCompat.ACTION_CLICK)
+            node.isClickable = true
+            if (k.type == KeyType.SHIFT) { node.isCheckable = true; node.isChecked = shift != 0 }
+            // What a long press offers (the digit, the accented letters) is a custom action each, since TalkBack cannot hold a finger down.
+            if (longPressEnabled && k.type == KeyType.CHAR) k.popups.forEachIndexed { i, text ->
+                node.addAction(androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat(POPUP + i, context.getString(R.string.a11y_type_popup, text)))
+            }
+        }
+
+        override fun onPerformActionForVirtualView(id: Int, action: Int, arguments: android.os.Bundle?): Boolean {
+            val k = keys.getOrNull(id) ?: return false
+            when {
+                action == androidx.core.view.accessibility.AccessibilityNodeInfoCompat.ACTION_CLICK -> {
+                    listener?.onPress(k)
+                    if (k.type == KeyType.CHAR) listener?.onText(k, if (shift != 0) k.label.uppercase() else k.label) else listener?.onFunction(k, false)
+                }
+                action >= POPUP && action - POPUP < k.popups.size -> listener?.onPopupText(k.popups[action - POPUP])
+                else -> return false
+            }
+            invalidateVirtualView(id)
+            return true
+        }
+    }
+
+    init { androidx.core.view.ViewCompat.setAccessibilityDelegate(this, a11y) }
+
+    override fun dispatchHoverEvent(event: MotionEvent): Boolean = a11y.dispatchHoverEvent(event) || super.dispatchHoverEvent(event)
+
     private class Pointer(val id: Int, val startKey: Key, val downX: Float, val downY: Float) {
         var key: Key? = startKey
         var popupKey: Key? = null
@@ -107,11 +167,11 @@ class KeyboardView(context: Context) : View(context) {
 
     // --- configuration ----------------------------------------------------------------------------------------------
 
-    fun setPage(p: KeyboardPage) { page = p; layoutKeys(); requestLayout(); invalidate() }
+    fun setPage(p: KeyboardPage) { page = p; layoutKeys(); requestLayout(); invalidate(); a11y.invalidateRoot() }
     fun setColors(c: KeyboardColors) { val restyle = colors?.spacedKeys != c.spacedKeys; colors = c; if (restyle) layoutKeys(); invalidate() }
-    fun setShift(state: Int) { if (shift != state) { shift = state; invalidate() } }
-    fun setLanguageName(name: String) { languageName = name; invalidate() }
-    fun setEnterAction(icon: Icon, label: String?) { enterIcon = icon; enterLabel = label; invalidate() }
+    fun setShift(state: Int) { if (shift != state) { shift = state; invalidate(); a11y.invalidateRoot() } }
+    fun setLanguageName(name: String) { languageName = name; invalidate(); a11y.invalidateRoot() }
+    fun setEnterAction(icon: Icon, label: String?) { enterIcon = icon; enterLabel = label; invalidate(); a11y.invalidateRoot() }
     fun setBehavior(longPress: Boolean, longPressMs: Int, swipe: Boolean, spaceCursor: Boolean, hints: Boolean, preview: Boolean = true) {
         this.preview = preview
         this.longPressEnabled = longPress; this.longPressMs = longPressMs.toLong(); this.swipeEnabled = swipe

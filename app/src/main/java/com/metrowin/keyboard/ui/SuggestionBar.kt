@@ -8,6 +8,7 @@ import android.text.TextPaint
 import android.text.TextUtils
 import android.view.MotionEvent
 import android.view.View
+import com.metrowin.keyboard.R
 import com.metrowin.keyboard.theme.ColorMath
 import com.metrowin.keyboard.theme.KeyboardColors
 
@@ -63,14 +64,14 @@ class SuggestionBar(context: Context) : View(context) {
     fun setColors(c: KeyboardColors) { if (colors?.style != c.style) forget(); colors = c; invalidate() }
 
     private fun forget() { faces.fill(null); cachedEdges = null }
-    fun setSlots(s: List<Slot?>) { if (s != slots) { scroll = 0f; cachedEdges = null }; slots = s; if (!toolsOpen) invalidate() }
+    fun setSlots(s: List<Slot?>) { if (s != slots) { scroll = 0f; cachedEdges = null }; slots = s; if (!toolsOpen) invalidate(); a11y.invalidateRoot() }
     internal fun slotsForTest() = slots
-    fun setStatus(text: String?) { status = text; invalidate() }
+    fun setStatus(text: String?) { status = text; invalidate(); a11y.invalidateRoot() }
     fun setVoiceActive(on: Boolean) { voiceActive = on; invalidate() }
-    fun setQuickTool(t: Tool) { if (quick != t) { quick = t; invalidate() } }
-    fun setBadge(on: Boolean) { if (badge != on) { badge = on; invalidate() } }
-    fun toggleTools() { toolsOpen = !toolsOpen; invalidate() }
-    fun closeTools() { if (toolsOpen) { toolsOpen = false; invalidate() } }
+    fun setQuickTool(t: Tool) { if (quick != t) { quick = t; invalidate(); a11y.invalidateRoot() } }
+    fun setBadge(on: Boolean) { if (badge != on) { badge = on; invalidate(); a11y.invalidateRoot() } }
+    fun toggleTools() { toolsOpen = !toolsOpen; invalidate(); a11y.invalidateRoot() }
+    fun closeTools() { if (toolsOpen) { toolsOpen = false; invalidate(); a11y.invalidateRoot() } }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) =
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), dp(46f).toInt())
@@ -252,7 +253,59 @@ class SuggestionBar(context: Context) : View(context) {
         return true
     }
 
+    // --- accessibility ------------------------------------------------------------------------------------------------
+    // Everything on the bar is drawn, so TalkBack gets the left button, the quick button and each cell as virtual views.
+
+    private fun toolName(t: Tool) = context.getString(when (t) {
+        Tool.CLIPBOARD -> R.string.a11y_tool_clipboard; Tool.EMOJI -> R.string.a11y_tool_emoji; Tool.MIC -> R.string.a11y_tool_mic
+        Tool.HELP -> R.string.a11y_tool_help; Tool.SETTINGS -> R.string.a11y_tool_settings
+    })
+
+    /** The virtual views, left to right: id, description and the horizontal span. A cell is only offered where something is drawn. */
+    private class Part(val id: Int, val description: String, val left: Float, val right: Float)
+
+    private fun parts(): List<Part> {
+        val bw = buttonWidth(); val w = width - 2 * bw
+        val out = ArrayList<Part>()
+        out += Part(LEFT, context.getString(if (toolsOpen) R.string.a11y_tools_close else R.string.a11y_tools), 0f, bw)
+        val text = status
+        if (text != null) out += Part(STATUS, text, bw, bw + w)
+        else if (toolsOpen) { val cell = w / tools.size; tools.forEachIndexed { i, t -> out += Part(i, toolName(t), bw + cell * i, bw + cell * (i + 1)) } }
+        else if (scrolling()) { val cell = rowCell(w); slots.forEachIndexed { i, s -> if (s != null) out += Part(i, slotName(s), bw + i * cell - scroll, bw + (i + 1) * cell - scroll) } }
+        else { val e = edges(w); for (i in 0 until 3) slots.getOrNull(i)?.let { out += Part(i, slotName(it), bw + e[i], bw + e[i + 1]) } }
+        out += Part(QUICK, toolName(quick), width - bw, width.toFloat())
+        return out
+    }
+
+    private fun slotName(s: Slot) = context.getString(if (s.best) R.string.a11y_suggestion_best else R.string.a11y_suggestion, shown(s))
+
+    private val a11y = object : androidx.customview.widget.ExploreByTouchHelper(this) {
+        override fun getVirtualViewAt(x: Float, y: Float): Int = parts().firstOrNull { x >= it.left && x < it.right }?.id ?: INVALID_ID
+        override fun getVisibleVirtualViews(ids: MutableList<Int>) { for (p in parts()) ids += p.id }
+        override fun onPopulateNodeForVirtualView(id: Int, node: androidx.core.view.accessibility.AccessibilityNodeInfoCompat) {
+            val p = parts().firstOrNull { it.id == id } ?: run { node.contentDescription = ""; node.setBoundsInParent(android.graphics.Rect(0, 0, 1, 1)); return }
+            node.contentDescription = if (id == QUICK && badge) p.description + ", new" else p.description
+            node.setBoundsInParent(android.graphics.Rect(p.left.toInt().coerceAtLeast(0), 0, p.right.toInt().coerceAtMost(width), height))
+            if (id != STATUS) { node.addAction(androidx.core.view.accessibility.AccessibilityNodeInfoCompat.ACTION_CLICK); node.isClickable = true }
+        }
+        override fun onPerformActionForVirtualView(id: Int, action: Int, arguments: android.os.Bundle?): Boolean {
+            if (action != androidx.core.view.accessibility.AccessibilityNodeInfoCompat.ACTION_CLICK) return false
+            when {
+                id == LEFT -> toggleTools()
+                id == QUICK -> listener?.onTool(quick)
+                id == STATUS -> return false
+                toolsOpen -> tools.getOrNull(id)?.let { listener?.onTool(it) }
+                else -> slots.getOrNull(id)?.let { listener?.onSlot(it) }
+            }
+            return true
+        }
+    }
+
+    init { androidx.core.view.ViewCompat.setAccessibilityDelegate(this, a11y) }
+
+    override fun dispatchHoverEvent(event: MotionEvent): Boolean = a11y.dispatchHoverEvent(event) || super.dispatchHoverEvent(event)
+
     private val PAD get() = dp(12f)
 
-    private companion object { const val NONE = -9; const val LEFT = -1; const val QUICK = -2; const val MIN_SCALE = 0.55f }
+    private companion object { const val NONE = -9; const val LEFT = -1; const val QUICK = -2; const val STATUS = -3; const val MIN_SCALE = 0.55f }
 }
