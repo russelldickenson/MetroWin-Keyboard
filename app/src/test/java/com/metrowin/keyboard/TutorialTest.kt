@@ -36,12 +36,11 @@ class TutorialTest {
         val a = page.keys.first { it.label == "a" }
         assertEquals("à", a.popups.first())
         assertTrue(a.popups.contains("a"))
-        // A letter with no accent keeps itself first, then the digit of the top row.
-        assertEquals(listOf("q", "1"), page.keys.first { it.label == "q" }.popups.take(2))
-        // On the top row the digit is last, after the plain letter.
+        // A letter with no accent offers only the digit of the top row.
+        assertEquals(listOf("1"), page.keys.first { it.label == "q" }.popups)
+        // The same on the top row's other letters: the digit alone, not the plain letter.
         val e = page.keys.first { it.label == "e" }
-        assertEquals(listOf("e", "3"), e.popups.takeLast(2))
-        assertNotEquals("e", e.popups.first())
+        assertEquals(listOf("3"), e.popups)
     }
 
     @Test fun hidingTheGlobeGivesTheRoomToTheSpaceBar() {
