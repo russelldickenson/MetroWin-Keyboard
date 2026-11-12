@@ -80,7 +80,7 @@ class SuggestionBar(context: Context) : View(context) {
 
     override fun onDraw(canvas: Canvas) {
         val c = colors ?: return
-        canvas.drawColor(c.bar)
+        fill.color = c.bar; canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), fill)
         val h = height.toFloat()
         val bw = buttonWidth()
         if (pressedIndex == LEFT) highlight(canvas, c, 0f, bw)

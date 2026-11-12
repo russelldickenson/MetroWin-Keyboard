@@ -266,7 +266,8 @@ class KeyboardView(context: Context) : View(context) {
         drawTrail(canvas, c)
     }
 
-    private fun drawBackground(canvas: Canvas, c: KeyboardColors) { canvas.drawColor(c.background) }
+    /** Fills this view only: the parents do not clip their children (so a popup can rise above the keys), and drawColor would paint over the suggestion bar. */
+    private fun drawBackground(canvas: Canvas, c: KeyboardColors) { keyPaint.style = Paint.Style.FILL; keyPaint.color = c.background; canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), keyPaint) }
 
     private fun isPressed(k: Key): Boolean = pointers.values.any { it.key === k && it.popupKey == null && !it.swiping }
 
