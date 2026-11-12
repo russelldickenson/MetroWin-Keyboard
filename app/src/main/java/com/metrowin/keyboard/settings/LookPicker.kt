@@ -16,6 +16,7 @@ import androidx.preference.PreferenceViewHolder
 import com.metrowin.keyboard.KeyboardApp
 import com.metrowin.keyboard.R
 import com.metrowin.keyboard.K
+import com.metrowin.keyboard.theme.ColorMath
 import com.metrowin.keyboard.theme.KeyboardColors
 import com.metrowin.keyboard.theme.KeyboardTheme
 import com.metrowin.keyboard.theme.ThemeStyle
@@ -79,6 +80,9 @@ class LookPicker(context: Context, attrs: AttributeSet?) : Preference(context, a
 
     /** A miniature keyboard: the surround, three rows of keys, a special key on each side of the bottom one and the accent on the action key. */
     private class Tile(c: Context, private val k: KeyboardColors, private val selected: Boolean, dark: Boolean) : View(c) {
+        // A translucent look (Glass) is drawn over white or black, as the keyboard itself sits on the app behind it.
+        private val surround = ColorMath.over(k.background, if (dark) 0xFF000000.toInt() else 0xFFFFFFFF.toInt())
+        private fun solid(c: Int) = ColorMath.over(c, surround)
         private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         private val rect = RectF()
         private val ring = Ui.primary(c)
@@ -88,7 +92,7 @@ class LookPicker(context: Context, attrs: AttributeSet?) : Preference(context, a
             val inset = context.dp(2f)
             val pad = context.dp(6f)
             // The surround, rounded as a card.
-            paint.style = Paint.Style.FILL; paint.color = k.background or 0xFF000000.toInt()
+            paint.style = Paint.Style.FILL; paint.color = surround
             rect.set(inset, inset, w - inset, h - inset)
             canvas.drawRoundRect(rect, context.dp(10f), context.dp(10f), paint)
             val gap = if (k.spacedKeys) context.dp(3.5f) else context.dp(2f)
@@ -100,11 +104,11 @@ class LookPicker(context: Context, attrs: AttributeSet?) : Preference(context, a
                 val kw = (w - 2 * inset - 2 * pad - gap * (n - 1)) / n
                 for (j in 0 until n) {
                     val special = ri == 2 && (j == 0 || j == n - 1)
-                    paint.style = Paint.Style.FILL; paint.color = (if (special) k.special else k.key).let { it or 0xFF000000.toInt() }
+                    paint.style = Paint.Style.FILL; paint.color = solid(if (special) k.special else k.key)
                     val x = inset + pad + j * (kw + gap)
                     rect.set(x, y, x + kw, y + kh)
                     canvas.drawRoundRect(rect, corner, corner, paint)
-                    if (k.strokeDp > 0f) { paint.style = Paint.Style.STROKE; paint.strokeWidth = context.dp(k.strokeDp); paint.color = k.stroke or 0xFF000000.toInt(); canvas.drawRoundRect(rect, corner, corner, paint) }
+                    if (k.strokeDp > 0f) { paint.style = Paint.Style.STROKE; paint.strokeWidth = context.dp(k.strokeDp); paint.color = solid(k.stroke); canvas.drawRoundRect(rect, corner, corner, paint) }
                 }
                 y += kh + gap
             }
@@ -114,7 +118,7 @@ class LookPicker(context: Context, attrs: AttributeSet?) : Preference(context, a
             var x = inset + pad
             for ((frac, col) in parts) {
                 val width = (bw - gap * 2) * frac / 0.92f
-                paint.style = Paint.Style.FILL; paint.color = col or 0xFF000000.toInt()
+                paint.style = Paint.Style.FILL; paint.color = solid(col)
                 rect.set(x, y, x + width, y + kh)
                 canvas.drawRoundRect(rect, corner, corner, paint)
                 x += width + gap

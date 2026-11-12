@@ -307,5 +307,5 @@ class SuggestionBar(context: Context) : View(context) {
 
     private val PAD get() = dp(12f)
 
-    private companion object { const val NONE = -9; const val LEFT = -1; const val QUICK = -2; const val STATUS = -3; const val MIN_SCALE = 0.55f }
+    private companion object { const val NONE = -9; const val LEFT = -4; const val QUICK = -2; const val STATUS = -3; const val MIN_SCALE = 0.55f }
 }
