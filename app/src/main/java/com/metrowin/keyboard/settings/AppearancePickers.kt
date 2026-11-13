@@ -232,9 +232,9 @@ class AccentPicker(context: Context, attrs: AttributeSet?) : PickerPreference(co
                 isClickable = true; isFocusable = true; isSelected = picked; contentDescription = label
                 setOnClickListener { onClick() }
                 addView(dotView, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
-                addView(name, LinearLayout.LayoutParams(context.dp(76f).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT))
+                addView(name, LinearLayout.LayoutParams(context.dp(84f).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT))
             }
-            r.addView(t, LinearLayout.LayoutParams(context.dp(76f).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginEnd = context.dp(4f).toInt() })
+            r.addView(t, LinearLayout.LayoutParams(context.dp(84f).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginEnd = context.dp(4f).toInt() })
         }
         tile(context.getString(R.string.accent_look), now == 0, dot(KeyboardTheme.lookAccent(context, prefs, system), now == 0)) { prefs.sp.edit().putInt(K.CUSTOM_ACCENT, 0).apply() }
         presets.forEachIndexed { i, c ->
