@@ -115,7 +115,7 @@ class FontPicker(context: Context, attrs: AttributeSet?) : PickerPreference(cont
             val sample = Ui.text(context, "Aa", Ui.Type.HEADLINE, Ui.onSurface(context)).apply {
                 typeface = KeyFonts.get(context, family, prefs.keyWeight); setTextSize(TypedValue.COMPLEX_UNIT_SP, 30f); gravity = Gravity.CENTER
             }
-            val name = Ui.text(context, names.getOrElse(i) { family }, Ui.Type.CAPTION, if (picked) Ui.metroText(context) else Ui.onSurfaceVariant(context)).apply { gravity = Gravity.CENTER; maxLines = 2 }
+            val name = Ui.text(context, names.getOrElse(i) { family }, Ui.Type.CAPTION, if (picked) Ui.metroText(context) else Ui.onSurfaceVariant(context)).apply { gravity = Gravity.CENTER; minLines = 2; maxLines = 2 }
             val tile = LinearLayout(context).apply {
                 orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER
                 setPadding(context.dp(6f).toInt(), context.dp(8f).toInt(), context.dp(6f).toInt(), context.dp(8f).toInt())
@@ -128,7 +128,8 @@ class FontPicker(context: Context, attrs: AttributeSet?) : PickerPreference(cont
                 setOnClickListener { if (family != prefs.keyFont) prefs.sp.edit().putString(K.KEY_FONT, family).putString(K.KEY_WEIGHT, KeyFonts.snap(family, prefs.keyWeight).toString()).apply() }
                 addView(sample); addView(name)
             }
-            r.addView(tile, LinearLayout.LayoutParams(context.dp(104f).toInt(), context.dp(88f).toInt()).apply { marginEnd = context.dp(10f).toInt() })
+            // Every name takes two lines, so the tiles are alike in height at any text size.
+            r.addView(tile, LinearLayout.LayoutParams(context.dp(112f).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginEnd = context.dp(10f).toInt() })
         }
     }
 }

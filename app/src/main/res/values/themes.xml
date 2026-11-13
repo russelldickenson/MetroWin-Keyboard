@@ -26,6 +26,9 @@
         <item name="preferenceTheme">@style/LuminaPreferenceTheme</item>
         <!-- Sliders, cursors and selection in the Metro cyan; the wallpaper colours (DynamicColors) leave these attributes alone. -->
         <item name="colorControlActivated">@color/metro_text</item>
+        <!-- The rows of every settings screen in Open Sans, as the home page. -->
+        <item name="android:textAppearanceListItem">@style/TextAppearance.Lumina.ListItem</item>
+        <item name="android:textAppearanceListItemSecondary">@style/TextAppearance.Lumina.ListItemSecondary</item>
     </style>
 
     <!-- The title of a screen: Open Sans Light, as the large title of the home page. -->
@@ -38,6 +41,14 @@
     <!-- The preference screens: the stock rows, with the Material 3 switch. -->
     <style name="LuminaPreferenceTheme" parent="PreferenceThemeOverlay">
         <item name="switchPreferenceCompatStyle">@style/LuminaSwitchPreference</item>
+    </style>
+    <style name="TextAppearance.Lumina.ListItem" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:fontFamily">@font/opensans_regular</item>
+        <item name="fontFamily">@font/opensans_regular</item>
+    </style>
+    <style name="TextAppearance.Lumina.ListItemSecondary" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:fontFamily">@font/opensans_regular</item>
+        <item name="fontFamily">@font/opensans_regular</item>
     </style>
     <style name="LuminaSwitchPreference" parent="Preference.SwitchPreferenceCompat.Material">
         <item name="widgetLayout">@layout/pref_widget_material_switch</item>
