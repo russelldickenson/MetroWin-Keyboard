@@ -5,11 +5,12 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.metrowin.keyboard.KeyboardApp
+import com.metrowin.keyboard.R
 import java.util.concurrent.Executors
 
 /** A keyboard cannot show a permission dialog or a file picker, so it opens this invisible screen to do it and closes it at once. */
 class HelperActivity : AppCompatActivity() {
-    private val mic = registerForActivityResult(ActivityResultContracts.RequestPermission()) { finish() }
+    private val mic = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted -> if (!granted) explainMicDenied(this); finish() }
     private val picture = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri == null) { finish(); return@registerForActivityResult }
         val app = KeyboardApp.of(this)
@@ -29,6 +30,16 @@ class HelperActivity : AppCompatActivity() {
     }
 
     companion object {
+        /**
+         * The microphone was refused: say why voice typing does not start, and, when Android will not ask again, open the screen where it can be turned on
+         * (the system shows no dialog then, so without this a tap on the microphone would do nothing at all).
+         */
+        fun explainMicDenied(a: android.app.Activity) {
+            val blocked = !androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale(a, Manifest.permission.RECORD_AUDIO)
+            android.widget.Toast.makeText(a, if (blocked) R.string.voice_permission_blocked else R.string.voice_permission_denied, android.widget.Toast.LENGTH_LONG).show()
+            if (blocked) runCatching { a.startActivity(android.content.Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, android.net.Uri.fromParts("package", a.packageName, null))) }
+        }
+
         const val EXTRA_MODE = "mode"
         const val MODE_MIC = "mic"
         const val MODE_CLIP_IMAGE = "clip_image"

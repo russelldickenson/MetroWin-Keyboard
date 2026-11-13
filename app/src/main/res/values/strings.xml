@@ -190,6 +190,8 @@
     <string name="pref_voice_offline_summary">Prefer recognition without the internet, if the language is downloaded</string>
     <string name="voice_listening">Listening…</string>
     <string name="voice_permission">Allow the microphone to use voice typing</string>
+    <string name="voice_permission_denied">Voice typing needs the microphone. Tap the microphone again to allow it.</string>
+    <string name="voice_permission_blocked">Voice typing needs the microphone. Turn it on under Permissions.</string>
     <string name="voice_unavailable">This phone has no speech recogniser. Install or turn on a speech service (such as Speech Services by Google) in the phone\u2019s settings.</string>
     <string name="voice_error_network">Voice typing needs the internet for this language. Check your connection, or download the language in the phone\u2019s speech settings.</string>
     <string name="voice_error_audio">The microphone could not be used. Another app may be using it: close it and try again.</string>

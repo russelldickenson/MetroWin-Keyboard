@@ -353,7 +353,7 @@ class SnippetsFragment : BaseFragment(R.xml.prefs_snippets, R.string.screen_snip
 }
 
 class VoiceFragment : BaseFragment(R.xml.prefs_voice, R.string.screen_voice) {
-    private val ask = registerForActivityResult(ActivityResultContracts.RequestPermission()) { refresh() }
+    private val ask = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted -> if (!granted) HelperActivity.explainMicDenied(requireActivity()); refresh() }
     override fun setup() { click("voice_permission") { ask.launch(Manifest.permission.RECORD_AUDIO) } }
     override fun onResume() { super.onResume(); refresh() }
     private fun refresh() {
