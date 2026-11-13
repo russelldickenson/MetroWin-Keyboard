@@ -18,7 +18,7 @@
   <img src="docs/screenshots/home.png" width="22%" alt="The home page with the calibration card">
   <img src="docs/screenshots/typing.png" width="22%" alt="The keyboard, in the Classic look">
   <img src="docs/screenshots/calibration.png" width="22%" alt="The calibration">
-  <img src="docs/screenshots/appearance.png" width="22%" alt="Appearance: look, font, weight and colour">
+  <img src="docs/screenshots/appearance.png" width="22%" alt="Appearance: look, dark or light, font, weight and accent colour">
 </p>
 
 ### The looks
@@ -47,7 +47,7 @@
 Compared with the original MetroWin Keyboard (version 26.1.2S):
 
 **Added**
-- **Key font and weight** (*Settings → Appearance*): the key letters can use the system font, Open Sans, Roboto or Atkinson Hyperlegible, at weights 200, 300, 400 or 500. Only the weights that look different for the chosen font are listed. The fonts are bundled variable fonts under the SIL OFL.
+- **Key font and weight** (*Settings → Appearance*): the key letters can use the system font, Open Sans, Roboto or Atkinson Hyperlegible, at weights 200, 300, 400 or 500, chosen from font tiles that show the font and a slider with a sample sentence. Only the weights that look different for the chosen font get a stop. The fonts are bundled variable fonts under the SIL OFL.
 - **iPhone look**: pale grey (or dark) keyboard, white rounded keys with a thin shadow, darker special keys, "space" and "return" labels, dividers between the suggestions and a white balloon over the pressed key.
 - **Modern Slate look**: dark grey keys with light grey symbols on a light grey surround (a dark one in dark mode), soft shadows and a light blue action key.
 - **Snippets** (*Settings → Snippets*): short words that turn into a phrase you write often. Type `wyd` and a space and it becomes "What do you need from me?". The text is also offered in the middle of the suggestion bar while you type the shortcut, and Backspace right after gives the shortcut back. They stay on the phone and are in the backup.
@@ -55,8 +55,8 @@ Compared with the original MetroWin Keyboard (version 26.1.2S):
 - **A new identity**: application id `com.lumina.keyboard`, so it coexists with the original.
 
 **Changed**
-- **The settings app is Material 3**, not Windows Phone style: a top app bar, a scrolling home with cards and lists, Material 3 type, buttons and switches, and the wallpaper colours (Material You) on Android 12+. The keyboard's own looks, including the Metro ones (Classic and Glass), are untouched.
-- **Accent colour**: the 20 Windows Phone colours are gone; you get Material You (Modern Droid follows the wallpaper) and one custom colour. Classic keeps its cyan by default.
+- **The settings app is Material 3 with a Metro touch**: Material 3 controls and behaviour, set in Open Sans Light with cyan headings, a flat cyan calibration tile on the home page, and every appearance setting shown as the thing itself (a keyboard for each look, a specimen for each font, a sample for the weight, a swatch for each colour). The keyboard's own looks, including the Metro ones (Classic and Glass), are untouched.
+- **Accent colour**: the 20 Windows Phone colours are gone. You choose "follow the look", one of six colours (cyan, blue, green, orange, red, magenta), your own `#RRGGBB`, or, on Modern Droid with Android 12+, the wallpaper's colour. Classic keeps its cyan by default.
 - The globe key is **hidden by default** (*Settings → Size and layout → Show the globe key* brings it back).
 - Release signing is read from `keystore.properties`; [`keystore.properties.example`](keystore.properties.example) shows the values to fill in.
 
