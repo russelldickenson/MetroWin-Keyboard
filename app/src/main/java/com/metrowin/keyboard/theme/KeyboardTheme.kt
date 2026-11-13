@@ -151,11 +151,11 @@ object KeyboardTheme {
         return if (barAccent != accent) spaced.copy(barAccentColor = barAccent) else spaced
     }
 
-    /** The accent the chosen look has on its own, with no colour of the user's: what "Follow the look" gives. */
-    fun lookAccent(context: Context, p: Prefs, systemDark: Boolean): Int {
+    /** The accent the chosen look has on its own, with no colour of the user's: what "Follow the look" gives; [wallpaper] says whether Modern Droid takes it from the wallpaper. */
+    fun lookAccent(context: Context, p: Prefs, systemDark: Boolean, wallpaper: Boolean = p.dynamicColor): Int {
         val style = ThemeStyle.from(p.themeStyle).base
         val dark = when (p.themeMode) { "dark" -> true; "light" -> false; else -> systemDark }
-        val system = if (style == ThemeStyle.DROID && p.dynamicColor) SystemTones.read(context) else null
+        val system = if (style == ThemeStyle.DROID && wallpaper) SystemTones.read(context) else null
         return when {
             system != null -> if (dark) system.accent200 else system.accent600
             style == ThemeStyle.IPHONE -> 0xFF007AFF.toInt()

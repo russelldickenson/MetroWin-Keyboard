@@ -236,7 +236,16 @@ class AccentPicker(context: Context, attrs: AttributeSet?) : PickerPreference(co
             }
             r.addView(t, LinearLayout.LayoutParams(context.dp(84f).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginEnd = context.dp(4f).toInt() })
         }
-        tile(context.getString(R.string.accent_look), now == 0, dot(KeyboardTheme.lookAccent(context, prefs, system), now == 0)) { prefs.sp.edit().putInt(K.CUSTOM_ACCENT, 0).apply() }
+        // Modern Droid on Android 12+ can take its colours from the wallpaper: that is one more swatch, in the wallpaper's own colour, not a separate switch.
+        val wallpaper = com.metrowin.keyboard.theme.ThemeStyle.from(prefs.themeStyle).base == com.metrowin.keyboard.theme.ThemeStyle.DROID && com.metrowin.keyboard.theme.SystemTones.read(context) != null
+        val onWallpaper = wallpaper && now == 0 && prefs.dynamicColor
+        tile(context.getString(R.string.accent_look), now == 0 && !onWallpaper, dot(KeyboardTheme.lookAccent(context, prefs, system, wallpaper = false), now == 0 && !onWallpaper)) {
+            // Only where the wallpaper is an option does "follow the look" also turn it off; on the other looks that setting is left alone.
+            prefs.sp.edit().putInt(K.CUSTOM_ACCENT, 0).apply { if (wallpaper) putBoolean(K.DYNAMIC_COLOR, false) }.apply()
+        }
+        if (wallpaper) tile(context.getString(R.string.accent_wallpaper), onWallpaper, dot(KeyboardTheme.lookAccent(context, prefs, system, wallpaper = true), onWallpaper)) {
+            prefs.sp.edit().putInt(K.CUSTOM_ACCENT, 0).putBoolean(K.DYNAMIC_COLOR, true).apply()
+        }
         presets.forEachIndexed { i, c ->
             val picked = now != 0 && (c or 0xFF000000.toInt()) == (now or 0xFF000000.toInt())
             tile(names.getOrElse(i) { "" }, picked, dot(c, picked)) { prefs.sp.edit().putInt(K.CUSTOM_ACCENT, c or 0xFF000000.toInt()).apply() }

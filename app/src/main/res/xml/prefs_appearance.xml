@@ -7,6 +7,5 @@
     <com.metrowin.keyboard.settings.FontPicker android:key="key_font" />
     <com.metrowin.keyboard.settings.WeightPicker android:key="key_weight" />
     <com.metrowin.keyboard.settings.AccentPicker android:key="accent_pick" />
-    <SwitchPreferenceCompat android:key="dynamic_color" android:title="@string/pref_dynamic_title" android:summary="@string/pref_dynamic_summary" android:defaultValue="true" />
     <SwitchPreferenceCompat android:key="oled_black" android:title="@string/pref_oled_title" android:summary="@string/pref_oled_summary" android:defaultValue="false" />
 </PreferenceScreen>

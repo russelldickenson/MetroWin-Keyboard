@@ -96,6 +96,7 @@
     <string name="weight_sample">The quick brown fox jumps over the lazy dog</string>
     <string name="pref_accent_title">Accent colour</string>
     <string name="accent_look">Follow the look</string>
+    <string name="accent_wallpaper">Wallpaper</string>
     <string name="accent_custom">Your own</string>
     <string-array name="accent_names">
         <item>Cyan</item>
@@ -105,8 +106,6 @@
         <item>Red</item>
         <item>Magenta</item>
     </string-array>
-    <string name="pref_dynamic_title">Colours from the wallpaper</string>
-    <string name="pref_dynamic_summary">Modern Droid only, Android 12 or newer: use the system palette</string>
     <string name="pref_oled_title">Pure black</string>
     <string name="pref_oled_summary">Darkest background, saves battery on OLED screens</string>
     <string name="accent_dialog_title">Accent colour</string>
