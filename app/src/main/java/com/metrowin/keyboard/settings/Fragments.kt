@@ -54,6 +54,12 @@ abstract class BaseFragment(private val xml: Int, private val title: Int) : Pref
         findPreference<Preference>(key)?.setOnPreferenceClickListener { block(); true }
     }
 
+    /** A failure stays on screen: a title that says what did not happen, the reason and what to do, and a button to close it. Successes stay toasts. */
+    protected fun fail(title: Int, message: Int) {
+        if (!isAdded) return
+        MaterialAlertDialogBuilder(requireContext()).setTitle(title).setMessage(message).setPositiveButton(R.string.ok, null).show()
+    }
+
     protected fun toast(res: Int) = Toast.makeText(requireContext(), res, Toast.LENGTH_SHORT).show()
     protected fun toast(text: String) = Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
 
@@ -77,7 +83,7 @@ class BackupFragment : BaseFragment(R.xml.prefs_backup, R.string.screen_backup) 
         if (uri == null) return@registerForActivityResult
         val ctx = requireContext().applicationContext
         background({ runCatching { ctx.contentResolver.openOutputStream(uri)!!.use { com.metrowin.keyboard.backup.Backup.write(ctx, it) } }.isSuccess }) { ok ->
-            toast(if (ok) R.string.backup_done else R.string.backup_failed)
+            if (ok) toast(R.string.backup_done) else fail(R.string.fail_backup_title, R.string.backup_failed)
         }
     }
 
@@ -92,7 +98,7 @@ class BackupFragment : BaseFragment(R.xml.prefs_backup, R.string.screen_backup) 
         background({ runCatching { ctx.contentResolver.openInputStream(uri)!!.use { com.metrowin.keyboard.backup.Backup.restore(ctx, it) } }.exceptionOrNull().let { Pair(it == null, it) } }) { (ok, error) ->
             if (!ok) {
                 // Say which: not one of ours, a damaged file, or a restore that could not finish (nothing is changed in any case).
-                toast(when (error) {
+                fail(R.string.fail_restore_title, when (error) {
                     is com.metrowin.keyboard.backup.Backup.Invalid, is java.util.zip.ZipException, is org.json.JSONException -> R.string.backup_invalid
                     is com.metrowin.keyboard.backup.Backup.Incomplete, is java.io.EOFException, is java.io.FileNotFoundException, is SecurityException -> R.string.backup_unreadable
                     else -> R.string.backup_restore_failed
@@ -122,7 +128,7 @@ class LanguagesFragment : BaseFragment(R.xml.prefs_languages, R.string.screen_la
         background({ runCatching { ctx.contentResolver.openInputStream(uri)!!.use { LanguageEngine.importDictionary(ctx, layout.dictionaryId, layout.locale, it) } } }) { result ->
             val count = result.getOrDefault(0)
             if (count > 0) { app.reloadEngines(); toast(getString(R.string.import_done_words, count)) }
-            else toast(if (result.isFailure) R.string.import_failed else R.string.import_dictionary_empty)
+            else fail(R.string.fail_import_title, if (result.isFailure) R.string.import_failed else R.string.import_dictionary_empty)
         }
     }
 
@@ -132,8 +138,8 @@ class LanguagesFragment : BaseFragment(R.xml.prefs_languages, R.string.screen_la
         val layout = text?.let { app.layouts.import(it) }
         when {
             layout != null -> toast(getString(R.string.import_layout_done, layout.name))
-            text == null -> toast(R.string.import_failed)
-            else -> toast(R.string.import_layout_invalid)
+            text == null -> fail(R.string.fail_import_title, R.string.import_failed)
+            else -> fail(R.string.fail_import_title, R.string.import_layout_invalid)
         }
     }
 
@@ -251,7 +257,7 @@ class SuggestionsFragment : BaseFragment(R.xml.prefs_suggestions, R.string.scree
                     }
                 }
             }.isSuccess
-        }) { ok -> toast(if (ok) R.string.export_done else R.string.export_failed) }
+        }) { ok -> if (ok) toast(R.string.export_done) else fail(R.string.fail_export_title, R.string.export_failed) }
     }
 
     override fun setup() {
@@ -277,8 +283,8 @@ class FeedbackFragment : BaseFragment(R.xml.prefs_feedback, R.string.screen_feed
             }
         }) { result ->
             val ok = result.getOrNull() == true
-            if (result.getOrNull() == false) { toast(R.string.sound_too_big); return@background }
-            if (ok) { app.prefs.putString(K.SOUND_MODE, "custom"); preferenceScreen.findPreference<androidx.preference.ListPreference>(K.SOUND_MODE)?.value = "custom"; toast(R.string.sound_saved) } else toast(R.string.import_failed)
+            if (result.getOrNull() == false) { fail(R.string.fail_sound_title, R.string.sound_too_big); return@background }
+            if (ok) { app.prefs.putString(K.SOUND_MODE, "custom"); preferenceScreen.findPreference<androidx.preference.ListPreference>(K.SOUND_MODE)?.value = "custom"; toast(R.string.sound_saved) } else fail(R.string.fail_sound_title, R.string.import_failed)
         }
     }
 
@@ -354,11 +360,21 @@ class SnippetsFragment : BaseFragment(R.xml.prefs_snippets, R.string.screen_snip
 
 class VoiceFragment : BaseFragment(R.xml.prefs_voice, R.string.screen_voice) {
     private val ask = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted -> if (!granted) HelperActivity.explainMicDenied(requireActivity()); refresh() }
-    override fun setup() { click("voice_permission") { ask.launch(Manifest.permission.RECORD_AUDIO) } }
+    override fun setup() {
+        click("voice_permission") {
+            // When Android will not ask again, a request does nothing: open the settings where it can be turned on.
+            if (HelperActivity.micBlocked(requireActivity())) HelperActivity.openAppSettings(requireActivity()) else ask.launch(Manifest.permission.RECORD_AUDIO)
+        }
+    }
     override fun onResume() { super.onResume(); refresh() }
     private fun refresh() {
         val ok = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
-        findPreference<Preference>("voice_permission")?.summary = if (ok) getString(R.string.setup_enabled) else getString(R.string.pref_voice_permission_summary)
+        if (ok) app.prefs.sp.edit().remove(HelperActivity.PREF_MIC_DENIED).apply()
+        findPreference<Preference>("voice_permission")?.summary = getString(when {
+            ok -> R.string.setup_enabled
+            HelperActivity.micBlocked(requireActivity()) -> R.string.pref_voice_permission_blocked_summary
+            else -> R.string.pref_voice_permission_summary
+        })
     }
 }
 
