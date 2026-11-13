@@ -126,8 +126,10 @@ class HomeFragment : Fragment() {
 
     /** The large light title of the home page, as the panorama title of Windows Phone; it stands where the app bar would be. */
     private fun homeTitle(c: Context) = Ui.text(c, getString(R.string.app_name), Ui.Type.HEADLINE).apply {
-        typeface = Fonts.light(c); setTextSize(TypedValue.COMPLEX_UNIT_SP, 38f)
-        setPadding(c.dp(16f).toInt(), c.dp(32f).toInt(), c.dp(16f).toInt(), c.dp(12f).toInt())
+        // On a short (landscape) screen the title is smaller and sits closer to the top, so the list is not pushed below the fold.
+        val short = c.resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
+        typeface = Fonts.light(c); setTextSize(TypedValue.COMPLEX_UNIT_SP, if (short) 28f else 38f)
+        setPadding(c.dp(16f).toInt(), c.dp(if (short) 8f else 32f).toInt(), c.dp(16f).toInt(), c.dp(if (short) 4f else 12f).toInt())
         ViewCompat.setAccessibilityHeading(this, true)
     }
 

@@ -29,8 +29,6 @@ object Ui {
     fun onMetroTile(c: Context) = c.getColor(R.color.metro_on_tile)
     fun onSurface(c: Context) = color(c, M.attr.colorOnSurface)
     fun onSurfaceVariant(c: Context) = color(c, M.attr.colorOnSurfaceVariant)
-    fun primaryContainer(c: Context) = color(c, M.attr.colorPrimaryContainer)
-    fun onPrimaryContainer(c: Context) = color(c, M.attr.colorOnPrimaryContainer)
 
     /** Android 15 draws apps edge to edge: keep the content out from under the system bars and the keyboard. */
     fun applyInsets(root: View) {

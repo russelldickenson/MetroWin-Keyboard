@@ -43,7 +43,7 @@ class LookPicker(context: Context, attrs: AttributeSet?) : Preference(context, a
             val scroll = HorizontalScrollView(context).apply { isHorizontalScrollBarEnabled = false; clipToPadding = false; addView(r) }
             val box = LinearLayout(context).apply {
                 orientation = LinearLayout.VERTICAL
-                addView(Ui.text(context, context.getString(R.string.pref_theme_style_title), Ui.Type.LABEL, Ui.primary(context)),
+                addView(Ui.text(context, context.getString(R.string.pref_theme_style_title), Ui.Type.LABEL, Ui.metroText(context)).apply { typeface = com.metrowin.keyboard.ui.Fonts.semibold(context) },
                     LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { bottomMargin = context.dp(8f).toInt() })
                 addView(scroll)
             }
