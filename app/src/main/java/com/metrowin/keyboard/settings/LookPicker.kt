@@ -86,6 +86,15 @@ class LookPicker(context: Context, attrs: AttributeSet?) : Preference(context, a
         private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         private val rect = RectF()
         private val ring = Ui.primary(c)
+        // A hairline where a tone-on-tone look would otherwise melt into what it sits on: round the card when the surround is close to the page, round each key when the key is close to the surround.
+        private val edge = ColorMath.over(ColorMath.withAlpha(k.keyText, 0x50), surround)
+        private val pageColor = Ui.color(c, com.google.android.material.R.attr.colorSurface)
+        private val cardNeedsEdge = ColorMath.contrast(surround, pageColor) < 1.4
+        private val keysNeedEdge = k.strokeDp == 0f && ColorMath.contrast(solid(k.key), surround) < 1.4
+        private fun hairline(canvas: Canvas, r: RectF, radius: Float) {
+            paint.style = Paint.Style.STROKE; paint.strokeWidth = context.dp(1f); paint.color = edge
+            canvas.drawRoundRect(r, radius, radius, paint)
+        }
 
         override fun onDraw(canvas: Canvas) {
             val w = width.toFloat(); val h = height.toFloat()
@@ -95,6 +104,7 @@ class LookPicker(context: Context, attrs: AttributeSet?) : Preference(context, a
             paint.style = Paint.Style.FILL; paint.color = surround
             rect.set(inset, inset, w - inset, h - inset)
             canvas.drawRoundRect(rect, context.dp(10f), context.dp(10f), paint)
+            if (cardNeedsEdge) hairline(canvas, rect, context.dp(10f))
             val gap = if (k.spacedKeys) context.dp(3.5f) else context.dp(2f)
             val rows = intArrayOf(7, 6, 5)
             val kh = (h - 2 * inset - 2 * pad - gap * 3) / 4
@@ -108,6 +118,7 @@ class LookPicker(context: Context, attrs: AttributeSet?) : Preference(context, a
                     val x = inset + pad + j * (kw + gap)
                     rect.set(x, y, x + kw, y + kh)
                     canvas.drawRoundRect(rect, corner, corner, paint)
+                    if (keysNeedEdge) hairline(canvas, rect, corner)
                     if (k.strokeDp > 0f) { paint.style = Paint.Style.STROKE; paint.strokeWidth = context.dp(k.strokeDp); paint.color = solid(k.stroke); canvas.drawRoundRect(rect, corner, corner, paint) }
                 }
                 y += kh + gap
@@ -121,6 +132,7 @@ class LookPicker(context: Context, attrs: AttributeSet?) : Preference(context, a
                 paint.style = Paint.Style.FILL; paint.color = solid(col)
                 rect.set(x, y, x + width, y + kh)
                 canvas.drawRoundRect(rect, corner, corner, paint)
+                if (keysNeedEdge && col != k.accent) hairline(canvas, rect, corner)
                 x += width + gap
             }
             if (selected) {
