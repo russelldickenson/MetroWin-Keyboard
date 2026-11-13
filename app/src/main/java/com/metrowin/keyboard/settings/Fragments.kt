@@ -36,7 +36,7 @@ abstract class BaseFragment(private val xml: Int, private val title: Int) : Pref
         // No room kept for icons: the screens have none.
         fun flat(g: androidx.preference.PreferenceGroup) {
             g.isIconSpaceReserved = false
-            for (i in 0 until g.preferenceCount) preferenceScreen.let { g.getPreference(i) }.let { p -> p.isIconSpaceReserved = false; if (p is androidx.preference.PreferenceGroup) flat(p) }
+            for (i in 0 until g.preferenceCount) preferenceScreen.let { g.getPreference(i) }.let { p -> p.isIconSpaceReserved = false; p.isSingleLineTitle = false; if (p is androidx.preference.PreferenceGroup) flat(p) }
         }
         flat(preferenceScreen)
     }
