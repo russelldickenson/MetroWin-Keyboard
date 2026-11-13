@@ -10,6 +10,7 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import androidx.core.content.ContextCompat
 import com.metrowin.keyboard.Prefs
+import com.metrowin.keyboard.R
 
 /**
  * Dictation with the speech recogniser of the phone. With "offline only" on, it asks for on-device recognition, so the sound does
@@ -66,7 +67,19 @@ class VoiceInput(private val context: Context, private val prefs: Prefs, private
         r.startListening(intent)
     }
 
-    private companion object { const val SILENCE_MS = 4000L }
+    companion object {
+        private const val SILENCE_MS = 4000L
+
+        /** What to tell the user about a recogniser error: the cause in plain words and what to do, never the number. */
+        fun messageFor(code: Int): Int = when (code) {
+            SpeechRecognizer.ERROR_NETWORK, SpeechRecognizer.ERROR_NETWORK_TIMEOUT, SpeechRecognizer.ERROR_SERVER, SpeechRecognizer.ERROR_SERVER_DISCONNECTED -> R.string.voice_error_network
+            SpeechRecognizer.ERROR_AUDIO -> R.string.voice_error_audio
+            SpeechRecognizer.ERROR_RECOGNIZER_BUSY, SpeechRecognizer.ERROR_TOO_MANY_REQUESTS -> R.string.voice_error_busy
+            SpeechRecognizer.ERROR_LANGUAGE_NOT_SUPPORTED, SpeechRecognizer.ERROR_LANGUAGE_UNAVAILABLE -> R.string.voice_error_language
+            SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> R.string.voice_permission
+            else -> R.string.voice_error_other
+        }
+    }
 
     private val listener = object : RecognitionListener {
         override fun onReadyForSpeech(params: Bundle?) {}

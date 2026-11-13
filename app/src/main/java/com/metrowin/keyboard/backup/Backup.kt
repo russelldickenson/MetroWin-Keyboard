@@ -30,6 +30,9 @@ object Backup {
 
     class Invalid(message: String) : IOException(message)
 
+    /** The file is one of ours but it ends early (a copy that stopped, a download cut off): nothing in it is used. */
+    class Incomplete(message: String) : IOException(message)
+
     /** The description is a few kilobytes; one that is more than a megabyte is not ours. */
     private fun readSmall(zip: ZipInputStream): ByteArray {
         val out = java.io.ByteArrayOutputStream()
@@ -44,9 +47,11 @@ object Backup {
 
     fun write(c: Context, out: OutputStream) {
         KeyboardApp.of(c).saveAll()
+        val files = roots.flatMap { root -> File(c.filesDir, root).walkTopDown().filter { it.isFile }.toList() }
         ZipOutputStream(out).use { zip ->
-            zip.putNextEntry(ZipEntry(JSON)); zip.write(describe(c).toString().toByteArray()); zip.closeEntry()
-            for (root in roots) File(c.filesDir, root).walkTopDown().filter { it.isFile }.forEach { f ->
+            // The description says how many files follow, so that a file cut short can be told from a whole one.
+            zip.putNextEntry(ZipEntry(JSON)); zip.write(describe(c).put("files", files.size).toString().toByteArray()); zip.closeEntry()
+            for (f in files) {
                 zip.putNextEntry(ZipEntry(FILES + f.relativeTo(c.filesDir).path.replace(File.separatorChar, '/')))
                 f.inputStream().use { it.copyTo(zip) }
                 zip.closeEntry()
@@ -81,6 +86,7 @@ object Backup {
         try {
             var json: JSONObject? = null
             var total = 0L
+            var count = 0
             ZipInputStream(input).use { zip ->
                 while (true) {
                     val e = zip.nextEntry ?: break
@@ -91,6 +97,7 @@ object Backup {
                     if (rel == "background.jpg") continue // from a version that had a picture behind the keys: no longer used
                     val parts = rel.split('/')
                     if (rel.startsWith("/") || '\\' in rel || parts.any { it.isEmpty() || it == ".." || it == "." } || parts[0] !in roots) throw Invalid("unexpected path")
+                    count++
                     val target = File(tmp, rel)
                     if (!target.canonicalPath.startsWith(tmp.canonicalPath + File.separator)) throw Invalid("unexpected path")
                     target.parentFile?.mkdirs()
@@ -106,15 +113,22 @@ object Backup {
             }
             val meta = json ?: throw Invalid("no description")
             if (meta.optString("format") != FORMAT || meta.optInt("version") !in 1..VERSION) throw Invalid("not a MetroWin Keyboard backup")
+            // A backup made by this version knows how many files it holds; fewer means it was cut short.
+            if (meta.has("files") && meta.getInt("files") != count) throw Incomplete("${count} of ${meta.getInt("files")} files")
             val prefs = meta.getJSONArray("prefs")
 
             // Sound: now the files, then the settings.
             KeyboardApp.of(c).saveAll()
+            // Every folder is copied beside the old one first: a copy that fails (a full phone) leaves what the app has untouched.
+            for (root in roots) {
+                val src = File(tmp, root)
+                if (src.exists()) File(c.filesDir, "$root.restoring").apply { deleteRecursively() }.let { staged -> if (!src.copyRecursively(staged, overwrite = true)) throw IOException("copy failed") }
+            }
             for (root in roots) {
                 val dest = File(c.filesDir, root)
+                val staged = File(c.filesDir, "$root.restoring")
                 dest.deleteRecursively()
-                val src = File(tmp, root)
-                if (src.exists()) src.copyRecursively(dest, overwrite = true)
+                if (staged.exists()) staged.renameTo(dest)
             }
             val edit = KeyboardApp.of(c).prefs.sp.edit().clear()
             for (i in 0 until prefs.length()) {

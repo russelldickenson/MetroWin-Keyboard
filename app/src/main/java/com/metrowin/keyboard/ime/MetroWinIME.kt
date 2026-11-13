@@ -905,7 +905,7 @@ open class MetroWinIME : InputMethodService(), KeyboardListener, SuggestionBar.L
             startActivity(Intent(this@MetroWinIME, HelperActivity::class.java).putExtra(HelperActivity.EXTRA_MODE, HelperActivity.MODE_MIC).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }
         override fun onUnavailable() { Toast.makeText(this@MetroWinIME, R.string.voice_unavailable, Toast.LENGTH_LONG).show() }
-        override fun onError(code: Int) { Toast.makeText(this@MetroWinIME, getString(R.string.voice_error, code), Toast.LENGTH_SHORT).show() }
+        override fun onError(code: Int) { Toast.makeText(this@MetroWinIME, com.metrowin.keyboard.voice.VoiceInput.messageFor(code), Toast.LENGTH_LONG).show() }
     }
 
     private var voiceText = false

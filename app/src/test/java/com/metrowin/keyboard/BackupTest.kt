@@ -55,4 +55,19 @@ class BackupTest {
         assertThrows(Exception::class.java) { Backup.restore(c, ByteArrayInputStream("not a zip".toByteArray())) }
         assertThrows(Backup.Invalid::class.java) { Backup.restore(c, ByteArrayInputStream(zip("backup.json" to """{"format":"other","version":1,"prefs":[]}"""))) }
     }
+
+    @Test fun aDamagedFileFailsAsAnIoErrorNotAsAnInvalidBackupAndNothingIsTouched() {
+        val prefs = KeyboardApp.of(c).prefs
+        prefs.putInt(K.KEY_HEIGHT, 130)
+        File(c.filesDir, "user").apply { mkdirs() }.resolve("it.txt").writeText("keep\n")
+        // A real backup cut short: the zip ends in the middle of an entry.
+        val out = ByteArrayOutputStream(); Backup.write(c, out)
+        val cut = out.toByteArray().copyOf(out.size() / 2)
+        val error = runCatching { Backup.restore(c, ByteArrayInputStream(cut)) }.exceptionOrNull()
+        assertNotNull(error)
+        assertTrue("a damaged zip is an IOException the screen can name: $error", error is java.io.IOException)
+        assertEquals(130, prefs.keyHeight)
+        assertEquals("keep\n", File(c.filesDir, "user/it.txt").readText())
+        assertFalse("no half-restored folder is left behind", File(c.filesDir, "user.restoring").exists())
+    }
 }

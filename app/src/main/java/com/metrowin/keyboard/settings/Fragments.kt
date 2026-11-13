@@ -89,8 +89,16 @@ class BackupFragment : BaseFragment(R.xml.prefs_backup, R.string.screen_backup) 
 
     private fun restore(uri: android.net.Uri) {
         val ctx = requireContext().applicationContext
-        background({ runCatching { ctx.contentResolver.openInputStream(uri)!!.use { com.metrowin.keyboard.backup.Backup.restore(ctx, it) } }.isSuccess }) { ok ->
-            if (!ok) { toast(R.string.backup_invalid); return@background }
+        background({ runCatching { ctx.contentResolver.openInputStream(uri)!!.use { com.metrowin.keyboard.backup.Backup.restore(ctx, it) } }.exceptionOrNull().let { Pair(it == null, it) } }) { (ok, error) ->
+            if (!ok) {
+                // Say which: not one of ours, a damaged file, or a restore that could not finish (nothing is changed in any case).
+                toast(when (error) {
+                    is com.metrowin.keyboard.backup.Backup.Invalid, is java.util.zip.ZipException, is org.json.JSONException -> R.string.backup_invalid
+                    is com.metrowin.keyboard.backup.Backup.Incomplete, is java.io.EOFException, is java.io.FileNotFoundException, is SecurityException -> R.string.backup_unreadable
+                    else -> R.string.backup_restore_failed
+                })
+                return@background
+            }
             toast(R.string.backup_restored)
             // Everything that was loaded (settings, clipboard, dictionaries) is now out of date: the app starts again from the files.
             android.os.Handler(ctx.mainLooper).postDelayed({ android.os.Process.killProcess(android.os.Process.myPid()) }, 1200)
@@ -111,8 +119,10 @@ class LanguagesFragment : BaseFragment(R.xml.prefs_languages, R.string.screen_la
         if (uri == null || id == null) return@registerForActivityResult
         val layout = app.layouts.get(id) ?: return@registerForActivityResult
         val ctx = requireContext().applicationContext
-        background({ runCatching { ctx.contentResolver.openInputStream(uri)!!.use { LanguageEngine.importDictionary(ctx, layout.dictionaryId, layout.locale, it) } }.getOrDefault(0) }) { count ->
-            if (count > 0) { app.reloadEngines(); toast(getString(R.string.import_done_words, count)) } else toast(R.string.import_failed)
+        background({ runCatching { ctx.contentResolver.openInputStream(uri)!!.use { LanguageEngine.importDictionary(ctx, layout.dictionaryId, layout.locale, it) } } }) { result ->
+            val count = result.getOrDefault(0)
+            if (count > 0) { app.reloadEngines(); toast(getString(R.string.import_done_words, count)) }
+            else toast(if (result.isFailure) R.string.import_failed else R.string.import_dictionary_empty)
         }
     }
 
@@ -120,7 +130,11 @@ class LanguagesFragment : BaseFragment(R.xml.prefs_languages, R.string.screen_la
         if (uri == null) return@registerForActivityResult
         val text = runCatching { requireContext().contentResolver.openInputStream(uri)!!.use { it.readBytes().take(64 * 1024).toByteArray().toString(Charsets.UTF_8) } }.getOrNull()
         val layout = text?.let { app.layouts.import(it) }
-        if (layout != null) toast(getString(R.string.import_layout_done, layout.name)) else toast(R.string.import_failed)
+        when {
+            layout != null -> toast(getString(R.string.import_layout_done, layout.name))
+            text == null -> toast(R.string.import_failed)
+            else -> toast(R.string.import_layout_invalid)
+        }
     }
 
     override fun setup() {
@@ -237,7 +251,7 @@ class SuggestionsFragment : BaseFragment(R.xml.prefs_suggestions, R.string.scree
                     }
                 }
             }.isSuccess
-        }) { ok -> toast(if (ok) R.string.export_done else R.string.import_failed) }
+        }) { ok -> toast(if (ok) R.string.export_done else R.string.export_failed) }
     }
 
     override fun setup() {
@@ -257,10 +271,13 @@ class FeedbackFragment : BaseFragment(R.xml.prefs_feedback, R.string.screen_feed
         background({
             runCatching {
                 val bytes = ctx.contentResolver.openInputStream(uri)!!.use { it.readBytes() }
-                require(bytes.size in 1..(1024 * 1024))
+                if (bytes.size > 1024 * 1024) return@runCatching false
                 java.io.File(ctx.filesDir, "custom_sound").writeBytes(bytes)
-            }.isSuccess
-        }) { ok ->
+                true
+            }
+        }) { result ->
+            val ok = result.getOrNull() == true
+            if (result.getOrNull() == false) { toast(R.string.sound_too_big); return@background }
             if (ok) { app.prefs.putString(K.SOUND_MODE, "custom"); preferenceScreen.findPreference<androidx.preference.ListPreference>(K.SOUND_MODE)?.value = "custom"; toast(R.string.sound_saved) } else toast(R.string.import_failed)
         }
     }
