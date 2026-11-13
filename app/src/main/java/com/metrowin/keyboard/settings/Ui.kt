@@ -65,6 +65,7 @@ object Ui {
     /** The top app bar of a screen of its own: a title and, if [back] is given, an arrow that calls it. */
     fun toolbar(c: Context, title: CharSequence, back: (() -> Unit)? = null): MaterialToolbar = MaterialToolbar(c).apply {
         this.title = title
+        setTitleTextAppearance(c, R.style.TextAppearance_Lumina_ToolbarTitle)
         if (back != null) {
             setNavigationIcon(R.drawable.ic_arrow_back)
             setNavigationContentDescription(R.string.back)

@@ -64,7 +64,7 @@ class LookPicker(context: Context, attrs: AttributeSet?) : Preference(context, a
             val colors = KeyboardTheme.resolve(context, p, KeyboardTheme.isSystemDark(context), style)
             val tile = Tile(context, colors, style == current, dark)
             val label = Ui.text(context, names.getOrElse(i) { style.code }.substringBefore(" ("), Ui.Type.CAPTION,
-                if (style == current) Ui.primary(context) else Ui.onSurfaceVariant(context)).apply { gravity = Gravity.CENTER_HORIZONTAL; maxLines = 2 }
+                if (style == current) Ui.metroText(context) else Ui.onSurfaceVariant(context)).apply { gravity = Gravity.CENTER_HORIZONTAL; maxLines = 2 }
             val cell = LinearLayout(context).apply {
                 orientation = LinearLayout.VERTICAL
                 isClickable = true; isFocusable = true
@@ -85,7 +85,7 @@ class LookPicker(context: Context, attrs: AttributeSet?) : Preference(context, a
         private fun solid(c: Int) = ColorMath.over(c, surround)
         private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         private val rect = RectF()
-        private val ring = Ui.primary(c)
+        private val ring = Ui.metroText(c)
         // A hairline where a tone-on-tone look would otherwise melt into what it sits on: round the card when the surround is close to the page, round each key when the key is close to the surround.
         private val edge = ColorMath.over(ColorMath.withAlpha(k.keyText, 0x50), surround)
         private val pageColor = Ui.color(c, com.google.android.material.R.attr.colorSurface)

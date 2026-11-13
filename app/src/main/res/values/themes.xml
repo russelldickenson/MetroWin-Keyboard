@@ -24,6 +24,15 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">@bool/m3_light</item>
         <item name="preferenceTheme">@style/LuminaPreferenceTheme</item>
+        <!-- Sliders, cursors and selection in the Metro cyan; the wallpaper colours (DynamicColors) leave these attributes alone. -->
+        <item name="colorControlActivated">@color/metro_text</item>
+    </style>
+
+    <!-- The title of a screen: Open Sans Light, as the large title of the home page. -->
+    <style name="TextAppearance.Lumina.ToolbarTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:fontFamily">@font/opensans_light</item>
+        <item name="fontFamily">@font/opensans_light</item>
+        <item name="android:textSize">26sp</item>
     </style>
 
     <!-- The preference screens: the stock rows, with the Material 3 switch. -->
