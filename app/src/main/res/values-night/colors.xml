@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Cyan for small heading text on the dark surface (the tile keeps its colour in both). -->
+    <color name="metro_text">#52BDF0</color>
+
     <!-- Material 3 fallback scheme (dark). -->
     <color name="m3_primary">#9ECAFF</color>
     <color name="m3_on_primary">#003258</color>

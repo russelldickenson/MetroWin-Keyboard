@@ -32,9 +32,14 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
     /** The arrow back is there on the screens under the home page, not on the home page itself. */
     private fun showArrow() {
         if (supportFragmentManager.backStackEntryCount > 0) {
+            toolbar.visibility = View.VISIBLE
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
             toolbar.setNavigationContentDescription(R.string.back)
-        } else toolbar.navigationIcon = null
+        } else {
+            // The home page has a large title of its own instead of the bar (see HomeFragment).
+            toolbar.navigationIcon = null
+            toolbar.visibility = View.GONE
+        }
     }
 
     override fun onTitleChanged(title: CharSequence?, color: Int) {

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.ViewCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import com.google.android.material.card.MaterialCardView
@@ -17,6 +18,7 @@ import com.google.android.material.R as M
 import com.metrowin.keyboard.KeyboardApp
 import com.metrowin.keyboard.R
 import com.metrowin.keyboard.tutorial.Tutorial
+import com.metrowin.keyboard.ui.Fonts
 import com.metrowin.keyboard.ui.dp
 
 /** The screens of the settings: the home page opens them by class name, and a test loads each one so a typo cannot hide until it is tapped. */
@@ -62,6 +64,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(inflater: android.view.LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val c = requireContext()
         val list = LinearLayout(c).apply { orientation = LinearLayout.VERTICAL; setPadding(0, c.dp(8f).toInt(), 0, c.dp(24f).toInt()) }
+        list.addView(homeTitle(c))
         // The two steps that make the keyboard work come first, and go away once both are done.
         setup = LinearLayout(c).apply { orientation = LinearLayout.VERTICAL }
         setup!!.addView(heading(c, R.string.pivot_start))
@@ -99,16 +102,17 @@ class HomeFragment : Fragment() {
 
     /** A tonal card in the colour of the app: a title, a line under it, and a tap that opens [onClick]. */
     private fun card(c: Context, title: String, body: String, onClick: () -> Unit): Pair<MaterialCardView, TextView> {
-        val on = Ui.onPrimaryContainer(c)
-        val bodyView = Ui.text(c, body, Ui.Type.BODY_SMALL, on)
+        // A flat tile, square-cornered, in the cyan of Windows Phone, with light type on it.
+        val on = Ui.onMetroTile(c)
+        val bodyView = Ui.text(c, body, Ui.Type.BODY_SMALL, on).apply { typeface = Fonts.regular(c) }
         val card = MaterialCardView(c, null, M.attr.materialCardViewFilledStyle).apply {
-            setCardBackgroundColor(Ui.primaryContainer(c))
+            setCardBackgroundColor(Ui.metroTile(c)); radius = 0f; cardElevation = 0f; strokeWidth = 0
             isClickable = true; isFocusable = true
             setOnClickListener { onClick() }
             addView(LinearLayout(c).apply {
                 orientation = LinearLayout.VERTICAL
                 setPadding(c.dp(20f).toInt(), c.dp(16f).toInt(), c.dp(20f).toInt(), c.dp(16f).toInt())
-                addView(Ui.text(c, title, Ui.Type.TITLE, on))
+                addView(Ui.text(c, title, Ui.Type.TITLE, on).apply { typeface = Fonts.light(c); setTextSize(TypedValue.COMPLEX_UNIT_SP, 28f) })
                 addView(bodyView)
             })
             layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { setMargins(c.dp(16f).toInt(), c.dp(4f).toInt(), c.dp(16f).toInt(), c.dp(8f).toInt()) }
@@ -120,19 +124,29 @@ class HomeFragment : Fragment() {
     private fun calibrationCard(c: Context): View =
         card(c, getString(R.string.tile_calibrate_title), getString(R.string.tile_calibrate_body)) { startActivity(Intent(c, CalibrationActivity::class.java)) }.first
 
+    /** The large light title of the home page, as the panorama title of Windows Phone; it stands where the app bar would be. */
+    private fun homeTitle(c: Context) = Ui.text(c, getString(R.string.app_name), Ui.Type.HEADLINE).apply {
+        typeface = Fonts.light(c); setTextSize(TypedValue.COMPLEX_UNIT_SP, 38f)
+        setPadding(c.dp(16f).toInt(), c.dp(32f).toInt(), c.dp(16f).toInt(), c.dp(12f).toInt())
+        ViewCompat.setAccessibilityHeading(this, true)
+    }
+
     private fun heading(c: Context, title: Int) =
-        Ui.text(c, getString(title), Ui.Type.LABEL, Ui.primary(c)).apply { setPadding(c.dp(16f).toInt(), c.dp(20f).toInt(), c.dp(16f).toInt(), c.dp(4f).toInt()) }
+        Ui.text(c, getString(title), Ui.Type.LABEL, Ui.metroText(c)).apply {
+            typeface = Fonts.semibold(c); ViewCompat.setAccessibilityHeading(this, true)
+            setPadding(c.dp(16f).toInt(), c.dp(20f).toInt(), c.dp(16f).toInt(), c.dp(4f).toInt())
+        }
 
     private fun row(c: Context, title: Int, summary: Int, onClick: () -> Unit) = Row(c, c.getString(title), if (summary != 0) c.getString(summary) else "", onClick)
 }
 
 /** One entry of a list: a title over a line of smaller text, with the ripple of a Material list item. */
 class Row(c: Context, title: String, summary: String, onClick: () -> Unit) {
-    val summary: TextView = Ui.text(c, summary, Ui.Type.BODY_SMALL, Ui.onSurfaceVariant(c))
+    val summary: TextView = Ui.text(c, summary, Ui.Type.BODY_SMALL, Ui.onSurfaceVariant(c)).apply { typeface = Fonts.regular(c) }
     val view = LinearLayout(c).apply {
         orientation = LinearLayout.VERTICAL
         setPadding(c.dp(16f).toInt(), c.dp(12f).toInt(), c.dp(16f).toInt(), c.dp(12f).toInt())
-        addView(Ui.text(c, title, Ui.Type.BODY))
+        addView(Ui.text(c, title, Ui.Type.BODY).apply { typeface = Fonts.regular(c) })
         addView(this@Row.summary)
         val ripple = TypedValue()
         if (c.theme.resolveAttribute(android.R.attr.selectableItemBackground, ripple, true)) setBackgroundResource(ripple.resourceId)

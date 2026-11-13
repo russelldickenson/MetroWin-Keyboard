@@ -19,6 +19,22 @@ import org.robolectric.RobolectricTestRunner
 class ContrastTest {
     private fun ratio(fg: Int, bg: Int) = ColorMath.contrast(ColorMath.over(fg, bg), bg)
 
+    /** The Metro cyan of the settings app: heading text on the surface, and the white text on the calibration tile, in light and dark. */
+    @Test fun theSettingsCyanIsReadableLightAndDark() {
+        for (night in listOf(false, true)) {
+            org.robolectric.RuntimeEnvironment.setQualifiers(if (night) "+night" else "+notnight")
+            val app = ApplicationProvider.getApplicationContext<KeyboardApp>()
+            val surface = app.getColor(R.color.m3_surface)
+            val text = ratio(app.getColor(R.color.metro_text), surface)
+            val tile = ratio(app.getColor(R.color.metro_on_tile), app.getColor(R.color.metro_tile))
+            assertTrue("Heading cyan on the surface (night=$night): %.1f:1, needs 4.5".format(text), text >= 4.5)
+            assertTrue("White on the tile (night=$night): %.1f:1, needs 4.5".format(tile), tile >= 4.5)
+            // The tile is a shape on the surface: 3:1 so that it can be seen.
+            val shape = ratio(app.getColor(R.color.metro_tile), surface)
+            assertTrue("The tile against the surface (night=$night): %.1f:1, needs 3".format(shape), shape >= 3.0)
+        }
+    }
+
     @Test fun everyLookIsReadableLightAndDark() {
         val app = ApplicationProvider.getApplicationContext<KeyboardApp>()
         val failures = ArrayList<String>()

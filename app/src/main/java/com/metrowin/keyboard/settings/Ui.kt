@@ -23,6 +23,10 @@ object Ui {
     fun color(c: Context, attr: Int, fallback: Int = 0xFF808080.toInt()): Int = MaterialColors.getColor(c, attr, fallback)
 
     fun primary(c: Context) = color(c, androidx.appcompat.R.attr.colorPrimary)
+    /** The Metro cyan for small heading text, and the flat tile with the white text on it (see colors.xml). */
+    fun metroText(c: Context) = c.getColor(R.color.metro_text)
+    fun metroTile(c: Context) = c.getColor(R.color.metro_tile)
+    fun onMetroTile(c: Context) = c.getColor(R.color.metro_on_tile)
     fun onSurface(c: Context) = color(c, M.attr.colorOnSurface)
     fun onSurfaceVariant(c: Context) = color(c, M.attr.colorOnSurfaceVariant)
     fun primaryContainer(c: Context) = color(c, M.attr.colorPrimaryContainer)
