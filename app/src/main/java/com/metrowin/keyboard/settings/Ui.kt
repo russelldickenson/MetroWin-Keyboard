@@ -66,10 +66,22 @@ object Ui {
     fun toolbar(c: Context, title: CharSequence, back: (() -> Unit)? = null): MaterialToolbar = MaterialToolbar(c).apply {
         this.title = title
         setTitleTextAppearance(c, R.style.TextAppearance_Lumina_ToolbarTitle)
+        fitTitle(this)
         if (back != null) {
             setNavigationIcon(R.drawable.ic_arrow_back)
             setNavigationContentDescription(R.string.back)
             setNavigationOnClickListener { back() }
+        }
+    }
+
+    /**
+     * A long title shrinks to fit its line instead of being cut ("Languages and dictionari…" at a large text size): the bar shows one line,
+     * so the size gives way, down to a readable floor, before the words do.
+     */
+    fun fitTitle(bar: MaterialToolbar) = bar.post {
+        for (i in 0 until bar.childCount) (bar.getChildAt(i) as? TextView)?.takeIf { it.text == bar.title }?.let { t ->
+            t.maxLines = 1
+            TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(t, 16, 26, 1, TypedValue.COMPLEX_UNIT_SP)
         }
     }
 

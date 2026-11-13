@@ -124,7 +124,7 @@
     <string name="pref_hints_title">Digit hints on the letters</string>
     <string name="pref_hints_summary">When the number row is hidden, a long press on the top row types the digit</string>
     <string name="pref_double_space_title">Double space types a full stop</string>
-    <string name="pref_double_space_summary">Two quick spaces become \". \"</string>
+    <string name="pref_double_space_summary">Two quick spaces become a full stop and a space</string>
     <string name="pref_long_press_title">Hold a key for symbols</string>
     <string name="pref_long_press_summary">Accents, digits and symbols appear above the key</string>
     <string name="pref_long_press_ms_title">Press-and-hold time (ms)</string>
@@ -395,7 +395,7 @@
     <string name="backup_restore_title">Restore a backup</string>
     <string name="backup_restore_summary">Replaces what is in the app with the file you choose</string>
     <string name="backup_info_title">Keep the file private</string>
-    <string name="backup_info_text">It holds what you typed and learned, and your clipboard. Store it somewhere only you can reach. Use it to move to another phone, or to an app signed with another key, which has to be installed again.</string>
+    <string name="backup_info_text">It holds what you typed and learned, and your clipboard. Store it somewhere only you can reach. Use it to move to another phone, or to keep your data when you reinstall the app from a different source, which clears it.</string>
     <string name="backup_done">Backup saved</string>
     <string name="backup_failed">The backup could not be saved. Choose another place, or free some space, and try again.</string>
     <string name="backup_restore_confirm">Your settings and learned data are replaced by the ones in the file. The app then closes and opens again.</string>

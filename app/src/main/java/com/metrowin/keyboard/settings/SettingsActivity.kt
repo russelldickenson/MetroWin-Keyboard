@@ -44,7 +44,7 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
 
     override fun onTitleChanged(title: CharSequence?, color: Int) {
         super.onTitleChanged(title, color)
-        if (::toolbar.isInitialized) toolbar.title = title
+        if (::toolbar.isInitialized) { toolbar.title = title; Ui.fitTitle(toolbar) }
     }
 
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
