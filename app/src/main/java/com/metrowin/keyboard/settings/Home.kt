@@ -18,7 +18,6 @@ import com.google.android.material.R as M
 import com.metrowin.keyboard.KeyboardApp
 import com.metrowin.keyboard.R
 import com.metrowin.keyboard.tutorial.Tutorial
-import com.metrowin.keyboard.ui.Fonts
 import com.metrowin.keyboard.ui.dp
 
 /** The screens of the settings: the home page opens them by class name, and a test loads each one so a typo cannot hide until it is tapped. */
@@ -104,7 +103,7 @@ class HomeFragment : Fragment() {
     private fun card(c: Context, title: String, body: String, onClick: () -> Unit): Pair<MaterialCardView, TextView> {
         // A flat tile, square-cornered, in the cyan of Windows Phone, with light type on it.
         val on = Ui.onMetroTile(c)
-        val bodyView = Ui.text(c, body, Ui.Type.BODY_SMALL, on).apply { typeface = Fonts.regular(c) }
+        val bodyView = Ui.text(c, body, Ui.Type.BODY_SMALL, on).apply { typeface = UiFont.regular() }
         val card = MaterialCardView(c, null, M.attr.materialCardViewFilledStyle).apply {
             setCardBackgroundColor(Ui.metroTile(c)); radius = 0f; cardElevation = 0f; strokeWidth = 0
             isClickable = true; isFocusable = true
@@ -112,7 +111,7 @@ class HomeFragment : Fragment() {
             addView(LinearLayout(c).apply {
                 orientation = LinearLayout.VERTICAL
                 setPadding(c.dp(20f).toInt(), c.dp(16f).toInt(), c.dp(20f).toInt(), c.dp(16f).toInt())
-                addView(Ui.text(c, title, Ui.Type.TITLE, on).apply { typeface = Fonts.light(c); setTextSize(TypedValue.COMPLEX_UNIT_SP, 28f) })
+                addView(Ui.text(c, title, Ui.Type.TITLE, on).apply { typeface = UiFont.light(); setTextSize(TypedValue.COMPLEX_UNIT_SP, 28f) })
                 addView(bodyView)
             })
             layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { setMargins(c.dp(16f).toInt(), c.dp(4f).toInt(), c.dp(16f).toInt(), c.dp(8f).toInt()) }
@@ -128,14 +127,14 @@ class HomeFragment : Fragment() {
     private fun homeTitle(c: Context) = Ui.text(c, getString(R.string.app_name), Ui.Type.HEADLINE).apply {
         // On a short (landscape) screen the title is smaller and sits closer to the top, so the list is not pushed below the fold.
         val short = c.resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
-        typeface = Fonts.light(c); setTextSize(TypedValue.COMPLEX_UNIT_SP, if (short) 28f else 38f)
+        typeface = UiFont.light(); setTextSize(TypedValue.COMPLEX_UNIT_SP, if (short) 28f else 38f)
         setPadding(c.dp(16f).toInt(), c.dp(if (short) 8f else 32f).toInt(), c.dp(16f).toInt(), c.dp(if (short) 4f else 12f).toInt())
         ViewCompat.setAccessibilityHeading(this, true)
     }
 
     private fun heading(c: Context, title: Int) =
         Ui.text(c, getString(title), Ui.Type.LABEL, Ui.metroText(c)).apply {
-            typeface = Fonts.semibold(c); ViewCompat.setAccessibilityHeading(this, true)
+            typeface = UiFont.semibold(); ViewCompat.setAccessibilityHeading(this, true)
             setPadding(c.dp(16f).toInt(), c.dp(20f).toInt(), c.dp(16f).toInt(), c.dp(4f).toInt())
         }
 
@@ -144,11 +143,11 @@ class HomeFragment : Fragment() {
 
 /** One entry of a list: a title over a line of smaller text, with the ripple of a Material list item. */
 class Row(c: Context, title: String, summary: String, onClick: () -> Unit) {
-    val summary: TextView = Ui.text(c, summary, Ui.Type.BODY_SMALL, Ui.onSurfaceVariant(c)).apply { typeface = Fonts.regular(c) }
+    val summary: TextView = Ui.text(c, summary, Ui.Type.BODY_SMALL, Ui.onSurfaceVariant(c)).apply { typeface = UiFont.regular() }
     val view = LinearLayout(c).apply {
         orientation = LinearLayout.VERTICAL
         setPadding(c.dp(16f).toInt(), c.dp(12f).toInt(), c.dp(16f).toInt(), c.dp(12f).toInt())
-        addView(Ui.text(c, title, Ui.Type.BODY).apply { typeface = Fonts.regular(c) })
+        addView(Ui.text(c, title, Ui.Type.BODY).apply { typeface = UiFont.regular() })
         addView(this@Row.summary)
         val ripple = TypedValue()
         if (c.theme.resolveAttribute(android.R.attr.selectableItemBackground, ripple, true)) setBackgroundResource(ripple.resourceId)

@@ -26,36 +26,36 @@
         <item name="preferenceTheme">@style/LuminaPreferenceTheme</item>
         <!-- Sliders, cursors and selection in the Metro cyan; the wallpaper colours (DynamicColors) leave these attributes alone. -->
         <item name="colorControlActivated">@color/metro_text</item>
-        <!-- The rows of every settings screen in Open Sans, as the home page. -->
+        <!-- The rows of every settings screen in the phone's own font. -->
         <item name="android:textAppearanceListItem">@style/TextAppearance.Lumina.ListItem</item>
         <item name="android:textAppearanceListItemSecondary">@style/TextAppearance.Lumina.ListItemSecondary</item>
     </style>
 
-    <!-- The title of a screen: Open Sans Light, as the large title of the home page. -->
+    <!-- The title of a screen: the phone's own font, light, as the large title of the home page. -->
     <style name="TextAppearance.Lumina.ToolbarTitle" parent="TextAppearance.Material3.TitleLarge">
-        <item name="android:fontFamily">@font/opensans_light</item>
-        <item name="fontFamily">@font/opensans_light</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="fontFamily">sans-serif-light</item>
         <item name="android:textSize">26sp</item>
     </style>
 
     <!-- The preference screens: the stock rows, with the Material 3 switch. -->
     <style name="LuminaPreferenceTheme" parent="PreferenceThemeOverlay">
         <item name="switchPreferenceCompatStyle">@style/LuminaSwitchPreference</item>
-        <!-- The headings of the groups on a settings screen: Open Sans semibold in the Metro cyan, as the headings of the home page. -->
+        <!-- The headings of the groups on a settings screen: the phone's font, medium, in the Metro cyan, as the headings of the home page. -->
         <item name="preferenceCategoryTitleTextAppearance">@style/TextAppearance.Lumina.CategoryTitle</item>
         <item name="preferenceCategoryTitleTextColor">@color/metro_text</item>
     </style>
     <style name="TextAppearance.Lumina.CategoryTitle" parent="TextAppearance.Material3.LabelLarge">
-        <item name="android:fontFamily">@font/opensans_semibold</item>
-        <item name="fontFamily">@font/opensans_semibold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
     </style>
     <style name="TextAppearance.Lumina.ListItem" parent="TextAppearance.Material3.BodyLarge">
-        <item name="android:fontFamily">@font/opensans_regular</item>
-        <item name="fontFamily">@font/opensans_regular</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
     </style>
     <style name="TextAppearance.Lumina.ListItemSecondary" parent="TextAppearance.Material3.BodyMedium">
-        <item name="android:fontFamily">@font/opensans_regular</item>
-        <item name="fontFamily">@font/opensans_regular</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
     </style>
     <style name="LuminaSwitchPreference" parent="Preference.SwitchPreferenceCompat.Material">
         <item name="widgetLayout">@layout/pref_widget_material_switch</item>

@@ -55,7 +55,7 @@ Compared with the original MetroWin Keyboard (version 26.1.2S):
 - **A new identity**: application id `com.lumina.keyboard`, so it coexists with the original.
 
 **Changed**
-- **The settings app is Material 3 with a Metro touch**: Material 3 controls and behaviour, set in Open Sans Light with cyan headings, a flat cyan calibration tile on the home page, and every appearance setting shown as the thing itself (a keyboard for each look, a specimen for each font, a sample for the weight, a swatch for each colour). The keyboard's own looks, including the Metro ones (Classic and Glass), are untouched.
+- **The settings app is Material 3 with a Metro touch**: Material 3 controls and behaviour, set in the phone's own font, light for the titles, with cyan headings, a flat cyan calibration tile on the home page, and every appearance setting shown as the thing itself (a keyboard for each look, a specimen for each font, a sample for the weight, a swatch for each colour). The keyboard's own looks, including the Metro ones (Classic and Glass), are untouched.
 - **Accent colour**: the 20 Windows Phone colours are gone. You choose "follow the look", one of six colours (cyan, blue, green, orange, red, magenta), your own `#RRGGBB`, or, on Modern Droid with Android 12+, the wallpaper's colour. Classic keeps its cyan by default.
 - The globe key is **hidden by default** (*Settings → Size and layout → Show the globe key* brings it back).
 - Release signing is read from `keystore.properties`; [`keystore.properties.example`](keystore.properties.example) shows the values to fill in.

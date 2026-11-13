@@ -23,7 +23,6 @@ import com.metrowin.keyboard.KeyboardApp
 import com.metrowin.keyboard.R
 import com.metrowin.keyboard.theme.Accents
 import com.metrowin.keyboard.theme.KeyboardTheme
-import com.metrowin.keyboard.ui.Fonts
 import com.metrowin.keyboard.ui.KeyFonts
 import com.metrowin.keyboard.ui.dp
 
@@ -52,7 +51,7 @@ abstract class PickerPreference(context: Context, attrs: AttributeSet?, private 
         val frame = holder.itemView as FrameLayout
         if (frame.childCount == 0) {
             val box = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL; setPadding(0, context.dp(8f).toInt(), 0, 0) }
-            box.addView(Ui.text(context, context.getString(titleRes), Ui.Type.LABEL, Ui.metroText(context)).apply { typeface = Fonts.semibold(context) },
+            box.addView(Ui.text(context, context.getString(titleRes), Ui.Type.LABEL, Ui.metroText(context)).apply { typeface = UiFont.semibold() },
                 LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { bottomMargin = context.dp(8f).toInt() })
             val c = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
             box.addView(c)
@@ -82,7 +81,7 @@ class ModePicker(context: Context, attrs: AttributeSet?) : PickerPreference(cont
                 backgroundTintList = ColorStateList(arrayOf(checked, other), intArrayOf(tile, Color.TRANSPARENT))
                 setTextColor(ColorStateList(arrayOf(checked, other), intArrayOf(onTile, text)))
                 strokeColor = ColorStateList.valueOf(outline)
-                typeface = Fonts.regular(context)
+                typeface = UiFont.regular()
                 setOnClickListener { if (prefs.themeMode != code) save(K.THEME_MODE, code) }
             }
             g.addView(b, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))

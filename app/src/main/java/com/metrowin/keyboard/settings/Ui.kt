@@ -17,6 +17,17 @@ import com.google.android.material.R as M
 import com.metrowin.keyboard.R
 import com.metrowin.keyboard.ui.dp
 
+/** The typeface of the settings screens: the phone's own font, in the weights they use (light for the big titles, medium for the headings). */
+object UiFont {
+    private fun weight(w: Int, family: String): android.graphics.Typeface =
+        if (android.os.Build.VERSION.SDK_INT >= 28) android.graphics.Typeface.create(android.graphics.Typeface.DEFAULT, w, false)
+        else android.graphics.Typeface.create(family, android.graphics.Typeface.NORMAL)
+
+    fun light() = weight(300, "sans-serif-light")
+    fun regular() = weight(400, "sans-serif")
+    fun semibold() = weight(600, "sans-serif-medium")
+}
+
 /** The small kit the app's screens are built from: Material 3 type styles and colours (from the theme, so they follow Material You), buttons and the top app bar. */
 object Ui {
     /** A colour of the current theme, by its attribute. */
