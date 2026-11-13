@@ -82,6 +82,14 @@
     <string name="key_return">return</string>
     <string name="pref_theme_style_title">Look</string>
     <string name="pref_theme_mode_title">Dark or light</string>
+    <string name="mode_system">System</string>
+    <string name="mode_light">Light</string>
+    <string name="mode_dark">Dark</string>
+    <string name="weight_200">Extra light</string>
+    <string name="weight_300">Light</string>
+    <string name="weight_400">Regular</string>
+    <string name="weight_500">Medium</string>
+    <string name="weight_sample">The quick brown fox jumps over the lazy dog</string>
     <string name="pref_accent_title">Accent colour</string>
     <string name="pref_accent_summary">One colour of your own for the keyboard, or follow the look</string>
     <string name="pref_dynamic_title">Colours from the wallpaper</string>
@@ -189,18 +197,6 @@
         <item>Roboto</item>
         <item>Atkinson Hyperlegible</item>
     </string-array>
-    <string-array name="key_font_values">
-        <item>system</item>
-        <item>opensans</item>
-        <item>roboto</item>
-        <item>atkinson</item>
-    </string-array>
-    <string-array name="key_weight_values" translatable="false">
-        <item>200</item>
-        <item>300</item>
-        <item>400</item>
-        <item>500</item>
-    </string-array>
     <string-array name="theme_style_names">
         <item>Classic (flat Windows Phone)</item>
         <item>Modern Glass</item>
@@ -218,16 +214,6 @@
         <item>iphone</item>
         <item>slate</item>
         <item>slate_spaced</item>
-    </string-array>
-    <string-array name="theme_mode_names">
-        <item>Follow the system</item>
-        <item>Dark</item>
-        <item>Light</item>
-    </string-array>
-    <string-array name="theme_mode_values">
-        <item>system</item>
-        <item>dark</item>
-        <item>light</item>
     </string-array>
     <string-array name="align_names">
         <item>Left</item>

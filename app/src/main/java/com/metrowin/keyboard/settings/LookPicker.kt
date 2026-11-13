@@ -26,7 +26,7 @@ import com.metrowin.keyboard.ui.dp
  * The looks as a row of small keyboards to tap, each drawn in its own colours and key shape (in the dark or light the settings ask for),
  * so a look is chosen by seeing it. The one in use has an outline in the colour of the app.
  */
-class LookPicker(context: Context, attrs: AttributeSet?) : Preference(context, attrs) {
+class LookPicker(context: Context, attrs: AttributeSet?) : Preference(context, attrs), PickerRefresh {
     private var row: LinearLayout? = null
 
     init {
@@ -53,7 +53,7 @@ class LookPicker(context: Context, attrs: AttributeSet?) : Preference(context, a
         refresh()
     }
 
-    fun refresh() {
+    override fun refresh() {
         val r = row ?: return
         val p = KeyboardApp.of(context).prefs
         val names = context.resources.getStringArray(R.array.theme_style_names)

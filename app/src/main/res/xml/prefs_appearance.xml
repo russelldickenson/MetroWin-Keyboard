@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <com.metrowin.keyboard.settings.KeyboardPreview android:key="appearance_preview" />
     <com.metrowin.keyboard.settings.LookPicker android:key="theme_style" />
-    <ListPreference android:key="theme_mode" android:title="@string/pref_theme_mode_title" android:entries="@array/theme_mode_names" android:entryValues="@array/theme_mode_values" android:defaultValue="system" app:useSimpleSummaryProvider="true" />
-    <ListPreference android:key="key_font" android:title="@string/pref_key_font_title" android:entries="@array/key_font_names" android:entryValues="@array/key_font_values" android:defaultValue="opensans" app:useSimpleSummaryProvider="true" />
-    <ListPreference android:key="key_weight" android:title="@string/pref_key_weight_title" android:entries="@array/key_weight_values" android:entryValues="@array/key_weight_values" android:defaultValue="300" app:useSimpleSummaryProvider="true" />
+    <com.metrowin.keyboard.settings.ModePicker android:key="theme_mode" />
+    <com.metrowin.keyboard.settings.FontPicker android:key="key_font" />
+    <com.metrowin.keyboard.settings.WeightPicker android:key="key_weight" />
     <Preference android:key="accent_pick" android:title="@string/pref_accent_title" android:summary="@string/pref_accent_summary" />
     <SwitchPreferenceCompat android:key="dynamic_color" android:title="@string/pref_dynamic_title" android:summary="@string/pref_dynamic_summary" android:defaultValue="true" />
     <SwitchPreferenceCompat android:key="oled_black" android:title="@string/pref_oled_title" android:summary="@string/pref_oled_summary" android:defaultValue="false" />
