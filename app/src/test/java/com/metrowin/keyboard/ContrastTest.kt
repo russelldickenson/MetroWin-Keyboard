@@ -35,6 +35,24 @@ class ContrastTest {
         }
     }
 
+    /** Every colour the settings offer as an accent must leave the Enter arrow and the accent on the bar readable on every look, light and dark. */
+    @Test fun everyAccentSwatchIsReadableOnEveryLook() {
+        val app = ApplicationProvider.getApplicationContext<KeyboardApp>()
+        val failures = ArrayList<String>()
+        for (accent in com.metrowin.keyboard.theme.Accents.PRESETS) for (style in ThemeStyle.entries) for (dark in listOf(false, true)) {
+            app.prefs.sp.edit().putString(K.THEME_STYLE, style.code).putString(K.THEME_MODE, if (dark) "dark" else "light").putInt(K.CUSTOM_ACCENT, accent or 0xFF000000.toInt()).apply()
+            val c = KeyboardTheme.resolve(app, app.prefs, dark)
+            val behind = if (dark) 0xFF000000.toInt() else 0xFFFFFFFF.toInt()
+            val bar = ColorMath.over(c.bar, ColorMath.over(c.background, behind))
+            val where = "%06X on %s %s".format(accent and 0xFFFFFF, style.code, if (dark) "dark" else "light")
+            // Classic's own cyan keeps its white arrow on purpose (2.9:1, see above), also when the cyan swatch is picked.
+            val keptWhite = style == ThemeStyle.CLASSIC && accent == com.metrowin.keyboard.theme.Accents.DEFAULT
+            if (style != ThemeStyle.IPHONE && !keptWhite) ratio(c.onAccent, c.accent).let { if (it < 3.0) failures += "$where: Enter arrow %.1f:1".format(it) }
+            ratio(c.barAccent, bar).let { if (it < 3.0) failures += "$where: accent on the bar %.1f:1".format(it) }
+        }
+        assertTrue("Too little contrast:\n" + failures.joinToString("\n"), failures.isEmpty())
+    }
+
     @Test fun everyLookIsReadableLightAndDark() {
         val app = ApplicationProvider.getApplicationContext<KeyboardApp>()
         val failures = ArrayList<String>()

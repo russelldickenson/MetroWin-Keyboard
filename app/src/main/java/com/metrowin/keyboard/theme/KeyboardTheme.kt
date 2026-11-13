@@ -151,6 +151,19 @@ object KeyboardTheme {
         return if (barAccent != accent) spaced.copy(barAccentColor = barAccent) else spaced
     }
 
+    /** The accent the chosen look has on its own, with no colour of the user's: what "Follow the look" gives. */
+    fun lookAccent(context: Context, p: Prefs, systemDark: Boolean): Int {
+        val style = ThemeStyle.from(p.themeStyle).base
+        val dark = when (p.themeMode) { "dark" -> true; "light" -> false; else -> systemDark }
+        val system = if (style == ThemeStyle.DROID && p.dynamicColor) SystemTones.read(context) else null
+        return when {
+            system != null -> if (dark) system.accent200 else system.accent600
+            style == ThemeStyle.IPHONE -> 0xFF007AFF.toInt()
+            style == ThemeStyle.SLATE -> 0xFF8AB4F8.toInt()
+            else -> Accents.DEFAULT
+        }
+    }
+
     fun isSystemDark(context: Context) =
         context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 }

@@ -175,13 +175,13 @@ class AppearanceFragment : BaseFragment(R.xml.prefs_appearance, R.string.screen_
     // The preview and the pickers at the top redraw as soon as a look, mode, font, weight or colour changes.
     private val listener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
         findPreference<KeyboardPreview>("appearance_preview")?.refresh()
-        for (key in listOf("theme_style", "theme_mode", "key_font", "key_weight")) (findPreference<Preference>(key) as? PickerRefresh)?.refresh()
+        for (key in listOf("theme_style", "theme_mode", "key_font", "key_weight", "accent_pick")) (findPreference<Preference>(key) as? PickerRefresh)?.refresh()
     }
     override fun onStart() { super.onStart(); app.prefs.sp.registerOnSharedPreferenceChangeListener(listener) }
     override fun onStop() { app.prefs.sp.unregisterOnSharedPreferenceChangeListener(listener); super.onStop() }
 
     override fun setup() {
-        click("accent_pick") { showAccentDialog() }
+        findPreference<AccentPicker>("accent_pick")?.onCustom = { showAccentDialog() }
     }
 
     /** One colour of your own for the keyboard's accent; without it the look decides (Modern Droid follows the wallpaper). */
